@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8.4",
+  "package": "modist.romantictp.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "romantictp.refmap.json",
+  "client": [
+    "SoundSystemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
