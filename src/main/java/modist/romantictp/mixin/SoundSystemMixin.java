@@ -28,9 +28,8 @@ public class SoundSystemMixin {
     private void tickNonPaused(CallbackInfo ci, Iterator<?> iterator, Map.Entry<SoundInstance, ChannelAccess.ChannelHandle> map, ChannelAccess.ChannelHandle channelHandle, SoundInstance sound) {
         RomanticTp.LOGGER.info(sound.toString());
             if (this.minecraft.level != null) {
-                RomanticTp.LOGGER.info("adaed");
                 channelHandle.execute((channel) -> {
-                    RomanticTp.LOGGER.info("hahahaha");
+                    RomanticTp.LOGGER.info(channel.toString());
                 });
             }
     }
