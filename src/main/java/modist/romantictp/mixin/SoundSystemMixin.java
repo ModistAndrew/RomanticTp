@@ -1,6 +1,7 @@
 package modist.romantictp.mixin;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.InstrumentSoundManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
@@ -17,6 +18,12 @@ import java.util.Map;
 public class SoundSystemMixin {
     private final Minecraft minecraft = Minecraft.getInstance();
 
+
+    @Inject(method = "loadLibrary", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/audio/Listener;reset()V"))
+    private void loadLibrary(CallbackInfo ci) {
+        InstrumentSoundManager.init();
+    }
+
     @Inject(
             method = {"tickNonPaused"},
             at = {@At(
@@ -26,11 +33,11 @@ public class SoundSystemMixin {
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void tickNonPaused(CallbackInfo ci, Iterator<?> iterator, Map.Entry<SoundInstance, ChannelAccess.ChannelHandle> map, ChannelAccess.ChannelHandle channelHandle, SoundInstance sound) {
-        RomanticTp.LOGGER.info(sound.toString());
+        //RomanticTp.LOGGER.info(sound.toString());
             if (this.minecraft.level != null) {
-                RomanticTp.LOGGER.info("adaed");
+                //RomanticTp.LOGGER.info("adaed");
                 channelHandle.execute((channel) -> {
-                    RomanticTp.LOGGER.info("hahahaha");
+                    //InstrumentSoundManager.applyEFX(((ChannelAccessor) channel).getSource());
                 });
             }
     }
