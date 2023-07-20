@@ -23,7 +23,6 @@ public class MyChannel extends Channel {
     public AudioSynthesizer synthesizer;
     public Receiver receiver;
     private final AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
-    public volatile boolean pumping;
     public final AtomicInteger pumpCount = new AtomicInteger();
 
     public MyChannel(int source) {
@@ -39,20 +38,19 @@ public class MyChannel extends Channel {
 
     private void initAudio() {
         try {
+            RomanticTp.LOGGER.info("1:" + System.currentTimeMillis());
             this.synthesizer = new SoftSynthesizer();
 
             AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
             DataLine.Info info1 = new DataLine.Info(SourceDataLine.class, audioFormat);
             SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info1);
-            PipedInputStream pipedInputStream = new PipedInputStream();
-            this.synthesizer.open(new MyDataLine(this, sourceDataLine, pipedInputStream), null);
-
+            RomanticTp.LOGGER.info("2:" + System.currentTimeMillis());
+            this.synthesizer.open(new MyDataLine(this, sourceDataLine), null);
+            RomanticTp.LOGGER.info("3:" + System.currentTimeMillis());
 //            SF2Soundbank soundbank = new SF2Soundbank(new File("C:\\Users\\zjx\\Desktop\\Music\\Touhou1.sf2"));
 //            this.synthesizer.loadAllInstruments(soundbank);
 
             this.receiver = synthesizer.getReceiver();
-
-            this.stream = new MyInputStream(pipedInputStream);
 
 //            MidiDevice device;
 //            MidiDevice.Info[] infoList = MidiSystem.getMidiDeviceInfo();
@@ -88,18 +86,22 @@ public class MyChannel extends Channel {
 
     @Override
     public void destroy() {
+        RomanticTp.LOGGER.info("c1:" + System.currentTimeMillis());
         this.synthesizer.close();
+        RomanticTp.LOGGER.info("c2:" + System.currentTimeMillis());
+        this.removeProcessedBuffers();
         super.destroy();
     }
 
     @Override
     public void updateStream() {
         if (AL10.alGetSourcei(this.source, 4112) == AL10.AL_STOPPED) {
-            AL10.alSourcePlay(this.source);
             this.pumpBuffers(4);
+            AL10.alSourcePlay(this.source);
             RomanticTp.LOGGER.info("YES!!!");
         }
-        super.updateStream();
+        int i = this.removeProcessedBuffers();
+        this.pumpBuffers(i);
     }
 
     @Override
@@ -119,7 +121,7 @@ public class MyChannel extends Channel {
                 try {
                     pumpCount.wait();
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    return;
                 }
             }
         }
@@ -128,7 +130,7 @@ public class MyChannel extends Channel {
         ByteBuffer bytebuffer = AudioLoader.convertAudioBytes(b, audioFormat.getSampleSizeInBits() == 16,
                 audioFormat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
         if (bytebuffer != null) {
-            (new SoundBuffer(bytebuffer, this.stream.getFormat())).releaseAlBuffer().ifPresent((p_83669_) -> {
+            (new SoundBuffer(bytebuffer, audioFormat)).releaseAlBuffer().ifPresent((p_83669_) -> {
                 AL10.alSourceQueueBuffers(this.source, new int[]{p_83669_});
             });
         }

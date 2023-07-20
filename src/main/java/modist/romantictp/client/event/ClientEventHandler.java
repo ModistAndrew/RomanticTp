@@ -2,9 +2,7 @@ package modist.romantictp.client.event;
 
 import com.mojang.blaze3d.audio.Library;
 import com.mojang.blaze3d.platform.InputConstants;
-import modist.romantictp.client.audio.KeyInput;
 import modist.romantictp.client.audio.MyChannel;
-import modist.romantictp.client.audio.MyInputStream;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.common.item.InstrumentItem;
@@ -12,7 +10,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.sounds.ChannelAccess;
-import net.minecraft.client.sounds.SoundEngineExecutor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,12 +20,6 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.sampled.*;
-import java.io.*;
-import java.util.concurrent.CompletableFuture;
-
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler {
 
@@ -37,11 +28,14 @@ public class ClientEventHandler {
         if(event.getSound() instanceof InstrumentSoundInstance instance){
             ChannelAccess.ChannelHandle channelHandle = event.getEngine().instanceToChannel.get(instance);
             channelHandle.release();
-            channelHandle.stopped = false;
+
             MyChannel myChannel = MyChannel.create();
             myChannel.attachBufferStream(null);
             myChannel.play();
+
+            channelHandle.stopped = false;
             channelHandle.channel = myChannel;
+
             if(event.getEngine().library.staticChannels instanceof Library.CountingChannelPool pool){
                 pool.activeChannels.add(myChannel);
             }

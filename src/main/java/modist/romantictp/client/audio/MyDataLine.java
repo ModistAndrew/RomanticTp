@@ -11,14 +11,10 @@ import java.io.PipedOutputStream;
 public class MyDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
     private final MyChannel channel;
-    private final PipedInputStream pipedInputStream;
-    private final PipedOutputStream pipedOutputStream;
 
-    public MyDataLine(MyChannel channel, SourceDataLine line, PipedInputStream pipedInputStream) throws IOException {
+    public MyDataLine(MyChannel channel, SourceDataLine line) {
         this.channel = channel;
         this.dataLine = line;
-        this.pipedInputStream = pipedInputStream;
-        this.pipedOutputStream = new PipedOutputStream(pipedInputStream);
     }
 
     @Override
