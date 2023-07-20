@@ -70,6 +70,10 @@ public class SynthesizerPool {
                 throw new RuntimeException(e);
             }
 
+            if(ResourceLoader.getInstance().soundbank != null) {
+                synthesizer.loadAllInstruments(ResourceLoader.getInstance().soundbank);
+            }
+
             try {
                 this.receiver = this.synthesizer.getReceiver();
             } catch (MidiUnavailableException e) {
