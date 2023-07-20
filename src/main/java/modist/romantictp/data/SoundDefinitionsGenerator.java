@@ -15,9 +15,10 @@ public class SoundDefinitionsGenerator extends SoundDefinitionsProvider {
 
     @Override
     public void registerSounds() {
-        this.add(SoundEventLoader.TRUMPET_SOUND.getId(), definition()
-                .subtitle("sound.romantictp.trumpet")
-                .with(sound(new ResourceLocation(RomanticTp.MODID, "trumpet")))
+        SoundEventLoader.SOUND_MAP.forEach((s, r) ->
+                this.add(r.getId(), definition()
+                        .subtitle("sound.romantictp." + s)
+                        .with(sound(new ResourceLocation(RomanticTp.MODID, s))))
         );
     }
 }

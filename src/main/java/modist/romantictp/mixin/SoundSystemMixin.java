@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Iterator;
 import java.util.Map;
+
 @Mixin({SoundEngine.class})
 public class SoundSystemMixin {
     private final Minecraft minecraft = Minecraft.getInstance();
@@ -21,7 +22,7 @@ public class SoundSystemMixin {
 
     @Inject(method = "loadLibrary", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/audio/Listener;reset()V"))
     private void loadLibrary(CallbackInfo ci) {
-        InstrumentSoundManager.init();
+        InstrumentSoundManager.getInstance().init();
     }
 
     @Inject(
