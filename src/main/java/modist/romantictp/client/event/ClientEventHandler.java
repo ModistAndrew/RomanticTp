@@ -2,6 +2,7 @@ package modist.romantictp.client.event;
 
 import com.mojang.blaze3d.audio.Library;
 import com.mojang.blaze3d.platform.InputConstants;
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.audio.MyChannel;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
@@ -26,6 +27,8 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void changeSound(PlaySoundSourceEvent event) {
         if(event.getSound() instanceof InstrumentSoundInstance instance){
+            RomanticTp.LOGGER.info("a2:" + System.currentTimeMillis());
+
             ChannelAccess.ChannelHandle channelHandle = event.getEngine().instanceToChannel.get(instance);
             channelHandle.release();
 

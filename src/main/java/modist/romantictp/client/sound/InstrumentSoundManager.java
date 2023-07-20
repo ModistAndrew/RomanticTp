@@ -1,6 +1,7 @@
 package modist.romantictp.client.sound;
 
 import com.mojang.logging.LogUtils;
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.audio.MyChannel;
 import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.client.Minecraft;
@@ -27,8 +28,9 @@ public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
     //now playing, use instrument UUID to map
     private Map<UUID, InstrumentSoundInstance> soundInstanceCache = new HashMap<>();
+
     //TODO quit Game? ESC?
-    public void init(){
+    public void init() {
         efx = new EFXManager();
     }
 
@@ -43,22 +45,21 @@ public class InstrumentSoundManager {
     public void sendMessage
             (LivingEntity player, Instrument instrument, MidiMessage message, long timeStamp) {
         InstrumentSoundInstance soundInstance = getSound(instrument);
-        if(soundInstance==null){
+        if (soundInstance == null) {
             soundInstance = new InstrumentSoundInstance(player, instrument);
             Minecraft.getInstance().getSoundManager().play(soundInstance);
             soundInstanceCache.put(instrument.id, soundInstance);
         }
-        if(soundInstance.channelHandle!=null) {
-            soundInstance.channelHandle.execute(channel -> {
-                if (channel instanceof MyChannel myChannel) {
-                    myChannel.receiver.send(message, timeStamp);
-                }
-            });
-        }
+        RomanticTp.LOGGER.info("a1:" + System.currentTimeMillis());
+        soundInstance.channelHandle.thenAcceptAsync(channelHandle -> channelHandle.execute(channel -> {
+            if (channel instanceof MyChannel myChannel) {
+                myChannel.receiver.send(message, timeStamp);
+            }
+        }));
     }
 
-    private InstrumentSoundInstance getSound(Instrument instrument){
-        return instrument==null ? null : soundInstanceCache.get(instrument.id);
+    private InstrumentSoundInstance getSound(Instrument instrument) {
+        return instrument == null ? null : soundInstanceCache.get(instrument.id);
     }
 
     public void startPlay(LivingEntity player, Instrument instrument, float pitch, float volume) {
@@ -70,15 +71,13 @@ public class InstrumentSoundManager {
     }
 
     public static MidiEvent makeEvent(int command, int channel,
-                                      int note, int velocity, int tick)
-    {
+                                      int note, int velocity, int tick) {
         MidiEvent event = null;
         try {
             ShortMessage a = new ShortMessage();
             a.setMessage(command, channel, note, velocity);
             event = new MidiEvent(a, tick);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return event;
@@ -91,7 +90,7 @@ public class InstrumentSoundManager {
         private int sendFilter;
         private int maxAuxSends;
 
-        private EFXManager(){
+        private EFXManager() {
             //Get current context and device
             long currentContext = ALC10.alcGetCurrentContext();
             long currentDevice = ALC10.alcGetContextsDevice(currentContext);

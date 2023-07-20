@@ -96,9 +96,10 @@ public class MyChannel extends Channel {
     @Override
     public void updateStream() {
         if (AL10.alGetSourcei(this.source, 4112) == AL10.AL_STOPPED) {
-            this.pumpBuffers(4);
+            this.pumpBuffers(8);
             AL10.alSourcePlay(this.source);
             RomanticTp.LOGGER.info("YES!!!");
+            return;
         }
         int i = this.removeProcessedBuffers();
         this.pumpBuffers(i);
