@@ -62,6 +62,10 @@ public class InstrumentSoundManager {
         return instrument == null ? null : soundInstanceCache.get(instrument.id);
     }
 
+    public void remove(Instrument instrument) {
+        soundInstanceCache.remove(instrument.id);
+    }
+
     public void startPlay(LivingEntity player, Instrument instrument, float pitch, float volume) {
         sendMessage(player, instrument, makeEvent(144, 1, (int) (60 * pitch), 100, 0).getMessage(), -1);
     }

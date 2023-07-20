@@ -6,9 +6,12 @@ import com.mojang.blaze3d.audio.SoundBuffer;
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.audio.fork.sound.AudioSynthesizer;
 import modist.romantictp.client.audio.fork.sound.SoftSynthesizer;
+import modist.romantictp.client.sound.InstrumentSoundInstance;
+import modist.romantictp.client.sound.InstrumentSoundManager;
 import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
 
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -20,63 +23,32 @@ import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MyChannel extends Channel {
-    public AudioSynthesizer synthesizer;
-    public Receiver receiver;
     private final AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
     public final AtomicInteger pumpCount = new AtomicInteger();
+    public final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
+    public final Receiver receiver;
+    private final int BUFFER_SIZE = 2048;
+    private final int BUFFER_COUNT = 8;
+    private final InstrumentSoundInstance soundInstance;
 
-    public MyChannel(int source) {
+    public MyChannel(int source, InstrumentSoundInstance soundInstance) {
         super(source);
-        initAudio();
+        this.synthesizerWrapper = SynthesizerPool.getInstance().request(this).join();
+        this.synthesizerWrapper.bindChannel(this);
+        this.receiver = this.synthesizerWrapper.receiver;
+        this.soundInstance = soundInstance;
     }
 
-    public static MyChannel create() {
+    public static MyChannel create(InstrumentSoundInstance soundInstance) {
         int[] aint = new int[1];
         AL10.alGenSources(aint);
-        return new MyChannel(aint[0]);
-    }
-
-    private void initAudio() {
-        try {
-            RomanticTp.LOGGER.info("1:" + System.currentTimeMillis());
-            this.synthesizer = new SoftSynthesizer();
-
-            AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
-            DataLine.Info info1 = new DataLine.Info(SourceDataLine.class, audioFormat);
-            SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info1);
-            RomanticTp.LOGGER.info("2:" + System.currentTimeMillis());
-            this.synthesizer.open(new MyDataLine(this, sourceDataLine), null);
-            RomanticTp.LOGGER.info("3:" + System.currentTimeMillis());
-//            SF2Soundbank soundbank = new SF2Soundbank(new File("C:\\Users\\zjx\\Desktop\\Music\\Touhou1.sf2"));
-//            this.synthesizer.loadAllInstruments(soundbank);
-
-            this.receiver = synthesizer.getReceiver();
-
-//            MidiDevice device;
-//            MidiDevice.Info[] infoList = MidiSystem.getMidiDeviceInfo();
-//            for (MidiDevice.Info info : infoList) {
-//                try {
-//                    device = MidiSystem.getMidiDevice(info);
-//                    System.out.println(info);
-//
-//                    Transmitter trans = device.getTransmitter();
-//                    trans.setReceiver(receiver);
-//
-//                    device.open();
-//                    System.out.println(device.getDeviceInfo() + " Was Opened");
-//
-//                } catch (MidiUnavailableException ignored) {
-//                }
-//            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return new MyChannel(aint[0], soundInstance);
     }
 
     @Override
     public void attachBufferStream(AudioStream pStream) {
-        this.streamingBufferSize = 2048;
-        this.pumpBuffers(8);
+        this.streamingBufferSize = BUFFER_SIZE;
+        this.pumpBuffers(BUFFER_COUNT);
     }
 
     @Override
@@ -87,16 +59,17 @@ public class MyChannel extends Channel {
     @Override
     public void destroy() {
         RomanticTp.LOGGER.info("c1:" + System.currentTimeMillis());
-        this.synthesizer.close();
+        SynthesizerPool.getInstance().delete(this);
         RomanticTp.LOGGER.info("c2:" + System.currentTimeMillis());
         this.removeProcessedBuffers();
+        InstrumentSoundManager.getInstance().remove(soundInstance.instrument);
         super.destroy();
     }
 
     @Override
     public void updateStream() {
-        if (AL10.alGetSourcei(this.source, 4112) == AL10.AL_STOPPED) {
-            this.pumpBuffers(8);
+        if (AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_STOPPED) {
+            this.pumpBuffers(BUFFER_COUNT);
             AL10.alSourcePlay(this.source);
             RomanticTp.LOGGER.info("YES!!!");
             return;

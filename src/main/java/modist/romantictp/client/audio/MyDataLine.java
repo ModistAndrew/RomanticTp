@@ -1,7 +1,9 @@
 package modist.romantictp.client.audio;
 
+import com.mojang.blaze3d.audio.Channel;
 import modist.romantictp.RomanticTp;
 
+import javax.annotation.Nullable;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +12,15 @@ import java.io.PipedOutputStream;
 
 public class MyDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
-    private final MyChannel channel;
+    @Nullable
+    private MyChannel channel;
 
-    public MyDataLine(MyChannel channel, SourceDataLine line) {
-        this.channel = channel;
+    public MyDataLine(SourceDataLine line) {
         this.dataLine = line;
+    }
+
+    public void bindChannel(MyChannel channel) {
+        this.channel = channel;
     }
 
     @Override
@@ -29,9 +35,12 @@ public class MyDataLine implements SourceDataLine {
 
     @Override
     public int write(byte[] b, int off, int len) {
-        RomanticTp.LOGGER.info("write" + String.valueOf(b[0]));
-        channel.write(b, off, len);
-        return len;
+        if(channel!=null) {
+            RomanticTp.LOGGER.info("write" + String.valueOf(b[0]));
+            channel.write(b, off, len);
+            return len;
+        }
+        return 0;
     }
 
     @Override

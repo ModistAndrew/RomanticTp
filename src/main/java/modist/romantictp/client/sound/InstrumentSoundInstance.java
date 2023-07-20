@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.concurrent.CompletableFuture;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
-    private final Instrument instrument;
+    public final Instrument instrument;
     private LivingEntity player;
     private static final int MAX_LEFT_TICK = 10;
     private int leftTick = MAX_LEFT_TICK;

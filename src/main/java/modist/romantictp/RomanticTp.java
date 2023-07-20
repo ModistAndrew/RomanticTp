@@ -37,8 +37,11 @@ public class RomanticTp
     public RomanticTp()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
         ItemLoader.ITEMS.register(modEventBus);
         SoundEventLoader.SOUNDS.register(modEventBus);
+    }
+
+    public static void info(Object o){
+        LOGGER.info(String.valueOf(o));
     }
 }

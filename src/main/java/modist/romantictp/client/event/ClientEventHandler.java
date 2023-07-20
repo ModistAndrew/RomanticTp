@@ -32,7 +32,7 @@ public class ClientEventHandler {
             ChannelAccess.ChannelHandle channelHandle = event.getEngine().instanceToChannel.get(instance);
             channelHandle.release();
 
-            MyChannel myChannel = MyChannel.create();
+            MyChannel myChannel = MyChannel.create(instance);
             myChannel.attachBufferStream(null);
             myChannel.play();
 
