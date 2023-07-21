@@ -1,24 +1,27 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.common.instrument.Instrument;
+import modist.romantictp.common.instrument.InstrumentPlayer;
+import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 
+import javax.annotation.Nullable;
+import javax.sound.midi.Sequencer;
 import java.util.concurrent.CompletableFuture;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
-    public final Instrument instrument;
-    private LivingEntity player;
-    private static final int MAX_LEFT_TICK = 10;
-    private int leftTick = MAX_LEFT_TICK;
+    public final InstrumentPlayer player;
     public final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
+    @Nullable
+    public Instrument activeInstrument;
 
-    public InstrumentSoundInstance(LivingEntity player, Instrument instrument) {
-        super(instrument.sound, SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
-        this.instrument = instrument;
+    public InstrumentSoundInstance(InstrumentPlayer player) {
+        super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
     }
 
@@ -27,8 +30,14 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     }
     @Override
     public void tick() {
-        this.x = player.getX();
-        this.y = player.getY();
-        this.z = player.getZ();
+        this.x = player.getPos().x;
+        this.y = player.getPos().y;
+        this.z = player.getPos().z;
+        this.volume = player.geVolume();
+        if(activeInstrument!=null && !activeInstrument.equals(player.getActiveInstrument())) {
+            //TODO: change instrument send stop midi message!
+            InstrumentSoundManager.getInstance().stopSequence(player);
+        }
     }
+
 }

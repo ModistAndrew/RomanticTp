@@ -1,33 +1,29 @@
 package modist.romantictp.client.sound;
 
 import com.mojang.logging.LogUtils;
-import modist.romantictp.RomanticTp;
+import modist.romantictp.client.audio.MidiFileLoader;
 import modist.romantictp.client.audio.MyChannel;
-import modist.romantictp.common.instrument.Instrument;
+import modist.romantictp.common.instrument.InstrumentPlayer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import org.lwjgl.openal.AL10;
+import net.minecraft.client.sounds.ChannelAccess;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EXTEfx;
 import org.slf4j.Logger;
 
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.ShortMessage;
+import javax.annotation.Nullable;
+import javax.sound.midi.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class InstrumentSoundManager {
     public static final Logger LOGGER = LogUtils.getLogger();
     private EFXManager efx;
     static InstrumentSoundManager instance = new InstrumentSoundManager();
     //now playing, use instrument UUID to map
-    private Map<UUID, InstrumentSoundInstance> soundInstanceCache = new HashMap<>();
+    private Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new HashMap<>();
 
     //TODO quit Game? ESC?
     public void init() {
@@ -42,36 +38,39 @@ public class InstrumentSoundManager {
         efx.applyEFX(source);
     }
 
-    public void sendMessage
-            (LivingEntity player, Instrument instrument, MidiMessage message, long timeStamp) {
-        InstrumentSoundInstance soundInstance = getSound(instrument);
+    private void executeOnChannel(InstrumentPlayer player, Consumer<MyChannel> execution) {
+        InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance == null) {
-            soundInstance = new InstrumentSoundInstance(player, instrument);
+            soundInstance = new InstrumentSoundInstance(player);
             Minecraft.getInstance().getSoundManager().play(soundInstance);
-            soundInstanceCache.put(instrument.id, soundInstance);
+            soundInstanceCache.put(player, soundInstance);
         }
-        RomanticTp.LOGGER.info("a1:" + System.currentTimeMillis());
         soundInstance.channelHandle.thenAcceptAsync(channelHandle -> channelHandle.execute(channel -> {
-            if (channel instanceof MyChannel myChannel) {
-                myChannel.receiver.send(message, timeStamp);
+            if(channel instanceof MyChannel myChannel) {
+                execution.accept(myChannel);
             }
         }));
     }
 
-    private InstrumentSoundInstance getSound(Instrument instrument) {
-        return instrument == null ? null : soundInstanceCache.get(instrument.id);
+    @Nullable
+    private InstrumentSoundInstance getSound(InstrumentPlayer player) {
+        return player == null ? null : soundInstanceCache.get(player);
     }
 
-    public void remove(Instrument instrument) {
-        soundInstanceCache.remove(instrument.id);
+    public void remove(InstrumentPlayer player) {
+        soundInstanceCache.remove(player);
     }
 
-    public void startPlay(LivingEntity player, Instrument instrument, float pitch, float volume) {
-        sendMessage(player, instrument, makeEvent(144, 1, (int) (60 * pitch), 100, 0).getMessage(), -1);
+    public void sendMessage(InstrumentPlayer player, MidiMessage message, long timeStamp) {
+        executeOnChannel(player, myChannel -> myChannel.midiFilter.send(message, timeStamp));
     }
 
-    public void stopPlay(LivingEntity player, Instrument instrument) {
-        sendMessage(player, instrument, makeEvent(128, 1, 60, 100, 2).getMessage(), -1);
+    public void startPlay(InstrumentPlayer player, int pitch, int volume) {
+        sendMessage(player, makeEvent(ShortMessage.NOTE_ON, 1, pitch, volume, 0).getMessage(), -1);
+    }
+
+    public void stopPlay(InstrumentPlayer player, int pitch, int volume) {
+        sendMessage(player, makeEvent(ShortMessage.NOTE_OFF, 1, pitch, volume, 0).getMessage(), -1);
     }
 
     public static MidiEvent makeEvent(int command, int channel,
@@ -85,6 +84,19 @@ public class InstrumentSoundManager {
             ex.printStackTrace();
         }
         return event;
+    }
+
+    public void playSequence(InstrumentPlayer player, String name) {
+        Sequence sequence = MidiFileLoader.getInstance().getSequence(name);
+        if (sequence != null) {
+            executeOnChannel(player, myChannel -> myChannel.attachSequencer(sequence));
+            getSound(player).activeInstrument = player.getActiveInstrument();
+        }
+    }
+
+    public void stopSequence(InstrumentPlayer player) { //called by sound instance
+        executeOnChannel(player, MyChannel::closeSequencer);
+        getSound(player).activeInstrument = null;
     }
 
     private class EFXManager {

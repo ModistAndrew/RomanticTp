@@ -34,7 +34,7 @@ public class InstrumentKeyMapping {
         ));
     }
 
-    public static float getPitch(int i){
-        return (float) Math.exp(Math.log(2) * intervals[i] / 12);
+    public static int getPitch(int i){
+        return 60 + intervals[i];
     }
 }

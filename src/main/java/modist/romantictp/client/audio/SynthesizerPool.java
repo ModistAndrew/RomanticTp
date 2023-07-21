@@ -25,10 +25,10 @@ public class SynthesizerPool {
         return instance;
     }
 
-    public CompletableFuture<SynthesizerWrapper> request(MyChannel channel) {
+    public SynthesizerWrapper request(MyChannel channel) {
         create();
-        return CompletableFuture.supplyAsync(() -> availableSynthesizers.isEmpty() ?
-                new SynthesizerWrapper() : availableSynthesizers.remove(availableSynthesizers.size()-1));
+        return availableSynthesizers.isEmpty() ?
+                new SynthesizerWrapper() : availableSynthesizers.remove(availableSynthesizers.size()-1);
     }
 
     public void delete(MyChannel channel) {
@@ -70,8 +70,8 @@ public class SynthesizerPool {
                 throw new RuntimeException(e);
             }
 
-            if(ResourceLoader.getInstance().soundbank != null) {
-                synthesizer.loadAllInstruments(ResourceLoader.getInstance().soundbank);
+            if(SoundbankLoader.getInstance().soundbank != null) {
+                synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
             }
 
             try {

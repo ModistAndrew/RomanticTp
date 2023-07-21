@@ -1,41 +1,36 @@
 package modist.romantictp.client.audio;
 
 import com.mojang.blaze3d.audio.Channel;
-import com.mojang.blaze3d.audio.OpenAlUtil;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.audio.fork.sound.AudioSynthesizer;
-import modist.romantictp.client.audio.fork.sound.SoftSynthesizer;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
 
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Receiver;
+import javax.annotation.Nullable;
+import javax.sound.midi.*;
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.SourceDataLine;
-import java.io.PipedInputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MyChannel extends Channel {
+public class MyChannel extends Channel {  //TODO: Thread safety
     private final AudioFormat audioFormat = new AudioFormat(44100, 16, 2, true, false);
     public final AtomicInteger pumpCount = new AtomicInteger();
     public final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
-    public final Receiver receiver;
-    private final int BUFFER_SIZE = 2048;
+    public final MidiFilter midiFilter;
+    @Nullable
+    public Sequencer sequencer;
+    private final int BUFFER_SIZE = 1024;
     private final int BUFFER_COUNT = 8;
     private final InstrumentSoundInstance soundInstance;
 
     public MyChannel(int source, InstrumentSoundInstance soundInstance) {
         super(source);
-        this.synthesizerWrapper = SynthesizerPool.getInstance().request(this).join();
+        this.synthesizerWrapper = SynthesizerPool.getInstance().request(this);
         this.synthesizerWrapper.bindChannel(this);
-        this.receiver = this.synthesizerWrapper.receiver;
+        this.midiFilter = new MidiFilter(this.synthesizerWrapper.receiver, soundInstance.player);
         this.soundInstance = soundInstance;
     }
 
@@ -43,6 +38,27 @@ public class MyChannel extends Channel {
         int[] aint = new int[1];
         AL10.alGenSources(aint);
         return new MyChannel(aint[0], soundInstance);
+    }
+
+    public void closeSequencer() {
+        if(this.sequencer!=null){
+            sequencer.close();
+            RomanticTp.info("closing");
+        }
+        this.sequencer = null;
+    }
+
+    public void attachSequencer(Sequence sequence) {
+        closeSequencer();
+        try {
+            this.sequencer = MidiSystem.getSequencer(false);
+            sequencer.open();
+            sequencer.setSequence(sequence);
+            sequencer.getTransmitter().setReceiver(midiFilter);
+            sequencer.start();
+        } catch (MidiUnavailableException | InvalidMidiDataException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -57,12 +73,13 @@ public class MyChannel extends Channel {
     }
 
     @Override
-    public void destroy() {
+    public void destroy() { //TODO: move "destroy" to other class. remove Instrument player?
         RomanticTp.LOGGER.info("c1:" + System.currentTimeMillis());
         SynthesizerPool.getInstance().delete(this);
         RomanticTp.LOGGER.info("c2:" + System.currentTimeMillis());
         this.removeProcessedBuffers();
-        InstrumentSoundManager.getInstance().remove(soundInstance.instrument);
+        closeSequencer();
+        InstrumentSoundManager.getInstance().remove(soundInstance.player);
         super.destroy();
     }
 
@@ -86,10 +103,9 @@ public class MyChannel extends Channel {
                 pumpCount.notify();
             }
         }
-        RomanticTp.LOGGER.info("Starting pumping" + pReadCount);
     }
 
-    public void write(byte[] b, int off, int len) {
+    public void write(byte[] b, int off, int len) { //TODO: delay?
         synchronized (pumpCount){
             if(pumpCount.get() <= 0){
                 try {
@@ -100,7 +116,6 @@ public class MyChannel extends Channel {
             }
         }
         pumpCount.decrementAndGet();
-        RomanticTp.LOGGER.info("Receiving" + len);
         ByteBuffer bytebuffer = AudioLoader.convertAudioBytes(b, audioFormat.getSampleSizeInBits() == 16,
                 audioFormat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
         if (bytebuffer != null) {
@@ -112,6 +127,7 @@ public class MyChannel extends Channel {
 
     @Override
     public void pause() {
+        //TODO: pause use stop?
     }
 
     @Override

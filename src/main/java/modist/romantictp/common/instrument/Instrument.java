@@ -25,18 +25,16 @@ public abstract class Instrument {
     public final UUID id;
     public final float initialPitch;
     public final float initialVolume;
-    public final String soundName;
-    public final SoundEvent sound;
     public final boolean singleTone;
+    public int instrumentId;
     protected static final Random RANDOM = new Random();
     public static final String PREFIX = "instrument_properties.romantictp.";
 
-    public Instrument(float initialPitch, float initialVolume, String soundName, boolean singleTone) {
+    public Instrument(float initialPitch, float initialVolume, int id, boolean singleTone) {
         this.id = UUID.randomUUID();
         this.initialPitch = initialPitch;
         this.initialVolume = initialVolume;
-        this.soundName = soundName;
-        this.sound = SoundEventLoader.get(soundName).get();
+        this.instrumentId = id;
         this.singleTone = singleTone;
     }
 
@@ -44,8 +42,7 @@ public abstract class Instrument {
         this.id = NbtUtils.loadUUID(tag.get("id"));
         this.initialPitch = tag.getFloat("initialPitch");
         this.initialVolume = tag.getFloat("initialVolume");
-        this.soundName = tag.getString("soundName");
-        this.sound = SoundEventLoader.get(soundName).get();
+        this.instrumentId = tag.getInt("instrumentId");
         this.singleTone = tag.getBoolean("singleTone");
     }
 
@@ -54,7 +51,7 @@ public abstract class Instrument {
         tag.put("id", NbtUtils.createUUID(id));
         tag.putFloat("initialPitch", initialPitch);
         tag.putFloat("initialVolume", initialVolume);
-        tag.putString("soundName", soundName);
+        tag.putInt("instrumentId", instrumentId);
         tag.putBoolean("singleTone", singleTone);
         return tag;
     }
@@ -69,5 +66,13 @@ public abstract class Instrument {
         MutableComponent mutablecomponent = Component.translatable(PREFIX+name);
         mutablecomponent.append(": ").append(String.valueOf(value));
         pTooltip.add(mutablecomponent.withStyle(pFormats));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Instrument instrument){
+            return this.id.equals(instrument.id);
+        }
+        return false;
     }
 }

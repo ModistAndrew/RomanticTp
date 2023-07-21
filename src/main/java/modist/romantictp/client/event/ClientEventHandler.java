@@ -94,11 +94,10 @@ public class ClientEventHandler {
                 ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
                 if (stack.getItem() instanceof InstrumentItem<?> instrumentItem) {
                     if (event.getAction() == InputConstants.PRESS) {
-                        instrumentItem.startPlay(player, stack,
-                                InstrumentKeyMapping.getPitch(i), 1.0F);
+                        instrumentItem.startPlay(player, InstrumentKeyMapping.getPitch(i), 80);
                         player.startUsingItem(InteractionHand.MAIN_HAND);
                     } else if (event.getAction() == InputConstants.RELEASE) {
-                        instrumentItem.stopPlay(player, stack);
+                        instrumentItem.stopPlay(player, InstrumentKeyMapping.getPitch(i), 0);
                         player.stopUsingItem();
                     }
                 }

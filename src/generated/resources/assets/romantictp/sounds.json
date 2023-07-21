@@ -1,8 +1,8 @@
 {
-  "trumpet_sound": {
+  "blank": {
     "sounds": [
-      "romantictp:trumpet"
+      "romantictp:blank"
     ],
-    "subtitle": "sound.romantictp.trumpet"
+    "subtitle": "sound.romantictp.blank"
   }
 }

@@ -6,12 +6,12 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 
-public class ResourceLoader {
+public class SoundbankLoader {
     @Nullable
     public SF2Soundbank soundbank;
-    private static final ResourceLoader instance = new ResourceLoader();
+    private static final SoundbankLoader instance = new SoundbankLoader();
 
-    public static ResourceLoader getInstance() {
+    public static SoundbankLoader getInstance() {
         return instance;
     }
 

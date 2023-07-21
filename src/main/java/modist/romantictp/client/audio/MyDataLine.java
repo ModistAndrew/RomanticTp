@@ -36,7 +36,6 @@ public class MyDataLine implements SourceDataLine {
     @Override
     public int write(byte[] b, int off, int len) {
         if(channel!=null) {
-            RomanticTp.LOGGER.info("write" + String.valueOf(b[0]));
             channel.write(b, off, len);
             return len;
         }

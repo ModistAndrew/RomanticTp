@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 
 public class TrumpetInstrument extends Instrument {
     public TrumpetInstrument(float initialPitch, float initialVolume){
-        super(initialPitch, initialVolume, "trumpet", true);
+        super(initialPitch, initialVolume, 41, true);
     }
 
     public TrumpetInstrument(){
