@@ -16,7 +16,7 @@ import java.util.List;
 
 public class ScoreItem extends Item {
     public ScoreItem() {
-        super(new Item.Properties());
+        super(new Item.Properties().stacksTo(16));
     }
 
     @Nullable

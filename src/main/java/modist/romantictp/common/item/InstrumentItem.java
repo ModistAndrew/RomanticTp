@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class InstrumentItem extends BlockItem { //TODO: can only place at:...
+public class InstrumentItem extends BlockItem {
     public final Supplier<Instrument> defaultInstrument;
 
     public InstrumentItem(InstrumentBlock block) {

@@ -1,20 +1,25 @@
 package modist.romantictp.common.block;
 
+import modist.romantictp.common.item.ScoreItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.AbstractGlassBlock;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class AutoPlayerBlock extends Block implements EntityBlock {
     public AutoPlayerBlock() {
-        super(BlockBehaviour.Properties.of());
+        super(BlockBehaviour.Properties.of().instabreak().noOcclusion());
     }
 
     @Override
@@ -23,17 +28,23 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pReader, BlockPos pPos, CollisionContext pContext) {
-        return Shapes.create(0.2D, 0.2D, 0.2D, 0.8D, 0.8D, 0.8D);
-    }
-
-    @Override
-    public float getShadeBrightness(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-        return 1.0F;
-    }
-
-    @Override
-    public boolean propagatesSkylightDown(BlockState pState, BlockGetter pReader, BlockPos pPos) {
-        return true;
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        AutoPlayerBlockEntity blockEntity = (AutoPlayerBlockEntity) level.getBlockEntity(blockPos);
+        if (blockEntity == null) {
+            return super.use(blockState, level, blockPos, player, hand, hitResult);
+        }
+        if(blockEntity.containsScore()){
+            ItemHandlerHelper.giveItemToPlayer(player, blockEntity.ejectScore());
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        if (itemStack.getItem() instanceof ScoreItem) {
+            blockEntity.injectScore(itemStack);
+            if (!player.getAbilities().instabuild) {
+                itemStack.shrink(1);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return super.use(blockState, level, blockPos, player, hand, hitResult);
     }
 }
