@@ -1,6 +1,7 @@
 package modist.romantictp;
 
 import com.mojang.logging.LogUtils;
+import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraft.client.Minecraft;
@@ -38,6 +39,7 @@ public class RomanticTp
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ItemLoader.ITEMS.register(modEventBus);
+        BlockLoader.BLOCKS.register(modEventBus);
         SoundEventLoader.SOUNDS.register(modEventBus);
     }
 

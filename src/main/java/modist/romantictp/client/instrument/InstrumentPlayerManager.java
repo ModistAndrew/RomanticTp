@@ -1,5 +1,6 @@
-package modist.romantictp.common.instrument;
+package modist.romantictp.client.instrument;
 
+import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;

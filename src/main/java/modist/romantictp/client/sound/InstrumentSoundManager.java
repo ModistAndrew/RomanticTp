@@ -3,9 +3,8 @@ package modist.romantictp.client.sound;
 import com.mojang.logging.LogUtils;
 import modist.romantictp.client.audio.MidiFileLoader;
 import modist.romantictp.client.audio.MyChannel;
-import modist.romantictp.common.instrument.InstrumentPlayer;
+import modist.romantictp.client.instrument.InstrumentPlayer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.sounds.ChannelAccess;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EXTEfx;
@@ -15,7 +14,6 @@ import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class InstrumentSoundManager {

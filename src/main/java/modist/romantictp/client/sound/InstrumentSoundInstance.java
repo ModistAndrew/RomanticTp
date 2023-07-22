@@ -1,17 +1,14 @@
 package modist.romantictp.client.sound;
 
-import modist.romantictp.RomanticTp;
 import modist.romantictp.common.instrument.Instrument;
-import modist.romantictp.common.instrument.InstrumentPlayer;
+import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.LivingEntity;
 
 import javax.annotation.Nullable;
-import javax.sound.midi.Sequencer;
 import java.util.concurrent.CompletableFuture;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
