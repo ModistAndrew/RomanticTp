@@ -15,7 +15,7 @@ public class InstrumentBlock extends Block implements EntityBlock {
     public final Supplier<Instrument> defaultInstrument;
 
     public InstrumentBlock(Supplier<Instrument> defaultInstrument) {
-        super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW));
+        super(BlockBehaviour.Properties.of());
         this.defaultInstrument = defaultInstrument;
     }
 

@@ -27,11 +27,13 @@ public class ItemLoader {
     }
 
     public static final RegistryObject<Item> SCORE = ITEMS.register("score", ScoreItem::new);
+    public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));
 
     public static final RegistryObject<CreativeModeTab> ROMANTICTP_TAB = TABS.register("romantictp_tab",() -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.romantictp_tab"))
             .displayItems((parameters, output) -> {
                 INSTRUMENTS.forEach((s, i) -> ((InstrumentItem)i.get()).getDisplay().forEach(output::accept));
                 ((ScoreItem)SCORE.get()).getDisplay().forEach(output::accept);
+                output.accept(AUTO_PLAYER.get());
             }).build());
 }

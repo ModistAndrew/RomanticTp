@@ -26,12 +26,16 @@ public class BlockLoader {
     static {
         registerInstrument("trumpet", () -> new Instrument(1F,1F, 62, true));
     }
-
-    private static void registerInstrument(String name, Supplier<Instrument> instrument){
-        INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument)));
-    }
+    public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
 
     public static final RegistryObject<BlockEntityType<InstrumentBlockEntity>> INSTRUMENT_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("instrument_block_entity", ()-> BlockEntityType.Builder.of
                     (InstrumentBlockEntity::new, INSTRUMENTS.values().stream().map(RegistryObject::get).toArray(Block[]::new)).build(DSL.remainderType()));
+    public static final RegistryObject<BlockEntityType<AutoPlayerBlockEntity>> AUTO_PLAYER_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("auto_player_block_entity", ()-> BlockEntityType.Builder.of
+                    (AutoPlayerBlockEntity::new, AUTO_PLAYER.get()).build(DSL.remainderType()));
+
+    private static void registerInstrument(String name, Supplier<Instrument> instrument){
+        INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument)));
+    }
 }

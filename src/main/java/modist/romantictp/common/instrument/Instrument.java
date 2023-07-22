@@ -22,7 +22,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Instrument {
-    public final UUID id;
+    public final UUID id; //TODO remove
     public final float initialPitch;
     public final float initialVolume;
     public final boolean singleTone;

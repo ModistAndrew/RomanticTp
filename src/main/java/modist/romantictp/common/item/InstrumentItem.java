@@ -2,9 +2,11 @@ package modist.romantictp.common.item;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.InstrumentSoundManager;
+import modist.romantictp.common.block.AutoPlayerBlock;
 import modist.romantictp.common.block.InstrumentBlock;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -12,7 +14,10 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -73,5 +78,14 @@ public class InstrumentItem extends BlockItem { //TODO: can only place at:...
         CompoundTag tag = defaultInstrument.get().serializeNBT();
         stack.addTagElement("instrument", tag);
         return List.of(stack);
+    }
+
+    @Override
+    protected boolean canPlace(BlockPlaceContext pContext, BlockState pState) {
+        if(pContext.getClickedFace() == Direction.UP &&
+                pContext.getLevel().getBlockState(pContext.getClickedPos().below()).getBlock() instanceof AutoPlayerBlock) {
+            return super.canPlace(pContext, pState);
+        }
+        return false;
     }
 }
