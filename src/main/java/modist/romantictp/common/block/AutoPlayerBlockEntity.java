@@ -1,5 +1,6 @@
 package modist.romantictp.common.block;
 
+import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -8,6 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
 
 public class AutoPlayerBlockEntity extends BlockEntity {
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
@@ -43,7 +46,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
-        injectScore(ItemStack.of(compoundTag.getCompound("score")));
+        this.score = ItemStack.of(compoundTag.getCompound("score"));
     }
 
     @Override
