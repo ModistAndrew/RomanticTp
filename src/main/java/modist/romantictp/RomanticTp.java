@@ -42,12 +42,11 @@ public class RomanticTp
         BlockLoader.BLOCKS.register(modEventBus);
         BlockLoader.BLOCK_ENTITIES.register(modEventBus);
         ItemLoader.ITEMS.register(modEventBus);
+        ItemLoader.TABS.register(modEventBus);
         SoundEventLoader.SOUNDS.register(modEventBus);
     }
 
     public static void info(Object o){
         LOGGER.info(String.valueOf(o));
     }
-
-    public static final CreativeModeTab ITEM_GROUP = CreativeModeTab.builder().title(Component.literal("Romantic TP")).build();
 }

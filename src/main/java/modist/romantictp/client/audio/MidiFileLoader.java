@@ -20,6 +20,8 @@ public class MidiFileLoader {
         try {
             Sequence sequence = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\zjx.mid"));
             resourceMap.put("default", sequence);
+            Sequence sequence1 = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\test.midi"));
+            resourceMap.put("test", sequence1);
         } catch (IOException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }

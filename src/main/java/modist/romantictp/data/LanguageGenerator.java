@@ -18,6 +18,7 @@ public class LanguageGenerator extends LanguageProvider {
     protected void addTranslations() {
         add("key.romantictp.pitch.D", "D");
         add("key.categories.romantictp.instrument", "instrument");
+        add("itemGroup.romantictp_tab", "romantictp");
     }
 
 }

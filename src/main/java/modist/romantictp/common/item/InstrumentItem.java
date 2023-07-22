@@ -5,6 +5,7 @@ import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.block.InstrumentBlock;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,7 +18,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class InstrumentItem extends BlockItem { //TODO: one class is OK
+public class InstrumentItem extends BlockItem { //TODO: can only place at:...
     public final Supplier<Instrument> defaultInstrument;
 
     public InstrumentItem(InstrumentBlock block) {
@@ -65,5 +66,12 @@ public class InstrumentItem extends BlockItem { //TODO: one class is OK
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pIsAdvanced) {
         Instrument instrument = getInstrument(pStack);
         instrument.addText(pTooltip, pIsAdvanced.isAdvanced());
+    }
+
+    public List<ItemStack> getDisplay() {
+        ItemStack stack = new ItemStack(this);
+        CompoundTag tag = defaultInstrument.get().serializeNBT();
+        stack.addTagElement("instrument", tag);
+        return List.of(stack);
     }
 }

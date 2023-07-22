@@ -4,8 +4,9 @@ import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.block.InstrumentBlock;
 import modist.romantictp.common.instrument.Instrument;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -16,6 +17,7 @@ import java.util.function.Supplier;
 
 public class ItemLoader {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RomanticTp.MODID);
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, RomanticTp.MODID);
 
     public static final Map<String, RegistryObject<Item>> INSTRUMENTS = new HashMap<>();
 
@@ -25,4 +27,11 @@ public class ItemLoader {
     }
 
     public static final RegistryObject<Item> SCORE = ITEMS.register("score", ScoreItem::new);
+
+    public static final RegistryObject<CreativeModeTab> ROMANTICTP_TAB = TABS.register("romantictp_tab",() -> CreativeModeTab.builder()
+            .title(Component.translatable("itemGroup.romantictp_tab"))
+            .displayItems((parameters, output) -> {
+                INSTRUMENTS.forEach((s, i) -> ((InstrumentItem)i.get()).getDisplay().forEach(output::accept));
+                ((ScoreItem)SCORE.get()).getDisplay().forEach(output::accept);
+            }).build());
 }
