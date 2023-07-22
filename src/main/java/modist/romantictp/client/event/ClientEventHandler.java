@@ -92,7 +92,7 @@ public class ClientEventHandler {
             if (event.getKey() == k.get().getKey().getValue()) {
                 LocalPlayer player = Minecraft.getInstance().player;
                 ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                if (stack.getItem() instanceof InstrumentItem<?> instrumentItem) {
+                if (stack.getItem() instanceof InstrumentItem instrumentItem) {
                     if (event.getAction() == InputConstants.PRESS) {
                         instrumentItem.startPlay(player, InstrumentKeyMapping.getPitch(i), 80);
                         player.startUsingItem(InteractionHand.MAIN_HAND);

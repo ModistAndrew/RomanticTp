@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public abstract class Instrument {
+public class Instrument {
     public final UUID id;
     public final float initialPitch;
     public final float initialVolume;

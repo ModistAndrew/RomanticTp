@@ -86,10 +86,8 @@ public class InstrumentSoundManager {
 
     public void playSequence(InstrumentPlayer player, String name) {
         Sequence sequence = MidiFileLoader.getInstance().getSequence(name);
-        if (sequence != null) {
-            executeOnChannel(player, myChannel -> myChannel.attachSequencer(sequence));
-            getSound(player).activeInstrument = player.getActiveInstrument();
-        }
+        executeOnChannel(player, myChannel -> myChannel.attachSequencer(sequence));
+        getSound(player).activeInstrument = player.getActiveInstrument();
     }
 
     public void stopSequence(InstrumentPlayer player) { //called by sound instance

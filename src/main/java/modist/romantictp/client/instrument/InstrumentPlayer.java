@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 public interface InstrumentPlayer {
     public Vec3 getPos();
-    public float geVolume();
+    public float getVolume();
 
     @Nullable
     public Instrument getInstrument();

@@ -26,20 +26,20 @@ public class InstrumentPlayerManager {
         }
 
         @Override
-        public float geVolume() {
+        public float getVolume() {
             return (90F - entity.getXRot()) / 180F;
         }
 
         @Override
         public Instrument getInstrument() {
-            return entity.getMainHandItem().getItem() instanceof InstrumentItem<?> instrumentItem ?
+            return entity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem ?
                     instrumentItem.getInstrument(entity.getMainHandItem()) : null;
         }
 
         @Nullable
         @Override
         public Instrument getActiveInstrument() {
-            return entity.getUseItem().getItem() instanceof InstrumentItem<?> instrumentItem ?
+            return entity.getUseItem().getItem() instanceof InstrumentItem instrumentItem ?
                     instrumentItem.getInstrument(entity.getUseItem()) : null;
         }
     }

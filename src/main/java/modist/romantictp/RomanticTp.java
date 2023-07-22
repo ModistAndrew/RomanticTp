@@ -7,6 +7,7 @@ import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -38,12 +39,15 @@ public class RomanticTp
     public RomanticTp()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ItemLoader.ITEMS.register(modEventBus);
         BlockLoader.BLOCKS.register(modEventBus);
+        BlockLoader.BLOCK_ENTITIES.register(modEventBus);
+        ItemLoader.ITEMS.register(modEventBus);
         SoundEventLoader.SOUNDS.register(modEventBus);
     }
 
     public static void info(Object o){
         LOGGER.info(String.valueOf(o));
     }
+
+    public static final CreativeModeTab ITEM_GROUP = CreativeModeTab.builder().title(Component.literal("Romantic TP")).build();
 }

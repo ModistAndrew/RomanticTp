@@ -30,7 +30,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.x = player.getPos().x;
         this.y = player.getPos().y;
         this.z = player.getPos().z;
-        this.volume = player.geVolume();
+        this.volume = player.getVolume();
         if(activeInstrument!=null && !activeInstrument.equals(player.getActiveInstrument())) {
             //TODO: change instrument send stop midi message!
             InstrumentSoundManager.getInstance().stopSequence(player);

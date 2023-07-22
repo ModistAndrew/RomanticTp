@@ -19,13 +19,13 @@ public class MidiFileLoader {
     public void init() {
         try {
             Sequence sequence = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\zjx.mid"));
-            resourceMap.put("test", sequence);
+            resourceMap.put("default", sequence);
         } catch (IOException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
     }
 
     public Sequence getSequence(String name) {
-        return resourceMap.get(name);
+        return resourceMap.get(name) == null ? resourceMap.get("default") : resourceMap.get(name);
     }
 }
