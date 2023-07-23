@@ -37,14 +37,17 @@ public class InstrumentSoundManager { //TODO reload when changing sound
         efx.applyEFX(source);
     }
 
-    private void executeOnChannel(InstrumentPlayer player, Consumer<MyChannel> execution) { //TODO: move init to creation!
+    public void executeOnChannel(InstrumentPlayer player, Consumer<MyChannel> execution) { //TODO: move init to creation! destroy can be dealt on instance
         InstrumentSoundInstance soundInstance = getSound(player);
-        if (soundInstance == null) {
-            soundInstance = new InstrumentSoundInstance(player);
-            Minecraft.getInstance().getSoundManager().play(soundInstance);
-            soundInstanceCache.put(player, soundInstance);
+        if (soundInstance != null) {
+            soundInstance.execute(execution);
         }
-        soundInstance.execute(execution);
+    }
+
+    public void createSoundInstance(InstrumentPlayer player) {
+        InstrumentSoundInstance soundInstance = new InstrumentSoundInstance(player);
+        Minecraft.getInstance().getSoundManager().play(soundInstance);
+        soundInstanceCache.put(player, soundInstance);
     }
 
     @Nullable

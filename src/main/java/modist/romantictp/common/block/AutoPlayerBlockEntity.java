@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class AutoPlayerBlockEntity extends BlockEntity {
+    //TODO: for animation, maybe we can just tick here
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
     public boolean isPlaying;
 
@@ -55,7 +56,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return null;
     }
 
-    public boolean checkPlaying() {
+    public boolean checkPlaying() { //TODO updated from server?
         boolean ret = false;
         if(level!=null) {
             ret = containsScore() && getInstrument() != null && level.hasNeighborSignal(getBlockPos());
@@ -112,5 +113,6 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
+        InstrumentSoundManager.getInstance().createSoundInstance(InstrumentPlayerManager.getOrCreate(this));
     }
 }

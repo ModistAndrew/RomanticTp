@@ -4,20 +4,24 @@ import com.mojang.blaze3d.audio.Library;
 import com.mojang.blaze3d.platform.InputConstants;
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.audio.MyChannel;
+import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
+import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.item.InstrumentItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
 import net.minecraftforge.client.event.sound.PlayStreamingSourceEvent;
 import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -80,6 +84,13 @@ public class ClientEventHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void createSoundInstance(EntityJoinLevelEvent event) {
+        if(event.getEntity() instanceof Player player && player.level().isClientSide) {
+            InstrumentSoundManager.getInstance().createSoundInstance(InstrumentPlayerManager.getOrCreate(player));
         }
     }
 }

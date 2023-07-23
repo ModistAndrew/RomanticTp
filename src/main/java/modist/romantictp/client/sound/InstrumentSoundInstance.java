@@ -25,6 +25,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
         this.instrument = player.getInstrument();
+        this.isPlaying = player.isPlaying();
     }
 
     public void setChannel(CompletableFuture<ChannelAccess.ChannelHandle> channelHandle) {
@@ -42,7 +43,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.z = player.getPos().z;
         this.volume = player.getVolume();
         this.instrument = player.getInstrument();
-        //TODO: check instrument to stop all sound
+        //TODO: check instrument to stop all sound (also applies to sequence)
         checkSequence();
     }
 
