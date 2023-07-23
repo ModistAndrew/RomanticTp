@@ -12,8 +12,9 @@ import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
+    //TODO pass message to channel and manage stop!
     public final InstrumentPlayer player;
-    public final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
+    private CompletableFuture<ChannelAccess.ChannelHandle> channelHandle;
     @Nullable
     public Instrument activeInstrument;
 
@@ -22,8 +23,12 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.player = player;
     }
 
-    public void bindChannel(ChannelAccess.ChannelHandle channelHandle) {
-        this.channelHandle.complete(channelHandle);
+    public void setChannel(CompletableFuture<ChannelAccess.ChannelHandle> channelHandle) {
+        this.channelHandle = channelHandle;
+    }
+
+    public CompletableFuture<ChannelAccess.ChannelHandle> getChannel() {
+        return this.channelHandle;
     }
     @Override
     public void tick() {
@@ -32,7 +37,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.z = player.getPos().z;
         this.volume = player.getVolume();
         if(activeInstrument!=null && !activeInstrument.equals(player.getActiveInstrument())) {
-            //TODO: change instrument send stop midi message!
+            //TODO: change instrument send stop midi message? sequence stop?
             InstrumentSoundManager.getInstance().stopSequence(player);
         }
     }

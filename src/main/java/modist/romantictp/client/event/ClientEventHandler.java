@@ -25,28 +25,6 @@ import net.minecraftforge.fml.common.Mod;
 public class ClientEventHandler {
 
     @SubscribeEvent
-    public static void changeSound(PlaySoundSourceEvent event) {
-        if(event.getSound() instanceof InstrumentSoundInstance instance){
-            RomanticTp.LOGGER.info("a2:" + System.currentTimeMillis());
-
-            ChannelAccess.ChannelHandle channelHandle = event.getEngine().instanceToChannel.get(instance);
-            channelHandle.release();
-
-            MyChannel myChannel = MyChannel.create(instance);
-            myChannel.attachBufferStream(null);
-            myChannel.play();
-
-            channelHandle.stopped = false;
-            channelHandle.channel = myChannel;
-
-            if(event.getEngine().library.staticChannels instanceof Library.CountingChannelPool pool){
-                pool.activeChannels.add(myChannel);
-            }
-            instance.bindChannel(channelHandle);
-        }
-    }
-
-    @SubscribeEvent
     public static void changeSound(PlayStreamingSourceEvent event) {
 //        if(processed){
 //            event.getChannel().stop();

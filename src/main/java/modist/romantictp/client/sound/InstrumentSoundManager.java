@@ -14,16 +14,17 @@ import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public class InstrumentSoundManager {
+public class InstrumentSoundManager { //TODO reload when changing sound
     public static final Logger LOGGER = LogUtils.getLogger();
     private EFXManager efx;
     static InstrumentSoundManager instance = new InstrumentSoundManager();
     //now playing, use instrument UUID to map
     private Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new HashMap<>();
 
-    //TODO quit Game? ESC?
+    //TODO quit Game? ESC? where init?
     public void init() {
         efx = new EFXManager();
     }
@@ -43,7 +44,7 @@ public class InstrumentSoundManager {
             Minecraft.getInstance().getSoundManager().play(soundInstance);
             soundInstanceCache.put(player, soundInstance);
         }
-        soundInstance.channelHandle.thenAcceptAsync(channelHandle -> channelHandle.execute(channel -> {
+        soundInstance.getChannel().thenAcceptAsync(channelHandle -> channelHandle.execute(channel -> {
             if(channel instanceof MyChannel myChannel) {
                 execution.accept(myChannel);
             }
@@ -90,7 +91,7 @@ public class InstrumentSoundManager {
         getSound(player).activeInstrument = player.getActiveInstrument();
     }
 
-    public void stopSequence(InstrumentPlayer player) { //called by sound instance
+    public void stopSequence(InstrumentPlayer player) { //checked by sound instance of player
         executeOnChannel(player, MyChannel::closeSequencer);
         getSound(player).activeInstrument = null;
     }

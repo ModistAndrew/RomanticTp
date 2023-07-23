@@ -1,7 +1,10 @@
 {
   "blank": {
     "sounds": [
-      "romantictp:blank"
+      {
+        "name":"romantictp:blank",
+        "stream": true
+      }
     ],
     "subtitle": "sound.romantictp.blank"
   }
