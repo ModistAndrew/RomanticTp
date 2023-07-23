@@ -26,11 +26,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nullable;
 
 public class AutoPlayerBlock extends Block implements EntityBlock {
-    public static final BooleanProperty LIT = RedstoneTorchBlock.LIT;
 
     public AutoPlayerBlock() {
         super(BlockBehaviour.Properties.of().instabreak().noOcclusion());
-        this.registerDefaultState(this.defaultBlockState().setValue(LIT, Boolean.valueOf(false)));
     }
 
     @Override
@@ -55,31 +53,5 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
             }
         }
         return super.use(blockState, level, blockPos, player, hand, hitResult);
-    }
-
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
-        boolean flag = pState.getValue(LIT);
-        if (flag != pLevel.hasNeighborSignal(pPos)) {
-            if (flag) {
-                pLevel.scheduleTick(pPos, this, 4);
-            } else {
-                if (pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity be) {
-                    if (be.canStart()) {
-                        be.startSequence();
-                        pLevel.setBlock(pPos, pState.cycle(LIT), 2);
-                    }
-                }
-            }
-        }
-    }
-
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pState.getValue(LIT) && !pLevel.hasNeighborSignal(pPos)) {
-            pLevel.setBlock(pPos, pState.cycle(LIT), 2);
-        }
-    }
-
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(LIT);
     }
 }

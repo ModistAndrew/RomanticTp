@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class InstrumentItem extends BlockItem {
+public class InstrumentItem extends BlockItem { //TODO right click to drop
     public final Supplier<Instrument> defaultInstrument;
 
     public InstrumentItem(InstrumentBlock block) {
@@ -52,11 +52,8 @@ public class InstrumentItem extends BlockItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand == InteractionHand.MAIN_HAND) {
-            if(pPlayer.getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+            if(pPlayer.getOffhandItem().getItem() instanceof ScoreItem) {
                 pPlayer.startUsingItem(pUsedHand);
-                if (pPlayer.level().isClientSide) {
-                    InstrumentSoundManager.getInstance().playSequence(InstrumentPlayerManager.getOrCreate(pPlayer), scoreItem.getScoreName(pPlayer.getOffhandItem()));
-                }
                 return InteractionResultHolder.consume(pPlayer.getMainHandItem());
             }
         }

@@ -37,18 +37,14 @@ public class InstrumentSoundManager { //TODO reload when changing sound
         efx.applyEFX(source);
     }
 
-    private void executeOnChannel(InstrumentPlayer player, Consumer<MyChannel> execution) {
+    private void executeOnChannel(InstrumentPlayer player, Consumer<MyChannel> execution) { //TODO: move init to creation!
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance == null) {
             soundInstance = new InstrumentSoundInstance(player);
             Minecraft.getInstance().getSoundManager().play(soundInstance);
             soundInstanceCache.put(player, soundInstance);
         }
-        soundInstance.getChannel().thenAcceptAsync(channelHandle -> channelHandle.execute(channel -> {
-            if(channel instanceof MyChannel myChannel) {
-                execution.accept(myChannel);
-            }
-        }));
+        soundInstance.execute(execution);
     }
 
     @Nullable
@@ -85,15 +81,13 @@ public class InstrumentSoundManager { //TODO reload when changing sound
         return event;
     }
 
-    public void playSequence(InstrumentPlayer player, String name) {
+    public void playSequence(InstrumentPlayer player, String name) { //checked by sound instance of player
         Sequence sequence = MidiFileLoader.getInstance().getSequence(name);
         executeOnChannel(player, myChannel -> myChannel.attachSequencer(sequence));
-        getSound(player).activeInstrument = player.getActiveInstrument();
     }
 
     public void stopSequence(InstrumentPlayer player) { //checked by sound instance of player
         executeOnChannel(player, MyChannel::closeSequencer);
-        getSound(player).activeInstrument = null;
     }
 
     private class EFXManager {

@@ -17,8 +17,7 @@ import javax.annotation.Nullable;
 
 public class AutoPlayerBlockEntity extends BlockEntity {
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
-    private Instrument instrument;
-    //TODO store instrument here; flag of playing
+    public boolean isPlaying;
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -41,8 +40,13 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return oldItemStack;
     }
 
+    public String getScoreName() {
+        return score.getItem() instanceof ScoreItem scoreItem ?
+                scoreItem.getScoreName(score) : "default";
+    }
+
     @Nullable
-    public Instrument extractInstrument(){
+    public Instrument getInstrument() {
         if(level!=null){
             if(level.getBlockEntity(getBlockPos().above()) instanceof InstrumentBlockEntity be) {
                 return be.getInstrument();
@@ -51,21 +55,19 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return null;
     }
 
-    @Nullable
-    public Instrument getInstrument(){
-        return this.instrument;
-    }
-
-
-    public boolean canStart() {
-        return containsScore() && extractInstrument()!=null;
+    public boolean checkPlaying() {
+        boolean ret = false;
+        if(level!=null) {
+            ret = containsScore() && getInstrument() != null && level.hasNeighborSignal(getBlockPos());
+        }
+        isPlaying=ret;
+        return ret;
     }
 
     public void startSequence() {
-        this.instrument = extractInstrument();
         if (level != null && score.getItem() instanceof ScoreItem scoreItem) {
-            InstrumentSoundManager.getInstance().playSequence(InstrumentPlayerManager.getOrCreate(this),
-                    scoreItem.getScoreName(score));
+//            InstrumentSoundManager.getInstance().playSequence(InstrumentPlayerManager.getOrCreate(this),
+//                    scoreItem.getScoreName(score));
         }
     }
 
@@ -80,12 +82,14 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         this.score = ItemStack.of(compoundTag.getCompound("score"));
+        this.isPlaying = compoundTag.getBoolean("isPlaying");
     }
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
-        compoundTag.put("score", score.save(new CompoundTag()));
+        compoundTag.put("score", this.score.save(new CompoundTag()));
+        compoundTag.putBoolean("isPlaying", this.isPlaying);
     }
 
     @Override

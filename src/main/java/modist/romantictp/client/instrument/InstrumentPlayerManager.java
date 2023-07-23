@@ -3,6 +3,7 @@ package modist.romantictp.client.instrument;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
+import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -45,11 +46,16 @@ public class InstrumentPlayerManager {
                     instrumentItem.getInstrument(entity.getMainHandItem()) : null;
         }
 
-        @Nullable
         @Override
-        public Instrument getActiveInstrument() {
-            return entity.getUseItem().getItem() instanceof InstrumentItem instrumentItem ?
-                    instrumentItem.getInstrument(entity.getUseItem()) : null;
+        public boolean isPlaying() {
+            return getInstrument()!=null && entity.getOffhandItem().getItem() instanceof ScoreItem
+                    && entity.getUseItem().getItem() instanceof InstrumentItem;
+        }
+
+        @Override
+        public String getScore() {
+            return entity.getOffhandItem().getItem() instanceof ScoreItem scoreItem ?
+                    scoreItem.getScoreName(entity.getOffhandItem()) : "default";
         }
     }
 
@@ -69,10 +75,14 @@ public class InstrumentPlayerManager {
             return blockEntity.getInstrument();
         }
 
-        @Nullable
         @Override
-        public Instrument getActiveInstrument() {
-            return blockEntity.getInstrument();
+        public boolean isPlaying() {
+            return blockEntity.checkPlaying();
+        }
+
+        @Override
+        public String getScore() {
+            return blockEntity.getScoreName();
         }
     }
 }

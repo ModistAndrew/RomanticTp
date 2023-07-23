@@ -3,6 +3,7 @@ package modist.romantictp.client.audio;
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import modist.romantictp.RomanticTp;
+import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
 
@@ -13,13 +14,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MyChannel extends Channel {  //TODO: Thread safety
+public class MyChannel extends Channel {  //Thread safety: handling audio is OK. No direct access to Render Thread.
     public static final AudioFormat AUDIO_FORMAT = new AudioFormat(44100, 16, 1, true, false);
     public final AtomicInteger pumpCount = new AtomicInteger();
     public final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
     public final MidiFilter midiFilter;
     @Nullable
-    public Sequencer sequencer;
+    public Sequencer sequencer; //TODO tell instance!
     private final int BUFFER_SIZE = 1024;
     private final int BUFFER_COUNT = 8;
 
@@ -57,6 +58,10 @@ public class MyChannel extends Channel {  //TODO: Thread safety
         }
     }
 
+    public void attachInstrument(Instrument instrument) {
+        midiFilter.setActiveInstrument(instrument);
+    }
+
     @Override
     public void attachBufferStream(AudioStream pStream) {
         this.streamingBufferSize = BUFFER_SIZE;
@@ -80,18 +85,7 @@ public class MyChannel extends Channel {  //TODO: Thread safety
     }
 
     @Override
-    public void updateStream() { //TODO: first set again as source has changed?
-//        RomanticTp.info(AL10.alGetSourcei(this.source, AL10.AL_SOURCE_RELATIVE));
-//        RomanticTp.info(AL10.alGetSourcei(this.source, AL10.AL_DISTANCE_MODEL));
-//        RomanticTp.info(AL10.alGetSourcef(this.source, AL10.AL_MAX_DISTANCE));
-//        float[] f1 = new float[1];
-//        float[] f2 = new float[1];
-//        float[] f3 = new float[1];
-//        AL10.alGetSource3f(this.source, AL10.AL_POSITION, f1, f2, f3);
-//        RomanticTp.info(f1[0]);
-//        RomanticTp.info(f2[0]);
-//        RomanticTp.info(f3[0]);
-//        RomanticTp.info("end");
+    public void updateStream() {
         if (AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_STOPPED) {
             this.pumpBuffers(BUFFER_COUNT);
             AL10.alSourcePlay(this.source);
@@ -112,7 +106,7 @@ public class MyChannel extends Channel {  //TODO: Thread safety
         }
     }
 
-    public void write(byte[] b, int off, int len) { //TODO: delay?
+    public void write(byte[] b, int off, int len) { //TODO: delay and lag
         synchronized (pumpCount){
             if(pumpCount.get() <= 0){
                 try {

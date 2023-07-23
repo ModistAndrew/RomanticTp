@@ -6,11 +6,10 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 
 public interface InstrumentPlayer {
-    public Vec3 getPos();
-    public float getVolume();
-
+    Vec3 getPos();
+    float getVolume();
     @Nullable
-    public Instrument getInstrument();
-    @Nullable
-    public Instrument getActiveInstrument();
+    Instrument getInstrument(); //get current instrument holding
+    boolean isPlaying();
+    String getScore();
 }
