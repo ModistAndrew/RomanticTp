@@ -1,31 +1,35 @@
 package modist.romantictp.client.sound.audio;
 
-import modist.romantictp.client.sound.audio.MyChannel;
 import modist.romantictp.client.sound.util.MidiHelper;
-import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.client.sounds.ChannelAccess;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+//Thread safety: handling audio is OK. No direct access to Render Thread.
 public class OuterReceiver implements Receiver { //filter message (by instrument) to synthesizer receiver
-    private final InstrumentPlayer player;
-    private CompletableFuture<ChannelAccess.ChannelHandle> channelHandle;
+    private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
+    @Nullable
+    private volatile Instrument instrument;
 
-    public OuterReceiver(InstrumentPlayer player) {
-        this.player = player;
+    public OuterReceiver() {
     }
 
-    public void setChannel(CompletableFuture<ChannelAccess.ChannelHandle> channelHandle) {
-        this.channelHandle = channelHandle;
+    public void setChannel(ChannelAccess.ChannelHandle channelHandle) {
+        this.channelHandle.complete(channelHandle);
+    }
+
+    public void setInstrument(Instrument instrument) {
+        this.instrument = instrument;
     }
 
     @Override
     public void send(MidiMessage message, long timeStamp) { //TODO channel,... system
-        Instrument instrument = player.getInstrument();
         if(instrument == null){
             return;
         }

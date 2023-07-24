@@ -30,14 +30,16 @@ public class ClientEventHandler {
             Lazy<KeyMapping> k = InstrumentKeyMapping.PITCHES.get(i);
             if (event.getKey() == k.get().getKey().getValue()) {
                 LocalPlayer player = Minecraft.getInstance().player;
-                ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                if (stack.getItem() instanceof InstrumentItem instrumentItem) {
-                    if (event.getAction() == InputConstants.PRESS) {
-                        instrumentItem.startPlay(player, InstrumentKeyMapping.getPitch(i), 80);
-                        player.startUsingItem(InteractionHand.MAIN_HAND);
-                    } else if (event.getAction() == InputConstants.RELEASE) {
-                        instrumentItem.stopPlay(player, InstrumentKeyMapping.getPitch(i));
-                        player.stopUsingItem();
+                if(player!=null) {
+                    ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+                    if (stack.getItem() instanceof InstrumentItem instrumentItem) {
+                        if (event.getAction() == InputConstants.PRESS) {
+                            instrumentItem.startPlay(player, InstrumentKeyMapping.getPitch(i), 80);
+                            player.startUsingItem(InteractionHand.MAIN_HAND);
+                        } else if (event.getAction() == InputConstants.RELEASE) {
+                            instrumentItem.stopPlay(player, InstrumentKeyMapping.getPitch(i));
+                            player.stopUsingItem();
+                        }
                     }
                 }
             }

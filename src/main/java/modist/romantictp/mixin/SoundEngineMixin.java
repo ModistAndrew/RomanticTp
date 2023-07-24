@@ -23,7 +23,7 @@ public class SoundEngineMixin {
     public CompletableFuture<ChannelAccess.ChannelHandle> playSpecial(ChannelAccess channelAccess, Library.Pool pSystemMode, SoundInstance p_120313_) {
         if(p_120313_ instanceof InstrumentSoundInstance instance){
             CompletableFuture<ChannelAccess.ChannelHandle> ret = ((IChannelAccessSpecial)channelAccess).romanticTp$createHandleSpecial(pSystemMode);
-            instance.setChannel(ret);
+            instance.setChannel(ret.join());
             return ret;
         }
         return channelAccess.createHandle(pSystemMode);

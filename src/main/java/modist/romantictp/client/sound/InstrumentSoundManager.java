@@ -9,13 +9,14 @@ import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 //management of sound instance and provide method sending midi message and starting sequence (close is managed by soundInstance tick automatically)
 //TODO quit Game? ESC? where init?
 public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
     //now playing, use instrument UUID to map
-    private Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new HashMap<>();
+    private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>();
 
     public static InstrumentSoundManager getInstance() {
         return instance;

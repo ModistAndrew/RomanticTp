@@ -8,30 +8,31 @@ import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.sounds.SoundSource;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.concurrent.CompletableFuture;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
-    //pass message to channel and manage stop?
+    //pass message to channel and receiver and manage stop?
     public final InstrumentPlayer player;
+    private final OuterReceiver receiver;
+    private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
     @Nullable
     public Instrument instrument;
-    private final OuterReceiver receiver;
-    private CompletableFuture<ChannelAccess.ChannelHandle> channelHandle;
     @Nullable
     private Sequencer sequencer;
 
     public InstrumentSoundInstance(InstrumentPlayer player) {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
-        this.instrument = player.getInstrument();
-        this.receiver = new OuterReceiver(player);
+        this.receiver = new OuterReceiver();
+        this.tick();
     }
 
-    public void setChannel(CompletableFuture<ChannelAccess.ChannelHandle> channelHandle) { //should be called before any message is sent
-        this.channelHandle = channelHandle;
+    public void setChannel(ChannelAccess.ChannelHandle channelHandle) { //should be called before any message is sent
+        this.channelHandle.complete(channelHandle);
         this.receiver.setChannel(channelHandle);
     }
 
@@ -46,8 +47,12 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.z = player.getPos().z;
         this.volume = player.getVolume();
         this.instrument = player.getInstrument();
-        //TODO: check instrument to stop all sound and sequence
+        updateInstrument();
         checkSequence();
+    }
+
+    private void updateInstrument() {
+        this.receiver.setInstrument(this.instrument);
     }
 
     private void checkSequence() {
