@@ -19,8 +19,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     public final InstrumentPlayer player;
     private final OuterReceiver receiver;
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
-    @Nullable
-    public Instrument instrument;
+    public Instrument instrument = Instrument.EMPTY;
     @Nullable
     private Sequencer sequencer;
 
@@ -46,12 +45,16 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.y = player.getPos().y;
         this.z = player.getPos().z;
         this.volume = player.getVolume();
-        this.instrument = player.getInstrument();
         updateInstrument();
         checkSequence();
     }
 
     private void updateInstrument() {
+        Instrument instrumentNow = player.getInstrument();
+        if(this.instrument.equals(instrumentNow)){
+            return;
+        }
+        this.instrument = instrumentNow;
         this.receiver.setInstrument(this.instrument);
     }
 
@@ -63,7 +66,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     private void closeSequencer() {
         if(this.sequencer!=null){
-            sequencer.close();
+            sequencer.close(); //this will call the receiver to stop all notes
         }
         this.sequencer = null;
     }

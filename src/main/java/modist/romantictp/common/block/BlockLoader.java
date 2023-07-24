@@ -24,7 +24,8 @@ public class BlockLoader {
 
     public static final Map<String, RegistryObject<Block>> INSTRUMENTS = new HashMap<>();
     static {
-        registerInstrument("trumpet", () -> new Instrument(1F,1F, 62, true));
+        registerInstrument("trumpet", new Instrument(0,1F, 62, true),
+                            List.of(new Instrument(0,1F, 62, true), new Instrument(-12, 2F, 61, false)));
     }
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
 
@@ -35,7 +36,11 @@ public class BlockLoader {
             BLOCK_ENTITIES.register("auto_player_block_entity", ()-> BlockEntityType.Builder.of
                     (AutoPlayerBlockEntity::new, AUTO_PLAYER.get()).build(DSL.remainderType()));
 
-    private static void registerInstrument(String name, Supplier<Instrument> instrument){
+    private static void registerInstrument(String name, Instrument instrument){
         INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument)));
+    }
+
+    private static void registerInstrument(String name, Instrument instrument, List<Instrument> display){
+        INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument, display)));
     }
 }

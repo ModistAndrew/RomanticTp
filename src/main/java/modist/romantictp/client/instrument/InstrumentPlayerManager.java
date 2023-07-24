@@ -43,7 +43,7 @@ public class InstrumentPlayerManager {
         @Override
         public Instrument getInstrument() {
             return entity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem ?
-                    instrumentItem.getInstrument(entity.getMainHandItem()) : null;
+                    instrumentItem.getInstrument(entity.getMainHandItem()) : Instrument.EMPTY;
         }
 
         @Override

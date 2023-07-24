@@ -1,29 +1,35 @@
 package modist.romantictp.client.sound.util;
 
+import org.lwjgl.system.MathUtil;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
 public class MidiHelper {
-    public static MidiMessage makeMessage(int command, int channel, int note, int velocity) {
+    public static MidiMessage message(int command, int note, int velocity) {
         ShortMessage message;
         try {
-            message = new ShortMessage(command, channel, note, velocity);
+            message = new ShortMessage(command, 1, note, velocity);
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
         return message;
     }
 
-    public static MidiMessage startMessage(int channel, int note, int velocity){
-        return makeMessage(ShortMessage.NOTE_ON, channel, note, velocity);
+    public static MidiMessage startMessage(int note, int velocity){
+        return message(ShortMessage.NOTE_ON, clip(note), clip(velocity));
     }
 
-    public static MidiMessage stopMessage(int channel, int note){
-        return makeMessage(ShortMessage.NOTE_OFF, channel, note, 0);
+    public static MidiMessage stopMessage(int note){
+        return message(ShortMessage.NOTE_OFF, clip(note), 0);
     }
 
-    public static MidiMessage instrumentMessage(int channel, int instrument){
-        return makeMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
+    public static MidiMessage instrumentMessage(int instrument){
+        return message(ShortMessage.PROGRAM_CHANGE, instrument, 0);
+    }
+
+    private static int clip(int value) {
+        return Math.max(0, Math.min(127, value));
     }
 }

@@ -12,14 +12,21 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class InstrumentBlock extends Block implements EntityBlock {
-    public final Supplier<Instrument> defaultInstrument;
+    public final Instrument defaultInstrument;
+    public final List<Instrument> display;
 
-    public InstrumentBlock(Supplier<Instrument> defaultInstrument) {
+    public InstrumentBlock(Instrument defaultInstrument, List<Instrument> display) {
         super(BlockBehaviour.Properties.of());
         this.defaultInstrument = defaultInstrument;
+        this.display = display;
+    }
+
+    public InstrumentBlock(Instrument defaultInstrument) {
+        this(defaultInstrument, List.of(defaultInstrument));
     }
 
     @Override

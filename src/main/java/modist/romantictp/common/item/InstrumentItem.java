@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class InstrumentItem extends BlockItem { //TODO right click to drop
-    public final Supplier<Instrument> defaultInstrument;
+    public final Instrument defaultInstrument;
+    public final List<Instrument> display;
 
     public InstrumentItem(InstrumentBlock block) {
         super(block, new Item.Properties().stacksTo(1));
         this.defaultInstrument = block.defaultInstrument;
+        this.display = block.display;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
     }
 
     public Instrument getInstrument(ItemStack stack) {
-        return stack.getTagElement("instrument") == null ? defaultInstrument.get() : new Instrument(stack.getTagElement("instrument"));
+        return stack.getTagElement("instrument") == null ? defaultInstrument : new Instrument(stack.getTagElement("instrument"));
     }
 
     @Override
@@ -70,10 +72,12 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
     }
 
     public List<ItemStack> getDisplay() {
-        ItemStack stack = new ItemStack(this);
-        CompoundTag tag = defaultInstrument.get().serializeNBT();
-        stack.addTagElement("instrument", tag);
-        return List.of(stack);
+        return this.display.stream().map(instrument -> {
+            ItemStack stack = new ItemStack(this);
+            CompoundTag tag = instrument.serializeNBT();
+            stack.addTagElement("instrument", tag);
+            return stack;
+        }).toList();
     }
 
     @Override

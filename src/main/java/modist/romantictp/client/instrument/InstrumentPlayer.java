@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 public interface InstrumentPlayer {
     Vec3 getPos();
     float getVolume();
-    @Nullable
     Instrument getInstrument(); //get current instrument holding
     boolean isPlaying(); //for sequence check
 }

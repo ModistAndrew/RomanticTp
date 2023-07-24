@@ -19,8 +19,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     //TODO: get message from sequencer for animation
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
     public boolean isPlaying; //updated from server
-    @Nullable
-    public Instrument instrument; //updated from server
+    public Instrument instrument = Instrument.EMPTY; //updated from server
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -50,17 +49,16 @@ public class AutoPlayerBlockEntity extends BlockEntity {
                 return be.getInstrument();
             }
         }
-        return null;
+        return Instrument.EMPTY;
     }
 
-    @Nullable
     public Instrument getInstrument(){
         return this.instrument;
     }
 
     public void updateStatus() { //server. update status and synchronize data to client
         this.instrument = detectInstrument();
-        this.isPlaying = level != null && containsScore() && this.instrument != null && level.hasNeighborSignal(getBlockPos());
+        this.isPlaying = level != null && containsScore() && !this.instrument.isEmpty() && level.hasNeighborSignal(getBlockPos());
         setChangedAndUpdate();
     }
 
@@ -83,7 +81,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         super.load(compoundTag);
         this.score = ItemStack.of(compoundTag.getCompound("score"));
         this.isPlaying = compoundTag.getBoolean("isPlaying");
-        this.instrument = compoundTag.contains("instrument") ? new Instrument(compoundTag.getCompound("instrument")) : null;
+        this.instrument = new Instrument(compoundTag.getCompound("instrument"));
     }
 
     @Override
@@ -91,9 +89,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         super.saveAdditional(compoundTag);
         compoundTag.put("score", this.score.save(new CompoundTag()));
         compoundTag.putBoolean("isPlaying", this.isPlaying);
-        if (instrument != null) {
-            compoundTag.put("instrument", instrument.serializeNBT());
-        }
+        compoundTag.put("instrument", instrument.serializeNBT());
     }
 
     @Override

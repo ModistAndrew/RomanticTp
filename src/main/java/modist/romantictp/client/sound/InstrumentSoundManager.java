@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 //TODO quit Game? ESC? where init?
 public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
-    //now playing, use instrument UUID to map
     private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>();
 
     public static InstrumentSoundManager getInstance() {
@@ -43,11 +42,11 @@ public class InstrumentSoundManager {
     }
 
     public void startPlay(InstrumentPlayer player, int pitch, int velocity) {
-        sendMessage(player, MidiHelper.startMessage(1, pitch, velocity), -1);
+        sendMessage(player, MidiHelper.startMessage(pitch, velocity), -1);
     }
 
     public void stopPlay(InstrumentPlayer player, int pitch) {
-        sendMessage(player, MidiHelper.stopMessage(1, pitch), -1);
+        sendMessage(player, MidiHelper.stopMessage(pitch), -1);
     }
 
     public void startSequence(InstrumentPlayer player, String name) {

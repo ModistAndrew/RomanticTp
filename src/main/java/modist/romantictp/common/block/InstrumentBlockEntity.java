@@ -13,8 +13,7 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class InstrumentBlockEntity extends BlockEntity {
-    @Nullable
-    private Instrument instrument;
+    private Instrument instrument = Instrument.EMPTY;
 
     public InstrumentBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.INSTRUMENT_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -25,9 +24,9 @@ public class InstrumentBlockEntity extends BlockEntity {
         setChangedAndUpdate();
     }
 
-    public Instrument getInstrument() {
-        return this.instrument==null ?
-                ((InstrumentBlock)this.getBlockState().getBlock()).defaultInstrument.get() : this.instrument;
+    public Instrument getInstrument() { //may be set by command
+        return this.instrument.isEmpty() ?
+                ((InstrumentBlock)this.getBlockState().getBlock()).defaultInstrument : this.instrument;
     }
 
     private void setChangedAndUpdate() {
@@ -40,15 +39,13 @@ public class InstrumentBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
-        this.instrument = compoundTag.contains("instrument") ? new Instrument(compoundTag.getCompound("instrument")) : null;
+        this.instrument = new Instrument(compoundTag.getCompound("instrument"));
     }
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
-        if (instrument != null) {
-            compoundTag.put("instrument", instrument.serializeNBT());
-        }
+        compoundTag.put("instrument", instrument.serializeNBT());
     }
 
     @Override
