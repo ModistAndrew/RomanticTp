@@ -45,9 +45,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
 
     @Override
     public void destroy() { //TODO: move "destroy" to other class. remove Instrument player?
-        RomanticTp.LOGGER.info("c1:" + System.currentTimeMillis());
         SynthesizerPool.getInstance().delete(this);
-        RomanticTp.LOGGER.info("c2:" + System.currentTimeMillis());
         this.removeProcessedBuffers();
         //InstrumentSoundManager.getInstance().remove(soundInstance.player);
         super.destroy();
@@ -58,7 +56,6 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
         if (AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_STOPPED) {
             this.pumpBuffers(BUFFER_COUNT);
             AL10.alSourcePlay(this.source);
-            RomanticTp.LOGGER.info("YES!!!");
             return;
         }
         int i = this.removeProcessedBuffers();
