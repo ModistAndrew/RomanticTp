@@ -12,7 +12,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 //Thread safety: handling audio is OK. No direct access to Render Thread.
-public class OuterReceiver implements Receiver { //filter message (by instrument) to synthesizer receiver
+//filter message (by instrument) to synthesizer receiver. You can send message here from manager -> instance -> here or attach a transmitter
+public class OuterReceiver implements Receiver {
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
     @Nullable
     private volatile Instrument instrument;

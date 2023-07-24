@@ -35,25 +35,21 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
         return 72000; //INFINITY
     }
 
-    public void startPlay(LivingEntity player, int pitch, int velocity) {
+    public void startPlay(LivingEntity player, int pitch, int velocity) { //called client
         RomanticTp.info("start play" + System.currentTimeMillis());
-        if (player.level().isClientSide) {
-            InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, velocity);
-        }
+        InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, velocity);
     }
 
-    public void stopPlay(LivingEntity player, int pitch) {
-        if (player.level().isClientSide) {
-            InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch);
-        }
+    public void stopPlay(LivingEntity player, int pitch) { //called client
+        InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand == InteractionHand.MAIN_HAND) {
-            if(pPlayer.getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+            if (pPlayer.getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
                 pPlayer.startUsingItem(pUsedHand);
-                if(pLevel.isClientSide){
+                if (pLevel.isClientSide) {
                     InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(pPlayer),
                             scoreItem.getScoreName(pPlayer.getOffhandItem()));
                 }
@@ -82,7 +78,7 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
 
     @Override
     protected boolean canPlace(BlockPlaceContext pContext, BlockState pState) {
-        if(pContext.getClickedFace() == Direction.UP &&
+        if (pContext.getClickedFace() == Direction.UP &&
                 pContext.getLevel().getBlockState(pContext.getClickedPos().below()).getBlock() instanceof AutoPlayerBlock) {
             return super.canPlace(pContext, pState);
         }
