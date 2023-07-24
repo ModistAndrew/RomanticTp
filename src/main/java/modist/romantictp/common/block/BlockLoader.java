@@ -2,6 +2,7 @@ package modist.romantictp.common.block;
 
 import com.mojang.datafixers.DSL;
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ItemLoader;
@@ -24,8 +25,9 @@ public class BlockLoader {
 
     public static final Map<String, RegistryObject<Block>> INSTRUMENTS = new HashMap<>();
     static {
-        registerInstrument("trumpet", new Instrument(0,1F, 62, true),
-                            List.of(new Instrument(0,1F, 62, true), new Instrument(-12, 2F, 61, false)));
+        registerInstrument("trumpet", new Instrument(0,1F, 62, true, ReverbType.EMPTY),
+                            List.of(new Instrument(0,1F, 62, true, ReverbType.EMPTY),
+                                    new Instrument(0,1F, 62, true, ReverbType.TEST)));
     }
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
 

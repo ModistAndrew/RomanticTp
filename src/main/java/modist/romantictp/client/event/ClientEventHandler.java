@@ -2,7 +2,7 @@ package modist.romantictp.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
-import modist.romantictp.client.sound.audio.EFXManager;
+import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.common.item.InstrumentItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -21,7 +21,7 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void changeSound(PlaySoundSourceEvent event) {
-        EFXManager.getInstance().applyEFX(event.getChannel().source);
+        //EFXManager.getInstance().applyEFX(event.getChannel().source);
     }
 
     @SubscribeEvent

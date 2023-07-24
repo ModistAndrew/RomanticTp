@@ -3,6 +3,8 @@ package modist.romantictp.client.sound.audio;
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.efx.EFXManager;
+import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
@@ -18,12 +20,18 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     public final Receiver receiver; //synthesizer receiver
     private final int BUFFER_SIZE = 1024;
     private final int BUFFER_COUNT = 8;
+    private ReverbType reverb = ReverbType.EMPTY;
 
     public MyChannel(int source) {
         super(source);
         this.synthesizerWrapper = SynthesizerPool.getInstance().request(this);
         this.synthesizerWrapper.bindChannel(this);
         this.receiver = this.synthesizerWrapper.receiver;
+    }
+
+    public void setReverb(ReverbType reverb) {
+        this.reverb = reverb;
+        EFXManager.getInstance().applyEFX(this.reverb, this.source);
     }
 
     public static MyChannel create() {

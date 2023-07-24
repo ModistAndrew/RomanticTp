@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.client.sound.audio.MyChannel;
 import modist.romantictp.client.sound.audio.OuterReceiver;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
@@ -13,9 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
-    //pass message to channel and receiver and manage stop?
+    //pass message to channel and receiver and TODO manage stop
     public final InstrumentPlayer player;
     private final OuterReceiver receiver;
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
@@ -56,6 +58,15 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         }
         this.instrument = instrumentNow;
         this.receiver.setInstrument(this.instrument);
+        executeOnChannel(myChannel -> myChannel.setReverb(this.instrument.reverb()));
+    }
+
+    private void executeOnChannel(Consumer<MyChannel> execution){
+        channelHandle.thenAcceptAsync(handle -> handle.execute(channel -> {
+            if(channel instanceof MyChannel myChannel){
+                execution.accept(myChannel);
+            }
+        }));
     }
 
     private void checkSequence() {

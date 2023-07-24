@@ -1,4 +1,4 @@
-package modist.romantictp.client.sound.audio;
+package modist.romantictp.client.sound.efx;
 
 import modist.romantictp.RomanticTp;
 import org.lwjgl.openal.AL11;
@@ -69,10 +69,10 @@ public class EFXManager {
         EXTEfx.alAuxiliaryEffectSloti(auxFXSlot, EXTEfx.AL_EFFECTSLOT_EFFECT, reverbSlot);
     }
 
-    public void applyEFX(int source) {
+    public void applyEFX(ReverbType type, int source) {
         EXTEfx.alFilterf(sendFilter, EXTEfx.AL_LOWPASS_GAIN, 1F);
         EXTEfx.alFilterf(sendFilter, EXTEfx.AL_LOWPASS_GAINHF, 1F);
-        AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER, auxFXSlot, 0, EXTEfx.AL_FILTER_NULL);
-        //AL10.alSourcef(source, AL10.AL_PITCH, 2.0F);
+        AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER, type == ReverbType.EMPTY ?
+                EXTEfx.AL_EFFECT_NULL : auxFXSlot, 0, EXTEfx.AL_FILTER_NULL);
     }
 }

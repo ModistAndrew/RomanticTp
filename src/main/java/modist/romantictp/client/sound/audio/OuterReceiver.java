@@ -42,7 +42,7 @@ public class OuterReceiver implements Receiver {
     }
 
     @Override
-    public void send(MidiMessage message, long timeStamp) { //TODO channel ... system
+    public void send(MidiMessage message, long timeStamp) {
         if (message instanceof ShortMessage shortMessage) {
             if(this.instrument.isEmpty()){
                 return;

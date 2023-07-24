@@ -19,6 +19,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     //TODO: get message from sequencer for animation
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
     public boolean isPlaying; //updated from server
+    //TODO: manage instrument?
     public Instrument instrument = Instrument.EMPTY; //updated from server
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {

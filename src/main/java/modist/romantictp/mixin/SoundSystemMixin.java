@@ -1,6 +1,6 @@
 package modist.romantictp.mixin;
 
-import modist.romantictp.client.sound.audio.EFXManager;
+import modist.romantictp.client.sound.efx.EFXManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
