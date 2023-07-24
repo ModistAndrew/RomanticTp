@@ -17,7 +17,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.CollisionContext;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,16 +35,16 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
         return 72000; //INFINITY
     }
 
-    public void startPlay(LivingEntity player, int pitch, int volume) {
+    public void startPlay(LivingEntity player, int pitch, int velocity) {
         RomanticTp.info("start play" + System.currentTimeMillis());
         if (player.level().isClientSide) {
-            InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, volume);
+            InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, velocity);
         }
     }
 
-    public void stopPlay(LivingEntity player, int pitch, int volume) {
+    public void stopPlay(LivingEntity player, int pitch) {
         if (player.level().isClientSide) {
-            InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch, volume);
+            InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch);
         }
     }
 

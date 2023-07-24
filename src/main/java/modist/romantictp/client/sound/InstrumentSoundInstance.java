@@ -1,6 +1,6 @@
 package modist.romantictp.client.sound;
 
-import modist.romantictp.client.audio.OuterReceiver;
+import modist.romantictp.client.sound.audio.OuterReceiver;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.common.sound.SoundEventLoader;

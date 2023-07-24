@@ -3,7 +3,7 @@ package modist.romantictp.mixin;
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.Library;
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.audio.MyChannel;
+import modist.romantictp.client.sound.audio.MyChannel;
 import modist.romantictp.mixininterface.ICountingChannelPoolSpecial;
 import net.minecraft.SharedConstants;
 import org.spongepowered.asm.mixin.Final;
