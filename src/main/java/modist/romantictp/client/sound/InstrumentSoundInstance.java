@@ -38,7 +38,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     }
 
     public void sendMessage(MidiMessage message, long timeStamp) {
-        this.receiver.send(message,timeStamp);
+        this.receiver.send(message, timeStamp);
     }
 
     @Override
@@ -49,11 +49,12 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.volume = player.getVolume();
         updateInstrument();
         checkSequence();
+        updateSequenceStatus();
     }
 
     private void updateInstrument() {
         Instrument instrumentNow = player.getInstrument();
-        if(this.instrument.equals(instrumentNow)){
+        if (this.instrument.equals(instrumentNow)) {
             return;
         }
         this.instrument = instrumentNow;
@@ -61,22 +62,34 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         executeOnChannel(myChannel -> myChannel.setReverb(this.instrument.reverb()));
     }
 
-    private void executeOnChannel(Consumer<MyChannel> execution){
+    private void executeOnChannel(Consumer<MyChannel> execution) {
         channelHandle.thenAcceptAsync(handle -> handle.execute(channel -> {
-            if(channel instanceof MyChannel myChannel){
+            if (channel instanceof MyChannel myChannel) {
                 execution.accept(myChannel);
             }
         }));
     }
 
     private void checkSequence() {
-        if(!player.isPlaying() && this.sequencer !=null){
-            closeSequencer();
+        if (sequencer != null) {
+            if (!player.isPlaying()) {
+                closeSequencer();
+            } else if (!sequencer.isRunning()) {
+                closeSequencer();
+                player.stopPlaying(); //avoid duplication
+            }
+        }
+    }
+
+    private void updateSequenceStatus() {
+        if (this.sequencer != null) {
+            this.player.updateSequenceStatus
+                    ((float) sequencer.getTickPosition() / sequencer.getTickLength());
         }
     }
 
     private void closeSequencer() {
-        if(this.sequencer!=null){
+        if (this.sequencer != null) {
             sequencer.close(); //this will call the receiver to stop all notes
         }
         this.sequencer = null;

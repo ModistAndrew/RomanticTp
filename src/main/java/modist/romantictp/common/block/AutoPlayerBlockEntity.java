@@ -1,5 +1,6 @@
 package modist.romantictp.common.block;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
@@ -18,9 +19,11 @@ import javax.annotation.Nullable;
 public class AutoPlayerBlockEntity extends BlockEntity {
     //TODO: get message from sequencer for animation
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
-    public boolean isPlaying; //updated from server
     //TODO: manage instrument?
     public Instrument instrument = Instrument.EMPTY; //updated from server
+    public boolean powered; //whether is powered
+    public boolean isPlaying; //client only
+    public float progress; //client only
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -59,7 +62,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
 
     public void updateStatus() { //server. update status and synchronize data to client
         this.instrument = detectInstrument();
-        this.isPlaying = level != null && containsScore() && !this.instrument.isEmpty() && level.hasNeighborSignal(getBlockPos());
+        this.powered = level.hasNeighborSignal(getBlockPos());
         setChangedAndUpdate();
     }
 
@@ -81,16 +84,16 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         this.score = ItemStack.of(compoundTag.getCompound("score"));
-        this.isPlaying = compoundTag.getBoolean("isPlaying");
         this.instrument = new Instrument(compoundTag.getCompound("instrument"));
+        this.powered = compoundTag.getBoolean("powered");
     }
 
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         compoundTag.put("score", this.score.save(new CompoundTag()));
-        compoundTag.putBoolean("isPlaying", this.isPlaying);
         compoundTag.put("instrument", instrument.serializeNBT());
+        compoundTag.putBoolean("powered", this.powered);
     }
 
     @Override
@@ -100,9 +103,11 @@ public class AutoPlayerBlockEntity extends BlockEntity {
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) { //called when data from server is updated
-        boolean previous = this.isPlaying;
+        boolean previousPlaying = this.isPlaying;
+        boolean previousPowered = this.powered;
         handleUpdateTag(pkt.getTag());
-        if(this.isPlaying && !previous) {
+        this.isPlaying = containsScore() && !this.instrument.isEmpty() && this.powered;
+        if(this.powered && !previousPowered && this.isPlaying && !previousPlaying) {
             startSequence(); //stop will be handled by tick in instance
         }
     }
@@ -117,5 +122,15 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
+    }
+
+    public void updateSequenceStatus(float progress) {
+        this.progress = progress;
+        RomanticTp.info(progress);
+    }
+
+    public void stopPlaying() {
+        this.isPlaying = false;
+        RomanticTp.info(this.isPlaying);
     }
 }

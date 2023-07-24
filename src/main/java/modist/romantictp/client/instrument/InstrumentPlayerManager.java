@@ -51,6 +51,15 @@ public class InstrumentPlayerManager {
             return getInstrument()!=null && entity.getOffhandItem().getItem() instanceof ScoreItem
                     && entity.getUseItem().getItem() instanceof InstrumentItem;
         }
+
+        @Override
+        public void updateSequenceStatus(float progress) {
+        }
+
+        @Override
+        public void stopPlaying() {
+            entity.stopUsingItem();
+        }
     }
 
     private record BlockPlayer(AutoPlayerBlockEntity blockEntity) implements InstrumentPlayer {
@@ -72,6 +81,16 @@ public class InstrumentPlayerManager {
         @Override
         public boolean isPlaying() {
             return blockEntity.isPlaying;
+        }
+
+        @Override
+        public void updateSequenceStatus(float progress) {
+            blockEntity.updateSequenceStatus(progress);
+        }
+
+        @Override
+        public void stopPlaying() {
+            blockEntity.stopPlaying();
         }
     }
 }

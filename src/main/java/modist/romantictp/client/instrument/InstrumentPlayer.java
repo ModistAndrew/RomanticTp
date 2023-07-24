@@ -10,4 +10,6 @@ public interface InstrumentPlayer {
     float getVolume();
     Instrument getInstrument(); //get current instrument holding
     boolean isPlaying(); //for sequence check
+    void updateSequenceStatus(float progress);
+    void stopPlaying(); //reset from sequencer
 }
