@@ -16,9 +16,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class AutoPlayerBlockEntity extends BlockEntity {
-    //TODO: for animation, maybe we can just tick here
+    //TODO: get message from sequencer for animation
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
-    public boolean isPlaying;
+    public boolean isPlaying; //updated from server
+    @Nullable
+    public Instrument instrument; //updated from server
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -41,13 +43,8 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return oldItemStack;
     }
 
-    public String getScoreName() {
-        return score.getItem() instanceof ScoreItem scoreItem ?
-                scoreItem.getScoreName(score) : "default";
-    }
-
     @Nullable
-    public Instrument getInstrument() {
+    public Instrument detectInstrument() { //server
         if(level!=null){
             if(level.getBlockEntity(getBlockPos().above()) instanceof InstrumentBlockEntity be) {
                 return be.getInstrument();
@@ -56,19 +53,21 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return null;
     }
 
-    public boolean checkPlaying() { //TODO updated from server?
-        boolean ret = false;
-        if(level!=null) {
-            ret = containsScore() && getInstrument() != null && level.hasNeighborSignal(getBlockPos());
-        }
-        isPlaying=ret;
-        return ret;
+    @Nullable
+    public Instrument getInstrument(){
+        return this.instrument;
     }
 
-    public void startSequence() {
-        if (level != null && score.getItem() instanceof ScoreItem scoreItem) {
-//            InstrumentSoundManager.getInstance().playSequence(InstrumentPlayerManager.getOrCreate(this),
-//                    scoreItem.getScoreName(score));
+    public void updateStatus() { //server. update status and synchronize data to client
+        this.instrument = detectInstrument();
+        this.isPlaying = level != null && containsScore() && this.instrument != null && level.hasNeighborSignal(getBlockPos());
+        setChangedAndUpdate();
+    }
+
+    private void startSequence() { //client
+        if (score.getItem() instanceof ScoreItem scoreItem) {
+            InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(this),
+                    scoreItem.getScoreName(score));
         }
     }
 
@@ -84,6 +83,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         super.load(compoundTag);
         this.score = ItemStack.of(compoundTag.getCompound("score"));
         this.isPlaying = compoundTag.getBoolean("isPlaying");
+        this.instrument = compoundTag.contains("instrument") ? new Instrument(compoundTag.getCompound("instrument")) : null;
     }
 
     @Override
@@ -91,6 +91,9 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         super.saveAdditional(compoundTag);
         compoundTag.put("score", this.score.save(new CompoundTag()));
         compoundTag.putBoolean("isPlaying", this.isPlaying);
+        if (instrument != null) {
+            compoundTag.put("instrument", instrument.serializeNBT());
+        }
     }
 
     @Override
@@ -99,8 +102,12 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) { //called when data from server is updated
+        boolean previous = this.isPlaying;
         handleUpdateTag(pkt.getTag());
+        if(this.isPlaying && !previous) {
+            startSequence(); //stop will be handled by tick in instance
+        }
     }
 
     @Override
@@ -113,6 +120,5 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
-        InstrumentSoundManager.getInstance().createSoundInstance(InstrumentPlayerManager.getOrCreate(this));
     }
 }

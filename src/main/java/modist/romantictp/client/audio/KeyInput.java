@@ -10,6 +10,7 @@ import java.util.List;
 import modist.romantictp.client.audio.fork.sound.AudioSynthesizer;
 import modist.romantictp.client.audio.fork.sound.SF2Soundbank;
 import modist.romantictp.client.audio.fork.sound.SoftSynthesizer;
+@Deprecated
 public class KeyInput {
 
     /*public static PipedInputStream getStream() throws LineUnavailableException, InvalidMidiDataException, IOException, MidiUnavailableException {

@@ -86,11 +86,4 @@ public class ClientEventHandler {
             }
         }
     }
-
-    @SubscribeEvent
-    public static void createSoundInstance(EntityJoinLevelEvent event) {
-        if(event.getEntity() instanceof Player player && player.level().isClientSide) {
-            InstrumentSoundManager.getInstance().createSoundInstance(InstrumentPlayerManager.getOrCreate(player));
-        }
-    }
 }

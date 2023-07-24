@@ -3,6 +3,7 @@
     "sounds": [
       {
         "name":"romantictp:blank",
+        "attenuation_distance": 64,
         "stream": true
       }
     ],

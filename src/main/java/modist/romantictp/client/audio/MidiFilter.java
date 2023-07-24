@@ -8,6 +8,7 @@ import modist.romantictp.client.instrument.InstrumentPlayer;
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
 
+@Deprecated
 public class MidiFilter implements Receiver {
     private final Receiver receiver;
     @Nullable

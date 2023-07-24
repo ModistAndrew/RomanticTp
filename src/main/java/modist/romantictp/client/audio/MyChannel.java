@@ -15,12 +15,10 @@ import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MyChannel extends Channel {  //Thread safety: handling audio is OK. No direct access to Render Thread.
-    public static final AudioFormat AUDIO_FORMAT = new AudioFormat(44100, 16, 1, true, false);
+    public static final AudioFormat AUDIO_FORMAT = new AudioFormat(44100, 16, 1, true, false); //keep consistent with vanilla, or sth. strange will happen
     public final AtomicInteger pumpCount = new AtomicInteger();
     public final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
-    public final MidiFilter midiFilter;
-    @Nullable
-    public Sequencer sequencer; //TODO tell instance!
+    public final Receiver receiver; //synthesizer receiver
     private final int BUFFER_SIZE = 1024;
     private final int BUFFER_COUNT = 8;
 
@@ -28,38 +26,13 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
         super(source);
         this.synthesizerWrapper = SynthesizerPool.getInstance().request(this);
         this.synthesizerWrapper.bindChannel(this);
-        this.midiFilter = new MidiFilter(this.synthesizerWrapper.receiver);
+        this.receiver = this.synthesizerWrapper.receiver;
     }
 
     public static MyChannel create() {
         int[] aint = new int[1];
         AL10.alGenSources(aint);
         return new MyChannel(aint[0]);
-    }
-
-    public void closeSequencer() {
-        if(this.sequencer!=null){
-            sequencer.close();
-            RomanticTp.info("closing");
-        }
-        this.sequencer = null;
-    }
-
-    public void attachSequencer(Sequence sequence) {
-        closeSequencer();
-        try {
-            this.sequencer = MidiSystem.getSequencer(false);
-            sequencer.open();
-            sequencer.setSequence(sequence);
-            sequencer.getTransmitter().setReceiver(midiFilter);
-            sequencer.start();
-        } catch (MidiUnavailableException | InvalidMidiDataException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void attachInstrument(Instrument instrument) {
-        midiFilter.setActiveInstrument(instrument);
     }
 
     @Override
@@ -79,7 +52,6 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
         SynthesizerPool.getInstance().delete(this);
         RomanticTp.LOGGER.info("c2:" + System.currentTimeMillis());
         this.removeProcessedBuffers();
-        closeSequencer();
         //InstrumentSoundManager.getInstance().remove(soundInstance.player);
         super.destroy();
     }

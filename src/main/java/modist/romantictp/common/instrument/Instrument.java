@@ -22,6 +22,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Instrument {
+    @Deprecated
     public final UUID id; //TODO remove
     public final float initialPitch;
     public final float initialVolume;

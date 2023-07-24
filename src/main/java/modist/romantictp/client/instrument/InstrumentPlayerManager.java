@@ -51,12 +51,6 @@ public class InstrumentPlayerManager {
             return getInstrument()!=null && entity.getOffhandItem().getItem() instanceof ScoreItem
                     && entity.getUseItem().getItem() instanceof InstrumentItem;
         }
-
-        @Override
-        public String getScore() {
-            return entity.getOffhandItem().getItem() instanceof ScoreItem scoreItem ?
-                    scoreItem.getScoreName(entity.getOffhandItem()) : "default";
-        }
     }
 
     private record BlockPlayer(AutoPlayerBlockEntity blockEntity) implements InstrumentPlayer {
@@ -77,12 +71,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public boolean isPlaying() {
-            return blockEntity.checkPlaying();
-        }
-
-        @Override
-        public String getScore() {
-            return blockEntity.getScoreName();
+            return blockEntity.isPlaying;
         }
     }
 }

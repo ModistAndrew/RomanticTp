@@ -17,7 +17,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public class InstrumentSoundManager { //TODO reload when changing sound
+//management of sound instance and provide method sending midi message and starting sequence (close is managed by soundInstance tick automatically)
+public class InstrumentSoundManager {
     public static final Logger LOGGER = LogUtils.getLogger();
     private EFXManager efx;
     static InstrumentSoundManager instance = new InstrumentSoundManager();
@@ -37,30 +38,24 @@ public class InstrumentSoundManager { //TODO reload when changing sound
         efx.applyEFX(source);
     }
 
-    public void executeOnChannel(InstrumentPlayer player, Consumer<MyChannel> execution) { //TODO: move init to creation! destroy can be dealt on instance
-        InstrumentSoundInstance soundInstance = getSound(player);
-        if (soundInstance != null) {
-            soundInstance.execute(execution);
-        }
-    }
-
-    public void createSoundInstance(InstrumentPlayer player) {
-        InstrumentSoundInstance soundInstance = new InstrumentSoundInstance(player);
-        Minecraft.getInstance().getSoundManager().play(soundInstance);
-        soundInstanceCache.put(player, soundInstance);
-    }
-
     @Nullable
     private InstrumentSoundInstance getSound(InstrumentPlayer player) {
-        return player == null ? null : soundInstanceCache.get(player);
+        InstrumentSoundInstance soundInstance = soundInstanceCache.get(player);
+        if (soundInstance == null) { //lazy creation
+            soundInstance = new InstrumentSoundInstance(player);
+            Minecraft.getInstance().getSoundManager().play(soundInstance);
+            soundInstanceCache.put(player, soundInstance);
+        }
+        return soundInstance;
     }
 
-    public void remove(InstrumentPlayer player) {
+    public void remove(InstrumentPlayer player) { //TODO: removal of Sequencer and Player(optional?), destroy of channel(syn) and here!(for np)
         soundInstanceCache.remove(player);
     }
 
     public void sendMessage(InstrumentPlayer player, MidiMessage message, long timeStamp) {
-        executeOnChannel(player, myChannel -> myChannel.midiFilter.send(message, timeStamp));
+        InstrumentSoundInstance soundInstance = getSound(player);
+        soundInstance.sendMessage(message, timeStamp);
     }
 
     public void startPlay(InstrumentPlayer player, int pitch, int volume) {
@@ -84,13 +79,10 @@ public class InstrumentSoundManager { //TODO reload when changing sound
         return event;
     }
 
-    public void playSequence(InstrumentPlayer player, String name) { //checked by sound instance of player
+    public void startSequence(InstrumentPlayer player, String name) {
+        InstrumentSoundInstance soundInstance = getSound(player);
         Sequence sequence = MidiFileLoader.getInstance().getSequence(name);
-        executeOnChannel(player, myChannel -> myChannel.attachSequencer(sequence));
-    }
-
-    public void stopSequence(InstrumentPlayer player) { //checked by sound instance of player
-        executeOnChannel(player, MyChannel::closeSequencer);
+        soundInstance.attachSequencer(sequence);
     }
 
     private class EFXManager {

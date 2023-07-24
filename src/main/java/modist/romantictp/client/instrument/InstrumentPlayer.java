@@ -10,6 +10,5 @@ public interface InstrumentPlayer {
     float getVolume();
     @Nullable
     Instrument getInstrument(); //get current instrument holding
-    boolean isPlaying();
-    String getScore();
+    boolean isPlaying(); //for sequence check
 }
