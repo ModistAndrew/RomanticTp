@@ -39,11 +39,11 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
 
     public void startPlay(LivingEntity player, int pitch, int velocity) { //called client
         RomanticTp.info("start play" + System.currentTimeMillis());
-        InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, velocity);
+        InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, velocity, true);
     }
 
     public void stopPlay(LivingEntity player, int pitch) { //called client
-        InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch);
+        InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch, true);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
                 pPlayer.startUsingItem(pUsedHand);
                 if (pLevel.isClientSide) {
                     InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(pPlayer),
-                            scoreItem.getScoreName(pPlayer.getOffhandItem()));
+                            scoreItem.getScoreName(pPlayer.getOffhandItem()), true);
                 }
                 return InteractionResultHolder.consume(pPlayer.getMainHandItem());
             }

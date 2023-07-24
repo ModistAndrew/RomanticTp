@@ -16,7 +16,7 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
 
     public Instrument(CompoundTag tag) {
         this(tag.getInt("initialPitch"), tag.getFloat("initialVolume"), tag.getInt("instrumentId"), tag.getBoolean("singleTone"),
-                ReverbType.valueOf(tag.getString("reverb")));
+                ReverbType.fromString(tag.getString("reverb")));
     }
 
     public CompoundTag serializeNBT() {

@@ -52,7 +52,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     }
 
     @Override
-    public void destroy() { //TODO: move "destroy" to other class. destroy and CLOSE; instance clear; player clear?
+    public void destroy() { //TODO: move "destroy" to other class. destroy and close device; instance clear; player clear?
         SynthesizerPool.getInstance().delete(this);
         this.removeProcessedBuffers();
         //InstrumentSoundManager.getInstance().remove(soundInstance.player);

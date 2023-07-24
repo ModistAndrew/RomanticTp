@@ -4,6 +4,11 @@ import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +32,15 @@ public class InstrumentPlayerManager {
             blockEntityMap.put(blockEntity, new BlockPlayer(blockEntity));
         }
         return blockEntityMap.get(blockEntity);
+    }
+
+    public static InstrumentPlayer fromNbt(CompoundTag tag) {
+        if(tag.contains("id")){
+            return getOrCreate((LivingEntity) Minecraft.getInstance().level.getEntity(tag.getInt("id")));
+        } else {
+            return getOrCreate((AutoPlayerBlockEntity) Minecraft.getInstance().level
+                    .getBlockEntity(NbtUtils.readBlockPos(tag)));
+        }
     }
 
     private record Player(LivingEntity entity) implements InstrumentPlayer {
@@ -60,6 +74,13 @@ public class InstrumentPlayerManager {
         public void stopPlaying() {
             entity.stopUsingItem();
         }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            CompoundTag ret = new CompoundTag();
+            ret.putInt("id", entity.getId());
+            return ret;
+        }
     }
 
     private record BlockPlayer(AutoPlayerBlockEntity blockEntity) implements InstrumentPlayer {
@@ -91,6 +112,11 @@ public class InstrumentPlayerManager {
         @Override
         public void stopPlaying() {
             blockEntity.stopPlaying();
+        }
+
+        @Override
+        public CompoundTag serializeNBT() {
+            return NbtUtils.writeBlockPos(blockEntity.getBlockPos());
         }
     }
 }
