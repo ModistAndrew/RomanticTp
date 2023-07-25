@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//1. management of sound instance, thus providing method starting sequence (close is managed by soundInstance tick automatically)
-//2. sending midi message and broadcasting!
+//management of sound instance, thus providing method sending midi message and sequence and broadcasting
+//sequence closure is managed by soundInstance tick automatically
 //TODO quit Game? ESC? where init? reload?
 public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
@@ -55,7 +55,7 @@ public class InstrumentSoundManager {
         sendMessage(player, MidiHelper.stopMessage(pitch), -1, broadcast);
     }
 
-    public void startSequence(InstrumentPlayer player, String name, boolean broadcast) { //TODO: move to "global receiver", here a simple method to access sequencer
+    public void startSequence(InstrumentPlayer player, String name, boolean broadcast) {
         InstrumentSoundInstance soundInstance = getSound(player);
         Sequence sequence = MidiFileLoader.getInstance().getSequence(name);
         soundInstance.attachSequencer(sequence);

@@ -9,7 +9,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,12 +36,14 @@ public class InstrumentPlayerManager {
         return blockEntityMap.get(blockEntity);
     }
 
+    @Nullable
     public static InstrumentPlayer fromNbt(CompoundTag tag) {
         if(tag.contains("id")){
-            return getOrCreate((LivingEntity) Minecraft.getInstance().level.getEntity(tag.getInt("id")));
+            Entity entity = Minecraft.getInstance().level.getEntity(tag.getInt("id"));
+            return entity instanceof LivingEntity livingEntity ? getOrCreate(livingEntity) : null;
         } else {
-            return getOrCreate((AutoPlayerBlockEntity) Minecraft.getInstance().level
-                    .getBlockEntity(NbtUtils.readBlockPos(tag)));
+            BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(NbtUtils.readBlockPos(tag));
+            return blockEntity instanceof AutoPlayerBlockEntity autoPlayerBlockEntity ? getOrCreate(autoPlayerBlockEntity) : null;
         }
     }
 

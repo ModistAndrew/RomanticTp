@@ -29,9 +29,11 @@ public class InstrumentSoundBroadcastPacket {
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
         InstrumentPlayer player = InstrumentPlayerManager.fromNbt(packet.intrumentPlayer);
-        switch (packet.op) {
-            case 0 -> InstrumentSoundManager.getInstance().sendMessage(player, packet.midiMessage, packet.timeStamp, false);
-            case 1 -> InstrumentSoundManager.getInstance().startSequence(player, packet.sequenceName, false);
+        if(player!=null) {
+            switch (packet.op) {
+                case 0 -> InstrumentSoundManager.getInstance().sendMessage(player, packet.midiMessage, packet.timeStamp, false);
+                case 1 -> InstrumentSoundManager.getInstance().startSequence(player, packet.sequenceName, false);
+            }
         }
     }
 }

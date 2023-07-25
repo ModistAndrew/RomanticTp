@@ -16,10 +16,10 @@ public class SoundbankLoader {
     }
 
     public void init() {
-        try {
-            soundbank = new SF2Soundbank(new File("C:\\Users\\zjx\\Desktop\\Music\\Touhou1.sf2"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            soundbank = new SF2Soundbank(new File("C:\\Users\\zjx\\Desktop\\Music\\Touhou1.sf2"));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }

@@ -15,14 +15,14 @@ public class MidiFileLoader {
     }
 
     public void init() {
-        try {
-            Sequence sequence = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\zjx.mid"));
-            resourceMap.put("test", sequence);
-            Sequence sequence1 = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\test.midi"));
-            resourceMap.put("default", sequence1);
-        } catch (IOException | InvalidMidiDataException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            Sequence sequence = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\zjx.mid"));
+//            resourceMap.put("test", sequence);
+//            Sequence sequence1 = MidiSystem.getSequence(new File("C:\\Users\\zjx\\Desktop\\Music\\test.midi"));
+//            resourceMap.put("default", sequence1);
+//        } catch (IOException | InvalidMidiDataException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public Sequence getSequence(String name) {
