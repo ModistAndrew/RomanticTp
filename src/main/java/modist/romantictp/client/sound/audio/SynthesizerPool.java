@@ -35,6 +35,7 @@ public class SynthesizerPool {
 
     public void delete(MyChannel channel) {
         CompletableFuture.runAsync(() -> {
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             RomanticTp.info("deletingSyn");
             channel.synthesizerWrapper.close();
             RomanticTp.info("deleteFinish");
@@ -44,6 +45,7 @@ public class SynthesizerPool {
     private void create() {
         RomanticTp.info("syn" + availableSynthesizers.size());
         CompletableFuture.runAsync(() -> {
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             availableSynthesizers.add(new SynthesizerWrapper());
             RomanticTp.info("syn" + availableSynthesizers.size());
         });
