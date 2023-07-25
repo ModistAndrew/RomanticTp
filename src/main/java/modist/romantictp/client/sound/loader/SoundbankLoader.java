@@ -1,10 +1,8 @@
 package modist.romantictp.client.sound.loader;
 
-import modist.romantictp.client.sound.fork.sound.SF2Soundbank;
+import modist.romantictp.client.sound.fork.gervill.SF2Soundbank;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.io.IOException;
 
 public class SoundbankLoader {
     @Nullable

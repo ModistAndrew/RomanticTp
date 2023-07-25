@@ -1,8 +1,8 @@
 package modist.romantictp.client.sound.audio;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.fork.sound.AudioSynthesizer;
-import modist.romantictp.client.sound.fork.sound.SoftSynthesizer;
+import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
+import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
 import modist.romantictp.client.sound.loader.SoundbankLoader;
 import modist.romantictp.client.sound.util.AudioHelper;
 
