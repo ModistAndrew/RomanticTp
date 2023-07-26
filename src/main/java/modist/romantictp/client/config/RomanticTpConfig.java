@@ -2,7 +2,7 @@ package modist.romantictp.client.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class RomanticTpConfig {
+public class RomanticTpConfig { //TODO: list available device in Game?
     public static ForgeConfigSpec CONFIG_SPEC;
     public static ForgeConfigSpec.ConfigValue<String> SOUNDBANK_LOCATION;
     public static ForgeConfigSpec.ConfigValue<String> MIDI_KEYBOARD;

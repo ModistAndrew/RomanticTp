@@ -47,14 +47,6 @@ public class InstrumentSoundManager {
         }
     }
 
-    public void startPlay(InstrumentPlayer player, int pitch, int velocity, boolean broadcast) {
-        sendMessage(player, MidiHelper.startMessage(pitch, velocity), -1, broadcast);
-    }
-
-    public void stopPlay(InstrumentPlayer player, int pitch, boolean broadcast) {
-        sendMessage(player, MidiHelper.stopMessage(pitch), -1, broadcast);
-    }
-
     public void startSequence(InstrumentPlayer player, byte[] midiData, boolean broadcast) {
         InstrumentSoundInstance soundInstance = getSound(player);
         Sequence sequence = MidiHelper.loadSequence(midiData);

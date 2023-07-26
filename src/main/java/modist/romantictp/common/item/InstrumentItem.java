@@ -36,15 +36,6 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
         return 72000; //INFINITY
     }
 
-    public void startPlay(LivingEntity player, int pitch, int velocity) { //called client
-        RomanticTp.info("start play" + System.currentTimeMillis());
-        InstrumentSoundManager.getInstance().startPlay(InstrumentPlayerManager.getOrCreate(player), pitch, velocity, true);
-    }
-
-    public void stopPlay(LivingEntity player, int pitch) { //called client
-        InstrumentSoundManager.getInstance().stopPlay(InstrumentPlayerManager.getOrCreate(player), pitch, true);
-    }
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand == InteractionHand.MAIN_HAND) {

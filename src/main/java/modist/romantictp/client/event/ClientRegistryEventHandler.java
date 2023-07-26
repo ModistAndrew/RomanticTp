@@ -1,6 +1,7 @@
 package modist.romantictp.client.event;
 
 import modist.romantictp.client.sound.loader.MidiFileLoader;
+import modist.romantictp.client.sound.loader.MidiKeyboardLoader;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,7 +21,7 @@ public class ClientRegistryEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST) //avoid MIDI Keyboard conflict?
     public static void initAudio(FMLClientSetupEvent event) {
-        //TODO: midi KeyBoard
+        MidiKeyboardLoader.getInstance().init();
     }
 
     @SubscribeEvent

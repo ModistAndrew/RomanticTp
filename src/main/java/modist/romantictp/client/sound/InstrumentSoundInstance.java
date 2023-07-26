@@ -28,7 +28,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
         this.receiver = new MidiFilter();
-        this.tick();
+        this.tick(); //init tick to update instrument, etc
     }
 
     public void setChannel(ChannelAccess.ChannelHandle channelHandle) { //should be called before any message is sent

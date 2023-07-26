@@ -63,7 +63,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     public void onResourceManagerReload(ResourceManager pResourceManager) {
         SoundbankLoader.getInstance().onResourceManagerReload(pResourceManager); //first load soundbank
         if(SoundbankLoader.getInstance().soundbank!=null) {
-            RomanticTp.LOGGER.info("Soundbank loaded : " + SoundbankLoader.getInstance().soundbank.getName());
+            RomanticTp.info("Soundbank loaded: " + SoundbankLoader.getInstance().soundbank.getName());
         }
         init();
     }

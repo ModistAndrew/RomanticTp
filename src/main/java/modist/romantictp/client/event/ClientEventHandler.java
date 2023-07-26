@@ -2,7 +2,10 @@ package modist.romantictp.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
+import modist.romantictp.client.sound.InstrumentSoundManager;
+import modist.romantictp.client.sound.audio.LocalReceiver;
 import modist.romantictp.client.sound.efx.EFXManager;
+import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.item.InstrumentItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -29,18 +32,12 @@ public class ClientEventHandler {
         for (int i = 0; i < 7; i++) {
             Lazy<KeyMapping> k = InstrumentKeyMapping.PITCHES.get(i);
             if (event.getKey() == k.get().getKey().getValue()) {
-                LocalPlayer player = Minecraft.getInstance().player;
-                if(player!=null) {
-                    ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                    if (stack.getItem() instanceof InstrumentItem instrumentItem) {
-                        if (event.getAction() == InputConstants.PRESS) {
-                            instrumentItem.startPlay(player, InstrumentKeyMapping.getPitch(i), 80);
-                            player.startUsingItem(InteractionHand.MAIN_HAND);
-                        } else if (event.getAction() == InputConstants.RELEASE) {
-                            instrumentItem.stopPlay(player, InstrumentKeyMapping.getPitch(i));
-                            player.stopUsingItem();
-                        }
-                    }
+                if (event.getAction() == InputConstants.PRESS) {
+                    LocalReceiver.getInstance().send
+                            (MidiHelper.startMessage(InstrumentKeyMapping.getPitch(i), 80), -1);
+                } else if (event.getAction() == InputConstants.RELEASE) {
+                    LocalReceiver.getInstance().send
+                            (MidiHelper.stopMessage(InstrumentKeyMapping.getPitch(i)), -1);
                 }
             }
         }
