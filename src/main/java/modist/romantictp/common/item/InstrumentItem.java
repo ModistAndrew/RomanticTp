@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class InstrumentItem extends BlockItem { //TODO right click to drop
     public final Instrument defaultInstrument;
@@ -53,7 +52,7 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
                 pPlayer.startUsingItem(pUsedHand);
                 if (pLevel.isClientSide) {
                     InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(pPlayer),
-                            scoreItem.getScoreName(pPlayer.getOffhandItem()), true);
+                            scoreItem.getMidiData(pPlayer.getOffhandItem()), true);
                 }
                 return InteractionResultHolder.consume(pPlayer.getMainHandItem());
             }

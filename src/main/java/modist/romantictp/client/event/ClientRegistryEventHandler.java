@@ -1,10 +1,10 @@
 package modist.romantictp.client.event;
 
 import modist.romantictp.client.sound.loader.MidiFileLoader;
-import modist.romantictp.client.sound.loader.SoundbankLoader;
-import modist.romantictp.client.sound.audio.SynthesizerPool;
+import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,8 +20,12 @@ public class ClientRegistryEventHandler {
 
     @SubscribeEvent(priority = EventPriority.LOWEST) //avoid MIDI Keyboard conflict?
     public static void initAudio(FMLClientSetupEvent event) {
-        SoundbankLoader.getInstance().init(); //first load soundbank synchronously
-        SynthesizerPool.getInstance().init();
-        MidiFileLoader.getInstance().init();
+        //TODO: midi KeyBoard
+    }
+
+    @SubscribeEvent
+    public static void loadResource(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(MidiFileLoader.getInstance());
+        event.registerReloadListener(SynthesizerPool.getInstance());
     }
 }

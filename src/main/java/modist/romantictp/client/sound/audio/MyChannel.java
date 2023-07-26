@@ -2,9 +2,9 @@ package modist.romantictp.client.sound.audio;
 
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.SoundBuffer;
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
+import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
@@ -52,7 +52,9 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     }
 
     @Override
-    public void destroy() { //TODO: move "destroy" to other class. destroy and close device; instance clear; player clear?
+    public void destroy() {
+        //TODO: move "destroy" to other class. destroy and close device; instance clear; player clear?
+        //TODO: called: SoundEngineLoadEvent?
         SynthesizerPool.getInstance().delete(this);
         this.removeProcessedBuffers();
         //InstrumentSoundManager.getInstance().remove(soundInstance.player);

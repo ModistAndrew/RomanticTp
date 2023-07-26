@@ -42,6 +42,12 @@ public class NetworkHandler {
                 .encoder(InstrumentSoundBroadcastPacket::toBytes)
                 .consumerMainThread(InstrumentSoundBroadcastPacket::handle)
                 .add();
+
+        INSTANCE.messageBuilder(ScoreSyncPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ScoreSyncPacket::new)
+                .encoder(ScoreSyncPacket::toBytes)
+                .consumerMainThread(ScoreSyncPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG packet) {

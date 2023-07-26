@@ -4,9 +4,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import org.lwjgl.system.MathUtil;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.ShortMessage;
+import javax.sound.midi.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class MidiHelper {
     public static ShortMessage message(int command, int note, int velocity) {
@@ -46,5 +46,13 @@ public class MidiHelper {
         int data1 = buf.readInt();
         int data2 = buf.readInt();
         return message(command, data1, data2);
+    }
+
+    public static Sequence loadSequence(byte[] data){
+        try {
+            return MidiSystem.getSequence(new ByteArrayInputStream(data));
+        } catch (InvalidMidiDataException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

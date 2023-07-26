@@ -69,7 +69,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     private void startSequence() { //client
         if (score.getItem() instanceof ScoreItem scoreItem) {
             InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(this),
-                    scoreItem.getScoreName(score), true);
+                    scoreItem.getMidiData(score), false);
         }
     }
 

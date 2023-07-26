@@ -1,18 +1,24 @@
-package modist.romantictp.client.sound.audio;
+package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.audio.MyChannel;
+import modist.romantictp.client.sound.audio.MyDataLine;
 import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
+import modist.romantictp.client.sound.fork.gervill.SF2Soundbank;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
-import modist.romantictp.client.sound.loader.SoundbankLoader;
 import modist.romantictp.client.sound.util.AudioHelper;
+import modist.romantictp.client.sound.util.FileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
+import javax.annotation.Nullable;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.sampled.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class SynthesizerPool {
+public class SynthesizerPool implements ResourceManagerReloadListener {
     public volatile List<SynthesizerWrapper> availableSynthesizers = Collections.synchronizedList(new ArrayList<>());
     private static final SynthesizerPool instance = new SynthesizerPool();
 
@@ -46,9 +52,16 @@ public class SynthesizerPool {
         RomanticTp.info("syn" + availableSynthesizers.size());
         CompletableFuture.runAsync(() -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+            RomanticTp.info(FileHelper.class.getResource("/"));
             availableSynthesizers.add(new SynthesizerWrapper());
             RomanticTp.info("syn" + availableSynthesizers.size());
         });
+    }
+
+    @Override
+    public void onResourceManagerReload(ResourceManager pResourceManager) {
+        SoundbankLoader.getInstance().onResourceManagerReload(pResourceManager); //first load soundbank
+        init();
     }
 
     public static class SynthesizerWrapper {

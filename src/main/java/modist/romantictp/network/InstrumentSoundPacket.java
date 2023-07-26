@@ -19,7 +19,7 @@ public class InstrumentSoundPacket {
     protected final Vec3 position; //used to determine targets
     protected final ShortMessage midiMessage;
     protected final long timeStamp;
-    protected final String sequenceName;
+    protected final byte[] midiData;
 
     public InstrumentSoundPacket(InstrumentPlayer player, ShortMessage message, long timeStamp){
         this.op = 0;
@@ -27,16 +27,16 @@ public class InstrumentSoundPacket {
         this.position = player.getPos();
         this.midiMessage = message;
         this.timeStamp = timeStamp;
-        this.sequenceName = "";
+        this.midiData = new byte[0];
     }
 
-    public InstrumentSoundPacket(InstrumentPlayer player, String sequenceName){
+    public InstrumentSoundPacket(InstrumentPlayer player, byte[] midiData){
         this.op = 0;
         this.intrumentPlayer = player.serializeNBT();
         this.position = player.getPos();
         this.midiMessage = new ShortMessage();
         this.timeStamp = 0;
-        this.sequenceName = sequenceName;
+        this.midiData = midiData;
     }
 
     public InstrumentSoundPacket(FriendlyByteBuf byteBuf){
@@ -48,7 +48,7 @@ public class InstrumentSoundPacket {
         position = new Vec3(x, y, z);
         this.midiMessage = MidiHelper.load(byteBuf);
         this.timeStamp = byteBuf.readLong();
-        this.sequenceName = byteBuf.readUtf();
+        this.midiData = byteBuf.readByteArray();
     }
 
     public void toBytes(FriendlyByteBuf buf) {
@@ -59,7 +59,7 @@ public class InstrumentSoundPacket {
         buf.writeDouble(position.z);
         MidiHelper.save(buf, this.midiMessage);
         buf.writeLong(this.timeStamp);
-        buf.writeUtf(this.sequenceName);
+        buf.writeByteArray(this.midiData);
     }
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {

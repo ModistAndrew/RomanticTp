@@ -32,7 +32,7 @@ public class InstrumentSoundBroadcastPacket {
         if(player!=null) {
             switch (packet.op) {
                 case 0 -> InstrumentSoundManager.getInstance().sendMessage(player, packet.midiMessage, packet.timeStamp, false);
-                case 1 -> InstrumentSoundManager.getInstance().startSequence(player, packet.sequenceName, false);
+                case 1 -> InstrumentSoundManager.getInstance().startSequence(player, packet.midiData, false);
             }
         }
     }

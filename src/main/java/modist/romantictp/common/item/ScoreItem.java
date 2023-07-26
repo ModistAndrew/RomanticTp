@@ -1,5 +1,8 @@
 package modist.romantictp.common.item;
 
+import modist.romantictp.client.sound.loader.MidiFileLoader;
+import modist.romantictp.client.sound.util.MidiHelper;
+import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -8,16 +11,31 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import javax.swing.text.html.parser.TagElement;
 import java.util.List;
 
 public class ScoreItem extends Item {
     public ScoreItem() {
-        super(new Item.Properties().stacksTo(16));
+        super(new Item.Properties().stacksTo(1));
     }
 
-    @Nullable
-    public String getScoreName(ItemStack stack) {
-        return stack.getTagElement("score") == null ? "default" : stack.getTagElement("score").getString("name");
+    public byte[] getMidiData(ItemStack stack) {
+        CompoundTag tag = stack.getTagElement("midiData");
+        if(tag == null){
+            return MidiFileLoader.getInstance().getDefault();
+        }
+        return tag.getByteArray("data");
+    }
+
+    public byte[] fillMidiData(ItemStack stack) { //client
+        return fillMidiData(stack, MidiFileLoader.getInstance().getMidiData(stack.getHoverName().getString()));
+    }
+
+    public byte[] fillMidiData(ItemStack stack, byte[] data) { //server
+        CompoundTag tag = new CompoundTag();
+        tag.putByteArray("data", data);
+        stack.addTagElement("midiData", tag);
+        return data;
     }
 
     public List<ItemStack> getDisplay() {
@@ -30,6 +48,6 @@ public class ScoreItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pIsAdvanced) {
-        pTooltip.add(Component.literal(getScoreName(pStack)));
+        pTooltip.add(Component.literal(String.valueOf((getMidiData(pStack).length))));
     }
 }

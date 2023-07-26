@@ -42,7 +42,7 @@ public class OuterReceiver implements Receiver {
     }
 
     @Override
-    public void send(MidiMessage message, long timeStamp) {
+    public void send(MidiMessage message, long timeStamp) { //TODO: bank change? why still piano?
         if (message instanceof ShortMessage shortMessage) {
             if(this.instrument.isEmpty()){
                 return;
