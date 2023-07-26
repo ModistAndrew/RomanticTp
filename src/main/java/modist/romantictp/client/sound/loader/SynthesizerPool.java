@@ -24,6 +24,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
 
     private static final int INITIAL_COUNT = 4;
     public void init() {
+        availableSynthesizers.clear();
         for(int i=0; i<INITIAL_COUNT; i++){
             create();
         }
@@ -61,6 +62,9 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     @Override
     public void onResourceManagerReload(ResourceManager pResourceManager) {
         SoundbankLoader.getInstance().onResourceManagerReload(pResourceManager); //first load soundbank
+        if(SoundbankLoader.getInstance().soundbank!=null) {
+            RomanticTp.LOGGER.info("Soundbank loaded : " + SoundbankLoader.getInstance().soundbank.getName());
+        }
         init();
     }
 

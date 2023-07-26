@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 //Thread safety: handling audio is OK. No direct access to Render Thread.
 //filter message (by instrument) to synthesizer receiver. You can send message from manager -> instance -> here or attach a transmitter
 //channel will always be 1 as there is only one instrument playing at a time
-public class OuterReceiver implements Receiver {
+public class MidiFilter implements Receiver {
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
     private volatile Instrument instrument = Instrument.EMPTY;
     private int lastNote = -1;
@@ -42,7 +42,7 @@ public class OuterReceiver implements Receiver {
     }
 
     @Override
-    public void send(MidiMessage message, long timeStamp) { //TODO: bank change? why still piano?
+    public void send(MidiMessage message, long timeStamp) { //TODO: bank change? why still piano? midi compression?
         if (message instanceof ShortMessage shortMessage) {
             if(this.instrument.isEmpty()){
                 return;

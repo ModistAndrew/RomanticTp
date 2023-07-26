@@ -1,7 +1,7 @@
 package modist.romantictp.client.sound;
 
 import modist.romantictp.client.sound.audio.MyChannel;
-import modist.romantictp.client.sound.audio.OuterReceiver;
+import modist.romantictp.client.sound.audio.MidiFilter;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.common.sound.SoundEventLoader;
@@ -9,7 +9,6 @@ import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.sounds.SoundSource;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     //pass message to channel and receiver and TODO manage stop
     public final InstrumentPlayer player;
-    private final OuterReceiver receiver;
+    private final MidiFilter receiver;
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
     public Instrument instrument = Instrument.EMPTY;
     @Nullable
@@ -28,7 +27,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     public InstrumentSoundInstance(InstrumentPlayer player) {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
-        this.receiver = new OuterReceiver();
+        this.receiver = new MidiFilter();
         this.tick();
     }
 
