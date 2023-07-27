@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
@@ -52,16 +53,14 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             updateInstrument();
             checkSequence();
             updateSequenceStatus();
-            RomanticTp.info(player.isRemoved());
-            if (player.isRemoved()) {
+            if(channelHandle.isDone() && channelHandle.join().isStopped()){
                 destroy();
             }
         }
     }
 
-    public void destroy() {
+    public synchronized void destroy() { //outer or inner
         InstrumentSoundManager.getInstance().remove(player);
-        player.remove();
         closeSequencer();
         executeOnChannel(MyChannel::destroy);
         this.stop();
@@ -121,5 +120,10 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         } catch (MidiUnavailableException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean canStartSilent() {
+        return true;
     }
 }

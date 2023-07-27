@@ -8,8 +8,7 @@
     "ChannelAccessMixin",
     "CountingChannelPoolMixin",
     "LibraryMixin",
-    "SoundEngineMixin",
-    "SoundSystemMixin"
+    "SoundEngineMixin"
   ],
   "injectors": {
     "defaultRequire": 1
