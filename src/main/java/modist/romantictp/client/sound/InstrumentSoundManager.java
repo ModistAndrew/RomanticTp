@@ -20,14 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 //TODO quit Game? ESC? where init? reload?
 public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
-    private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>();
+    private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>(); //TODO: clean cache?
 
     public static InstrumentSoundManager getInstance() {
         return instance;
     }
 
     @Nullable
-    private InstrumentSoundInstance getSound(InstrumentPlayer player) {
+    private InstrumentSoundInstance getSound(InstrumentPlayer player) { //lazy
         InstrumentSoundInstance soundInstance = soundInstanceCache.get(player);
         if (soundInstance == null) {
             return tryCreate(player);

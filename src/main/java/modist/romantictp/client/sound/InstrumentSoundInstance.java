@@ -59,7 +59,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         }
     }
 
-    public synchronized void destroy() { //outer or inner
+    public void destroy() { //outer or inner
         InstrumentSoundManager.getInstance().remove(player);
         closeSequencer();
         executeOnChannel(MyChannel::destroy);

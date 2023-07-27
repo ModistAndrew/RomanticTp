@@ -1,5 +1,6 @@
 package modist.romantictp.client.instrument;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
@@ -61,7 +62,8 @@ public class InstrumentPlayerManager {
 
         @Override
         public Instrument getInstrument() {
-            return entity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem ?
+            return entity.isRemoved() ? Instrument.EMPTY :
+                    entity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem ?
                     instrumentItem.getInstrument(entity.getMainHandItem()) : Instrument.EMPTY;
         }
 
@@ -101,7 +103,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public Instrument getInstrument() {
-            return blockEntity.getInstrument();
+            return blockEntity.isRemoved() ? Instrument.EMPTY : blockEntity.getInstrument();
         }
 
         @Override
