@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class AutoPlayerBlock extends Block implements EntityBlock {
+public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
 
     public AutoPlayerBlock() {
         super(BlockBehaviour.Properties.of().instabreak().noOcclusion());

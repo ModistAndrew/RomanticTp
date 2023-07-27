@@ -20,6 +20,6 @@ public class BlockStateGenerator extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlock(BlockLoader.AUTO_PLAYER.get(),
-                this.models().getExistingFile(new ResourceLocation(RomanticTp.MODID, "auto_player")));
+                this.models().getExistingFile(modLoc("auto_player")));
     }
 }

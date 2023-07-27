@@ -102,7 +102,7 @@ public class InstrumentPlayerManager {
         }
 
         @Override
-        public Instrument getInstrument() {
+        public Instrument getInstrument() { //TODO: removed synchronized from server?
             return blockEntity.isRemoved() ? Instrument.EMPTY : blockEntity.getInstrument();
         }
 

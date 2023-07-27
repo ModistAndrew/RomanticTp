@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class InstrumentBlock extends Block implements EntityBlock {
+public class InstrumentBlock extends Block implements EntityBlock { //TODO: drop
     public final Instrument defaultInstrument;
     public final List<Instrument> display;
 
