@@ -1,5 +1,7 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.RomanticTp;
+import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.audio.MyChannel;
 import modist.romantictp.client.sound.audio.MidiFilter;
 import modist.romantictp.common.instrument.Instrument;
@@ -42,13 +44,27 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        this.x = player.getPos().x;
-        this.y = player.getPos().y;
-        this.z = player.getPos().z;
-        this.volume = player.getVolume();
-        updateInstrument();
-        checkSequence();
-        updateSequenceStatus();
+        if(!this.isStopped()) {
+            this.x = player.getPos().x;
+            this.y = player.getPos().y;
+            this.z = player.getPos().z;
+            this.volume = player.getVolume();
+            updateInstrument();
+            checkSequence();
+            updateSequenceStatus();
+            RomanticTp.info(player.isRemoved());
+            if (player.isRemoved()) {
+                destroy();
+            }
+        }
+    }
+
+    public void destroy() {
+        InstrumentSoundManager.getInstance().remove(player);
+        player.remove();
+        closeSequencer();
+        executeOnChannel(MyChannel::destroy);
+        this.stop();
     }
 
     private void updateInstrument() {

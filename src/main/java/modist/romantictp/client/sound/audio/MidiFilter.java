@@ -82,6 +82,5 @@ public class MidiFilter implements Receiver {
 
     @Override
     public void close() {
-        //TODO: close inner receiver? or just close when destroy()
     }
 }

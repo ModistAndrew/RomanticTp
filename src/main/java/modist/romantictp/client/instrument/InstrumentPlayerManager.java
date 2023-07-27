@@ -85,6 +85,16 @@ public class InstrumentPlayerManager {
             ret.putInt("id", entity.getId());
             return ret;
         }
+
+        @Override
+        public boolean isRemoved() {
+            return entity.isRemoved();
+        }
+
+        @Override
+        public void remove() {
+            entityMap.remove(entity);
+        }
     }
 
     private record BlockPlayer(AutoPlayerBlockEntity blockEntity) implements InstrumentPlayer {
@@ -121,6 +131,16 @@ public class InstrumentPlayerManager {
         @Override
         public CompoundTag serializeNBT() {
             return NbtUtils.writeBlockPos(blockEntity.getBlockPos());
+        }
+
+        @Override
+        public boolean isRemoved() {
+            return blockEntity.isRemoved();
+        }
+
+        @Override
+        public void remove() {
+            blockEntityMap.remove(blockEntity);
         }
     }
 }

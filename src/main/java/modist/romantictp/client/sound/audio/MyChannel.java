@@ -12,6 +12,7 @@ import org.lwjgl.openal.AL10;
 import javax.sound.midi.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MyChannel extends Channel {  //Thread safety: handling audio is OK. No direct access to Render Thread.
@@ -21,6 +22,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     private final int BUFFER_SIZE = 1024;
     private final int BUFFER_COUNT = 8;
     private ReverbType reverb = ReverbType.EMPTY;
+    private final AtomicBoolean alive = new AtomicBoolean(true);
 
     public MyChannel(int source) {
         super(source);
@@ -48,17 +50,17 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
 
     @Override
     public boolean stopped() {
-        return false;
+        return !this.alive.get(); //only can be stopped manually
     }
 
     @Override
     public void destroy() {
-        //TODO: move "destroy" to other class. destroy and close device; instance clear; player clear?
         //TODO: called: SoundEngineLoadEvent?
-        SynthesizerPool.getInstance().delete(this);
-        this.removeProcessedBuffers();
-        //InstrumentSoundManager.getInstance().remove(soundInstance.player);
-        super.destroy();
+        if (this.alive.compareAndSet(true, false)) { //avoid duplication
+            SynthesizerPool.getInstance().delete(this); //closing synthesizer, thus closing receiver and dataline
+            this.removeProcessedBuffers();
+            super.destroy();
+        }
     }
 
     @Override

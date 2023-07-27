@@ -30,7 +30,7 @@ public class MyDataLine implements SourceDataLine {
 
     @Override
     public int write(byte[] b, int off, int len) {
-        if(channel!=null) {
+        if(channel!=null && !channel.stopped()) {
             channel.write(b, off, len);
             return len;
         }

@@ -15,4 +15,6 @@ public interface InstrumentPlayer {
     void updateSequenceStatus(float progress);
     void stopPlaying(); //reset from sequencer
     CompoundTag serializeNBT(); //client
+    boolean isRemoved();
+    void remove();
 }

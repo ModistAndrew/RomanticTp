@@ -14,11 +14,11 @@ public class EFXManager {
 
     private static EFXManager instance;
 
-    public static void init(){
+    public static void init() {
         instance = new EFXManager();
     }
 
-    public static EFXManager getInstance(){
+    public static EFXManager getInstance() {
         return instance;
     }
 
