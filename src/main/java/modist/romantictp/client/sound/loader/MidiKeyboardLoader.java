@@ -27,7 +27,7 @@ public class MidiKeyboardLoader {
         List<MidiDevice> device = getAvailableDevices().stream()
                 .filter(midiDevice -> midiDevice.getDeviceInfo().getName().equals(RomanticTpConfig.MIDI_KEYBOARD.get())).toList();
         if(!device.isEmpty()){
-            midiKeyboard = device.get(0);
+            midiKeyboard = device.get(0); //TODO: conflict
             try {
                 midiKeyboard.getTransmitter().setReceiver(LocalReceiver.getInstance());
                 midiKeyboard.open();

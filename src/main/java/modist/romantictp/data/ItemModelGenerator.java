@@ -17,6 +17,8 @@ public class ItemModelGenerator extends ItemModelProvider {
     protected void registerModels() {
         singleTexture(ItemLoader.SCORE.getId().getPath(), mcLoc("item/generated"), "layer0",
                 modLoc("item/"+ItemLoader.SCORE.getId().getPath()));
-        withExistingParent(ItemLoader.AUTO_PLAYER.getId().getPath(), modLoc("block/"+ItemLoader.AUTO_PLAYER.getId().getPath()));
+        ItemLoader.INSTRUMENTS.forEach((s, i) -> singleTexture
+                (s, mcLoc("item/generated"), "layer0", modLoc("item/"+s)));
+        withExistingParent(ItemLoader.AUTO_PLAYER.getId().getPath(), mcLoc("glass"));
     }
 }

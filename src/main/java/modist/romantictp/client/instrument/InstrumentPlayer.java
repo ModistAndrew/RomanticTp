@@ -7,7 +7,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public interface InstrumentPlayer {
+public interface InstrumentPlayer { //TODO: when to remove? capability?
     Vec3 getPos();
     float getVolume();
     Instrument getInstrument(); //get current instrument holding. set to EMPTY to stop all sounds

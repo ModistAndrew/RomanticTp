@@ -20,6 +20,9 @@ public class BlockStateGenerator extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         simpleBlock(BlockLoader.AUTO_PLAYER.get(),
-                this.models().getExistingFile(modLoc("auto_player")));
+                this.models().getExistingFile(mcLoc("glass")));
+        BlockLoader.INSTRUMENTS.forEach((s, b) -> {
+            simpleBlock(b.get(), this.models().getExistingFile(mcLoc("air")));
+        });
     }
 }

@@ -3,6 +3,7 @@ package modist.romantictp;
 import com.mojang.logging.LogUtils;
 import modist.romantictp.client.config.RomanticTpConfig;
 import modist.romantictp.common.block.BlockLoader;
+import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +26,9 @@ public class RomanticTp
         ItemLoader.ITEMS.register(modEventBus);
         ItemLoader.TABS.register(modEventBus);
         SoundEventLoader.SOUNDS.register(modEventBus);
+        EntityLoader.POI_TYPES.register(modEventBus);
+        EntityLoader.VILLAGER_PROFESSIONS.register(modEventBus);
+        EntityLoader.ENTITIES.register(modEventBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RomanticTpConfig.CONFIG_SPEC);
     }
 

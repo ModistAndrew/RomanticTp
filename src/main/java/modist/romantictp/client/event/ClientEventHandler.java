@@ -1,6 +1,7 @@
 package modist.romantictp.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.client.sound.audio.LocalReceiver;
@@ -18,10 +19,11 @@ import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
 import net.minecraftforge.client.event.sound.SoundEngineLoadEvent;
 import net.minecraftforge.client.event.sound.SoundEvent;
 import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = RomanticTp.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler {
 
     @SubscribeEvent
@@ -43,5 +45,13 @@ public class ClientEventHandler {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void startPlaySequence(LivingEntityUseItemEvent.Start event) {
+    }
+
+    @SubscribeEvent
+    public static void startPlaySequence(LivingEntityUseItemEvent.Stop event) {
     }
 }
