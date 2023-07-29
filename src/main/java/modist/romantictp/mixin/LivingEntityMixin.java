@@ -19,7 +19,7 @@ public abstract class LivingEntityMixin {
     public abstract ItemStack getItemInHand(InteractionHand pHand);
 
     @Inject(method = "startUsingItem", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;useItemRemaining:I"))
-    private void startUsingItem(InteractionHand pHand, CallbackInfo ci) {
+    private void startUsingItem(InteractionHand pHand, CallbackInfo ci) { //after use item is set
         LivingEntity livingEntity = (LivingEntity)(Object)this;
         if(livingEntity.level().isClientSide) {
             ItemStack itemstack = this.getItemInHand(pHand);

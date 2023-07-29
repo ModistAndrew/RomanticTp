@@ -48,13 +48,19 @@ public class MelodyAi {
     }
 
     private static void initCoreActivity(Brain<Melody> pBrain) {
-        pBrain.addActivity(Activity.CORE, 0, ImmutableList.of(new Swim(0.8F), new AnimalPanic(2.5F), new LookAtTargetSink(45, 90), new MoveToTargetSink(), new CountDownCooldownTicks(MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS), new CountDownCooldownTicks(MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS)));
+        pBrain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new Swim(0.8F),
+                new AnimalPanic(2.5F),
+                new LookAtTargetSink(45, 90),
+                new MoveToTargetSink(),
+                new CountDownCooldownTicks(MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS),
+                new CountDownCooldownTicks(MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS)));
     }
 
     private static void initIdleActivity(Brain<Melody> pBrain) {
         pBrain.addActivityWithConditions(Activity.IDLE, ImmutableList.of(
                 Pair.of(0, GoToWantedItem.create((p_218428_) -> true, 1.75F, true, 32)),
-                Pair.of(1, new GoAndGiveItemsToTarget<>(MelodyAi::getItemDepositPosition, 2.25F, 20)),
+                Pair.of(1, SetEntityPlayInstrumentSometimes.create(UniformInt.of(30, 60))),
                 Pair.of(2, StayCloseToTarget.create(MelodyAi::getItemDepositPosition, Predicate.not(MelodyAi::hasWantedItem), 4, 16, 2.25F)),
                 Pair.of(3, SetEntityLookTargetSometimes.create(6.0F, UniformInt.of(30, 60))), //random
                 Pair.of(4, new RunOne<>(ImmutableList.of(

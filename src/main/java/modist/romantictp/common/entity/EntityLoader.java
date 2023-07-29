@@ -27,7 +27,7 @@ public class EntityLoader {
                     poiTypeHolder -> poiTypeHolder.get() == MUSICIAN_POI.get(),
                     ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_FISHERMAN));
     public static final RegistryObject<EntityType<Melody>> MELODY = ENTITIES.register("melody", () -> EntityType.Builder.of(Melody::new, MobCategory.CREATURE)
-            .sized(0.35F, 0.6F)
+            .sized(0.7F, 1.2F)
             .clientTrackingRange(8)
             .updateInterval(2).build("melody"));
 }

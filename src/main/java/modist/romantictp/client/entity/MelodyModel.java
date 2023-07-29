@@ -67,7 +67,7 @@ public class MelodyModel extends HierarchicalModel<Melody> implements ArmedModel
         float f3 = pAgeInTicks * 9.0F * ((float) Math.PI / 180F);
         float f4 = Math.min(pLimbSwingAmount / 0.3F, 1.0F);
         float f5 = 1.0F - f4;
-        float f6 = 0.5F;
+        float f6 = pEntity.getHoldingItemAnimationProgress(f2);
         if (pEntity.isDancing()) {
             float f7 = pAgeInTicks * 8.0F * ((float) Math.PI / 180F) + pLimbSwingAmount;
             float f8 = Mth.cos(f7) * 16.0F * ((float) Math.PI / 180F);
