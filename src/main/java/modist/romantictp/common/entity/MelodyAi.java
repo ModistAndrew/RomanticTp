@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -57,6 +58,7 @@ public class MelodyAi {
                 new CountDownCooldownTicks(MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS)));
     }
 
+    //TODO: stop, interval, flying around?
     private static void initIdleActivity(Brain<Melody> pBrain) {
         pBrain.addActivityWithConditions(Activity.IDLE, ImmutableList.of(
                 Pair.of(0, GoToWantedItem.create((p_218428_) -> true, 1.75F, true, 32)),
@@ -130,11 +132,9 @@ public class MelodyAi {
                         return Optional.of(serverplayer);
                     }
                 }
-
                 return Optional.empty();
             }
         }
-
         return Optional.empty();
     }
 }

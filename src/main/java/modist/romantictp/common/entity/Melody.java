@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
+import net.minecraft.client.resources.sounds.ElytraOnPlayerSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,6 +49,7 @@ import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -66,6 +68,7 @@ public class Melody extends PathfinderMob {
     private float dancingAnimationTicks;
     private float spinningAnimationTicks;
     private float spinningAnimationTicks0;
+    private boolean startedUsingItem; //used to synchronize used item from server
 
     public Melody(EntityType<? extends Melody> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -102,6 +105,40 @@ public class Melody extends PathfinderMob {
         super.defineSynchedData();
         this.entityData.define(DATA_DANCING, false);
         this.entityData.define(DATA_CAN_DUPLICATE, true);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> pKey) {
+        super.onSyncedDataUpdated(pKey);
+        if (DATA_LIVING_ENTITY_FLAGS.equals(pKey)) {
+            boolean flag = (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 1) > 0;
+            InteractionHand interactionhand = (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 2) > 0 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+            if (flag && !this.startedUsingItem) {
+                this.startUsingItem(interactionhand);
+            } else if (!flag && this.startedUsingItem) {
+                this.stopUsingItem();
+            }
+        }
+    }
+
+    @Override
+    public boolean isUsingItem() {
+        return this.startedUsingItem;
+    }
+
+    @Override
+    public void stopUsingItem() {
+        super.stopUsingItem();
+        this.startedUsingItem = false;
+    }
+
+    @Override
+    public void startUsingItem(InteractionHand pHand) {
+        ItemStack itemstack = this.getItemInHand(pHand);
+        if (!itemstack.isEmpty() && !this.isUsingItem()) {
+            super.startUsingItem(pHand);
+            this.startedUsingItem = true;
+        }
     }
 
     public void travel(Vec3 pTravelVector) {

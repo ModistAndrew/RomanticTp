@@ -30,7 +30,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         }
     }
 
-    public static SynthesizerPool getInstance(){
+    public static SynthesizerPool getInstance() {
         return instance;
     }
 
