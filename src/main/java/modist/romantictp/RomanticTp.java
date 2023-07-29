@@ -33,6 +33,6 @@ public class RomanticTp
     }
 
     public static void info(Object o){
-        LOGGER.info(String.valueOf(o));
+        //LOGGER.info(String.valueOf(o));
     }
 }

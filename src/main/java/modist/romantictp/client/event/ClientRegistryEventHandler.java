@@ -1,6 +1,7 @@
 package modist.romantictp.client.event;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.entity.MelodyModel;
 import modist.romantictp.client.entity.MelodyRenderer;
 import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.client.sound.loader.MidiKeyboardLoader;
@@ -32,6 +33,11 @@ public class ClientRegistryEventHandler {
     public static void loadResource(RegisterClientReloadListenersEvent event) {
         event.registerReloadListener(MidiFileLoader.getInstance());
         event.registerReloadListener(SynthesizerPool.getInstance());
+    }
+
+    @SubscribeEvent
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(MelodyModel.MELODY, MelodyModel::createBodyLayer);
     }
 
     @SubscribeEvent

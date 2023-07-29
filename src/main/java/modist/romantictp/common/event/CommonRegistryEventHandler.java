@@ -2,6 +2,7 @@ package modist.romantictp.common.event;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.common.entity.EntityLoader;
+import modist.romantictp.common.entity.Melody;
 import modist.romantictp.network.NetworkHandler;
 import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -19,7 +20,7 @@ public class CommonRegistryEventHandler {
 
     @SubscribeEvent
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
-        event.put(EntityLoader.MELODY.get(), Allay.createAttributes().build());
+        event.put(EntityLoader.MELODY.get(), Melody.createAttributes().build());
     }
 
 }

@@ -2,16 +2,19 @@ package modist.romantictp.client.event;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.client.sound.audio.LocalReceiver;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.item.InstrumentItem;
+import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -22,6 +25,7 @@ import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 @Mod.EventBusSubscriber(modid = RomanticTp.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler {
@@ -32,7 +36,7 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void startPlay(InputEvent.Key event) {
+    public static void startPlay(InputEvent.Key event) { //TODO: F2, F3?
         for (int i = 0; i < 7; i++) {
             Lazy<KeyMapping> k = InstrumentKeyMapping.PITCHES.get(i);
             if (event.getKey() == k.get().getKey().getValue()) {
@@ -48,10 +52,16 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void startPlaySequence(LivingEntityUseItemEvent.Start event) {
+    public static void startPlaySequence(UseItemEnd event) {
+        if(event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+            InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(event.getEntity()),
+                    scoreItem.getMidiData(event.getEntity().getOffhandItem()), true);
+        }
     }
 
-    @SubscribeEvent
-    public static void startPlaySequence(LivingEntityUseItemEvent.Stop event) {
+    public static class UseItemEnd extends LivingEntityUseItemEvent.Start { //client only
+        public UseItemEnd(LivingEntity entity, @NotNull ItemStack item, int duration) {
+            super(entity, item, duration);
+        }
     }
 }

@@ -39,14 +39,8 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (pUsedHand == InteractionHand.MAIN_HAND) {
-            if (pPlayer.getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
-                pPlayer.startUsingItem(pUsedHand);
-                if (pLevel.isClientSide) {
-                    InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(pPlayer),
-                            scoreItem.getMidiData(pPlayer.getOffhandItem()), true);
-                }
+                pPlayer.startUsingItem(pUsedHand); //see client event
                 return InteractionResultHolder.consume(pPlayer.getMainHandItem());
-            }
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }

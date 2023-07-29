@@ -13,6 +13,6 @@ public interface InstrumentPlayer { //TODO: when to remove? capability?
     Instrument getInstrument(); //get current instrument holding. set to EMPTY to stop all sounds
     boolean isPlaying(); //for sequence check
     void updateSequenceStatus(float progress);
-    void stopPlaying(); //reset from sequencer
+    void stopPlaying(); //reset from sequencer. TODO: synchronized to server?
     CompoundTag serializeNBT(); //client
 }

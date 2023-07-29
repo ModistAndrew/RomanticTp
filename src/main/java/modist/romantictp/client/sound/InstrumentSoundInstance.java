@@ -45,7 +45,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        if(!this.isStopped()) {
+        if (!this.isStopped()) {
             this.x = player.getPos().x;
             this.y = player.getPos().y;
             this.z = player.getPos().z;
@@ -53,7 +53,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             updateInstrument();
             checkSequence();
             updateSequenceStatus();
-            if(channelHandle.isDone() && channelHandle.join().isStopped()){
+            if (channelHandle.isDone() && channelHandle.join().isStopped()) {
                 destroy();
             }
         }
