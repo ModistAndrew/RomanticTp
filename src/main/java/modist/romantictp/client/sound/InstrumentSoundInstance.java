@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.audio.MidiFilter;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
@@ -15,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
-    //pass message to channel and receiver and TODO manage stop
+    //interact with channel and receiver and manage stop
     public final InstrumentPlayer player;
     private final MidiFilter receiver;
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
@@ -57,6 +58,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     public void destroy() { //outer or inner
         InstrumentSoundManager.getInstance().remove(player);
+        InstrumentPlayerManager.remove(player);
         closeSequencer();
         executeOnChannel(MyChannel::destroy);
         this.stop();

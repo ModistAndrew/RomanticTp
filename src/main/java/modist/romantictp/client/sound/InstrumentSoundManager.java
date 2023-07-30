@@ -18,10 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 //management of sound instance,
 //thus providing method sending midi message and starting sequence and broadcasting (close is managed by soundInstance tick automatically)
-//TODO quit Game? ESC? where init? reload?
 public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
-    private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>(); //TODO: clean cache?
+    private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>();
 
     public static InstrumentSoundManager getInstance() {
         return instance;

@@ -58,7 +58,7 @@ public class MelodyAi {
                 new CountDownCooldownTicks(MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS)));
     }
 
-    //TODO: stop, interval, flying around?
+    //TODO: stop, interval, drop offhand, flying around?
     private static void initIdleActivity(Brain<Melody> pBrain) {
         pBrain.addActivityWithConditions(Activity.IDLE, ImmutableList.of(
                 Pair.of(0, GoToWantedItem.create((p_218428_) -> true, 1.75F, true, 32)),

@@ -35,6 +35,11 @@ public class InstrumentPlayerManager {
         return blockEntityMap.get(blockEntity);
     }
 
+    public static void remove(InstrumentPlayer player) {
+        entityMap.values().remove(player);
+        blockEntityMap.values().remove(player);
+    }
+
     @Nullable
     public static InstrumentPlayer fromNbt(CompoundTag tag) {
         if(tag.contains("id")){

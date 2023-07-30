@@ -95,7 +95,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
         }
     }
 
-    public void write(byte[] b, int off, int len) { //TODO: delay and lag
+    public void write(byte[] b, int off, int len) {
         synchronized (pumpCount) {
             if (pumpCount.get() <= 0) {
                 try {

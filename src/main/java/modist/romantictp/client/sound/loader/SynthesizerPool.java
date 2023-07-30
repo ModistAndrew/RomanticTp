@@ -61,7 +61,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         init();
     }
 
-    public static class SynthesizerWrapper { //TODO: delay? jitter correction?
+    public static class SynthesizerWrapper {
         public final AudioSynthesizer synthesizer;
         public final MyDataLine dataLine;
         public final Receiver receiver;

@@ -1,6 +1,6 @@
 package modist.romantictp.client.sound.efx;
 
-public enum ReverbType { //TODO: range is to large?
+public enum ReverbType {
     EMPTY, TEST;
 
     public static ReverbType fromString(String name){
