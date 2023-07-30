@@ -100,14 +100,22 @@ public class MelodyModel extends HierarchicalModel<Melody> implements ArmedModel
         this.left_arm.yRot = -0.27925268F * f6;
     }
 
+    @Override
     public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) {
-        float f = 1.0F;
-        float f1 = 3.0F;
+        boolean flag = pSide == HumanoidArm.RIGHT;
+        ModelPart modelpart = flag ? this.right_arm : this.left_arm;
         this.root.translateAndRotate(pPoseStack);
         this.body.translateAndRotate(pPoseStack);
-        pPoseStack.translate(0.0F, 0.0625F, 0.1875F);
-        pPoseStack.mulPose(Axis.XP.rotation(this.right_arm.xRot));
-        pPoseStack.scale(0.7F, 0.7F, 0.7F);
-        pPoseStack.translate(0.0625F, 0.0F, 0.0F);
+        modelpart.translateAndRotate(pPoseStack);
+        pPoseStack.scale(0.55F, 0.55F, 0.55F);
+        this.offsetStackPosition(pPoseStack, flag);
+    }
+
+    private void offsetStackPosition(PoseStack pPoseStack, boolean pRightSide) {
+        if (pRightSide) {
+            pPoseStack.translate(0.046875D, -0.15625D, 0.278125D);
+        } else {
+            pPoseStack.translate(-0.046875D, -0.15625D, 0.278125D);
+        }
     }
 }
