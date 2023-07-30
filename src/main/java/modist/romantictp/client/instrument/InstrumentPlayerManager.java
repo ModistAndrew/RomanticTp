@@ -5,6 +5,9 @@ import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
+import modist.romantictp.network.NetworkHandler;
+import modist.romantictp.network.StopPlayingPacket;
+import modist.romantictp.network.StopUsingItemPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
@@ -62,8 +65,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public Instrument getInstrument() {
-            return entity.isRemoved() ? Instrument.EMPTY :
-                    entity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem ?
+            return entity.getMainHandItem().getItem() instanceof InstrumentItem instrumentItem ?
                     instrumentItem.getInstrument(entity.getMainHandItem()) : Instrument.EMPTY;
         }
 
@@ -80,6 +82,7 @@ public class InstrumentPlayerManager {
         @Override
         public void stopPlaying() {
             entity.stopUsingItem();
+            NetworkHandler.sendToServer(new StopUsingItemPacket(entity));
         }
 
         @Override
@@ -87,6 +90,11 @@ public class InstrumentPlayerManager {
             CompoundTag ret = new CompoundTag();
             ret.putInt("id", entity.getId());
             return ret;
+        }
+
+        @Override
+        public boolean isRemoved() {
+            return entity.isRemoved();
         }
     }
 
@@ -102,13 +110,13 @@ public class InstrumentPlayerManager {
         }
 
         @Override
-        public Instrument getInstrument() { //TODO: removed synchronized from server?
-            return blockEntity.isRemoved() ? Instrument.EMPTY : blockEntity.getInstrument();
+        public Instrument getInstrument() {
+            return blockEntity.getInstrument();
         }
 
         @Override
         public boolean isPlaying() {
-            return blockEntity.isPlaying;
+            return blockEntity.isPlaying();
         }
 
         @Override
@@ -119,11 +127,17 @@ public class InstrumentPlayerManager {
         @Override
         public void stopPlaying() {
             blockEntity.stopPlaying();
+            NetworkHandler.sendToServer(new StopPlayingPacket(blockEntity));
         }
 
         @Override
         public CompoundTag serializeNBT() {
             return NbtUtils.writeBlockPos(blockEntity.getBlockPos());
+        }
+
+        @Override
+        public boolean isRemoved() {
+            return blockEntity.isRemoved();
         }
     }
 }

@@ -1,17 +1,10 @@
 package modist.romantictp.common.entity;
 
-import modist.romantictp.RomanticTp;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 
-import java.util.Optional;
-import java.util.function.Predicate;
 
 public class SetEntityPlayInstrumentSometimes {
 
@@ -22,7 +15,7 @@ public class SetEntityPlayInstrumentSometimes {
                     if (!setEntityPlayInstrumentSometimes$ticker.tickDownAndCheck(serverLevel.random)) {
                         return false;
                     }
-                    if(entity.canPlay() && !entity.isDancing()) {
+                    if(entity.canPlay() && !entity.isPlaying()) {
                         entity.startPlay();
                         return true;
                     }

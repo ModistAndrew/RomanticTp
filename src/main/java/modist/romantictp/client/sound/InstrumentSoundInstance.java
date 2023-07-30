@@ -53,7 +53,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             updateInstrument();
             checkSequence();
             updateSequenceStatus();
-            if (channelHandle.isDone() && channelHandle.join().isStopped()) {
+            if ((channelHandle.isDone() && channelHandle.join().isStopped()) || player.isRemoved()) {
                 destroy();
             }
         }

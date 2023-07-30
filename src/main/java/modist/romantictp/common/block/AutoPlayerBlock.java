@@ -51,4 +51,15 @@ public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
             blockEntity.updateStatus();
         }
     }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState pState) {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) { //TODO update
+        return pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity &&
+                blockEntity.isPlaying() ? 15 : 0;
+    }
 }

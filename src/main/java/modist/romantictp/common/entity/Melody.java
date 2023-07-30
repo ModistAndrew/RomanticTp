@@ -68,7 +68,7 @@ public class Melody extends PathfinderMob {
     private float dancingAnimationTicks;
     private float spinningAnimationTicks;
     private float spinningAnimationTicks0;
-    private boolean startedUsingItem; //used to synchronize used item from server
+    private boolean startedUsingItem; //used to synchronize used item from server. Keep same with isDancing.
 
     public Melody(EntityType<? extends Melody> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -214,11 +214,15 @@ public class Melody extends PathfinderMob {
             this.heal(1.0F);
         }
 
-//        if (this.isDancing() && this.shouldStopDancing() && this.tickCount % 20 == 0) {
-//            this.setDancing(false);
-//        }
+        if (this.isDancing() && this.shouldStopDancing() && this.tickCount % 20 == 0) {
+            this.setDancing(false);
+        }
 
         this.updateDuplicationCooldown();
+    }
+
+    private boolean shouldStopDancing() {
+        return !this.isUsingItem();
     }
 
     public void tick() {
@@ -249,6 +253,7 @@ public class Melody extends PathfinderMob {
         } else {
             if (this.isPanicking()) {
                 this.setDancing(false);
+                this.stopUsingItem();
             }
         }
 
@@ -346,6 +351,10 @@ public class Melody extends PathfinderMob {
         return this.entityData.get(DATA_DANCING);
     }
 
+    public boolean isPlaying() {
+        return this.isUsingItem();
+    }
+
     public boolean isPanicking() {
         return this.brain.getMemory(MemoryModuleType.IS_PANICKING).isPresent();
     }
@@ -355,11 +364,6 @@ public class Melody extends PathfinderMob {
             this.entityData.set(DATA_DANCING, pDancing);
         }
     }
-
-//    private boolean shouldStopDancing() {
-//        return this.jukeboxPos == null || !this.jukeboxPos.closerToCenterThan(this.position(), (double) GameEvent.JUKEBOX_PLAY.getNotificationRadius()) || !this.level().getBlockState(this.jukeboxPos).is(Blocks.JUKEBOX);
-//    }
-//
 
     public float getHoldingItemAnimationProgress(float pPartialTick) {
         return Mth.lerp(pPartialTick, this.holdingItemAnimationTicks0, this.holdingItemAnimationTicks) / 5.0F;

@@ -22,7 +22,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     //TODO: manage instrument?
     public Instrument instrument = Instrument.EMPTY; //updated from server
     public boolean powered; //whether is powered
-    public boolean isPlaying; //client only
+    private boolean isPlaying; //client and server, but needn't store.
     public float progress; //client only
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {
@@ -63,6 +63,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public void updateStatus() { //server. update status and synchronize data to client
         this.instrument = detectInstrument();
         this.powered = level.hasNeighborSignal(getBlockPos());
+        this.isPlaying = containsScore() && !this.instrument.isEmpty() && this.powered;
         setChangedAndUpdate();
     }
 
@@ -131,6 +132,9 @@ public class AutoPlayerBlockEntity extends BlockEntity {
 
     public void stopPlaying() {
         this.isPlaying = false;
-        RomanticTp.info(this.isPlaying);
+    }
+
+    public boolean isPlaying() {
+        return this.isPlaying;
     }
 }
