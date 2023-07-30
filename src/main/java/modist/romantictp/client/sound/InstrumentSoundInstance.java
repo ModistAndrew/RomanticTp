@@ -1,8 +1,5 @@
 package modist.romantictp.client.sound;
 
-import modist.romantictp.RomanticTp;
-import modist.romantictp.client.instrument.InstrumentPlayerManager;
-import modist.romantictp.client.sound.audio.MyChannel;
 import modist.romantictp.client.sound.audio.MidiFilter;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
@@ -15,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
@@ -37,6 +33,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     public void setChannel(ChannelAccess.ChannelHandle channelHandle) { //should be called before any message is sent
         this.channelHandle.complete(channelHandle);
         this.receiver.setChannel(channelHandle);
+        executeOnChannel(myChannel -> myChannel.bindInstance(this));
     }
 
     public void sendMessage(MidiMessage message, long timeStamp) {
@@ -85,7 +82,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     private void checkSequence() {
         if (sequencer != null) {
-            if (!player.isPlaying() || !sequencer.isRunning()) {
+            if (!player.isPlaying() || sequencer.getTickPosition() == sequencer.getTickLength()) {
                 closeSequencer();
             }
         }
@@ -108,6 +105,19 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             sequencer.start();
         } catch (MidiUnavailableException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void pause() {
+        if(sequencer != null) {
+            sequencer.stop();
+        }
+        receiver.setInstrument(this.instrument); //stop all sounds
+    }
+
+    public void unpause() {
+        if(sequencer != null) {
+            sequencer.start();
         }
     }
 

@@ -1,6 +1,6 @@
 package modist.romantictp.client.sound.audio;
 
-import modist.romantictp.client.sound.audio.MyChannel;
+import modist.romantictp.client.sound.MyChannel;
 
 import javax.annotation.Nullable;
 import javax.sound.sampled.*;

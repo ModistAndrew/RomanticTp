@@ -1,13 +1,13 @@
-package modist.romantictp.client.sound.audio;
+package modist.romantictp.client.sound;
 
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.SoundBuffer;
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.client.sound.util.AudioHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
 
@@ -17,6 +17,7 @@ import java.nio.ByteOrder;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public class MyChannel extends Channel {  //Thread safety: handling audio is OK. No direct access to Render Thread.
     public final AtomicInteger pumpCount = new AtomicInteger();
@@ -26,6 +27,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     private final int BUFFER_COUNT = 8;
     private ReverbType reverb = ReverbType.EMPTY;
     private final AtomicBoolean alive = new AtomicBoolean(true);
+    private CompletableFuture<InstrumentSoundInstance> instance = new CompletableFuture<>();
 
     public MyChannel(int source) {
         super(source);
@@ -37,6 +39,10 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     public void setReverb(ReverbType reverb) {
         this.reverb = reverb;
         EFXManager.getInstance().applyEFX(this.reverb, this.source);
+    }
+
+    public void bindInstance(InstrumentSoundInstance instance) {
+        this.instance.complete(instance);
     }
 
     public static MyChannel create() {
@@ -113,11 +119,18 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     }
 
     @Override
-    public void pause() {
-        //TODO: pause use stop?
+    public void pause(){
+        super.pause();
+        executeOnInstance(InstrumentSoundInstance::pause);
     }
 
     @Override
-    public void unpause() {
+    public void unpause(){
+        super.unpause();
+        executeOnInstance(InstrumentSoundInstance::unpause);
+    }
+
+    private void executeOnInstance(Consumer<InstrumentSoundInstance> consumer) { //thread safety
+        instance.thenAcceptAsync(instance -> Minecraft.getInstance().execute(() -> consumer.accept(instance)));
     }
 }

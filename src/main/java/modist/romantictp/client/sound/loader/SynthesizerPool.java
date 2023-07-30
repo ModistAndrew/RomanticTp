@@ -1,17 +1,15 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.audio.MyChannel;
+import modist.romantictp.client.sound.MyChannel;
 import modist.romantictp.client.sound.audio.MyDataLine;
 import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
-import modist.romantictp.client.sound.fork.gervill.SF2Soundbank;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
 import modist.romantictp.client.sound.util.AudioHelper;
 import modist.romantictp.client.sound.util.FileHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
-import javax.annotation.Nullable;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.sampled.*;
@@ -86,7 +84,9 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
 
             this.dataLine = new MyDataLine(sourceDataLine);
             try {
-                this.synthesizer.open(this.dataLine, null);
+                Map<String, Object> params = new HashMap<>();
+                params.put("jitter correction", false);
+                this.synthesizer.open(this.dataLine, params);
             } catch (MidiUnavailableException e) {
                 throw new RuntimeException(e);
             }

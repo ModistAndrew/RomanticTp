@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound.audio;
 
+import modist.romantictp.client.sound.MyChannel;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.client.sounds.ChannelAccess;
