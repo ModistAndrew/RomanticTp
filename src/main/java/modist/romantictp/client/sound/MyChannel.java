@@ -6,6 +6,7 @@ import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
+import modist.romantictp.client.sound.util.AlHelper;
 import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.AudioStream;
@@ -48,6 +49,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     public static MyChannel create() {
         int[] aint = new int[1];
         AL10.alGenSources(aint);
+        AlHelper.checkALError();
         return new MyChannel(aint[0]);
     }
 
@@ -79,10 +81,12 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
         if (AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_STOPPED) {
             this.pumpBuffers(BUFFER_COUNT);
             AL10.alSourcePlay(this.source);
+            AlHelper.checkALError();
             return;
         }
         int i = this.removeProcessedBuffers();
         this.pumpBuffers(i);
+        AlHelper.checkALError();
     }
 
     @Override
@@ -109,10 +113,11 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
         pumpCount.decrementAndGet();
         ByteBuffer bytebuffer = AudioHelper.convertAudioBytes(b, AudioHelper.AUDIO_FORMAT.getSampleSizeInBits() == 16,
                 AudioHelper.AUDIO_FORMAT.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
-        if (bytebuffer != null) {
+        if (bytebuffer != null && !this.stopped()) {
             (new SoundBuffer(bytebuffer, AudioHelper.AUDIO_FORMAT)).releaseAlBuffer().ifPresent((p_83669_) -> {
                 if (!this.stopped()) {
                     AL10.alSourceQueueBuffers(this.source, new int[]{p_83669_});
+                    AlHelper.checkALError();
                 }
             });
         }
