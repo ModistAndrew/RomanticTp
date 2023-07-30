@@ -42,7 +42,7 @@ public class MidiFilter implements Receiver {
     }
 
     @Override
-    public void send(MidiMessage message, long timeStamp) { //TODO: bank change? why still piano? midi compression?
+    public void send(MidiMessage message, long timeStamp) {
         if (message instanceof ShortMessage shortMessage) {
             if(this.instrument.isEmpty()){
                 return;
@@ -63,7 +63,7 @@ public class MidiFilter implements Receiver {
                             lastNote = -1;
                         }
                     }
-                    case ShortMessage.CONTROL_CHANGE -> {
+                    case ShortMessage.CONTROL_CHANGE, ShortMessage.PROGRAM_CHANGE -> {
                         //skip instrument change
                     }
                     default -> receiver.send
