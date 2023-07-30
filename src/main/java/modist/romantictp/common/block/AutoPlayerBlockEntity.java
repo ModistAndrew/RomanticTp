@@ -4,6 +4,7 @@ import modist.romantictp.RomanticTp;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
+import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -22,8 +23,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     //TODO: manage instrument?
     public Instrument instrument = Instrument.EMPTY; //updated from server
     public boolean powered; //whether is powered
-    private boolean isPlaying; //client and server, but needn't store.
-    public float progress; //client only
+    private boolean isPlaying; //updated from server
 
     public AutoPlayerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -32,7 +32,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public void injectScore(ItemStack score) {
         this.score = score.copy();
         this.score.setCount(1);
-        setChangedAndUpdate();
+        updateStatus();
     }
 
     public boolean containsScore() {
@@ -41,30 +41,54 @@ public class AutoPlayerBlockEntity extends BlockEntity {
 
     public ItemStack ejectScore() {
         ItemStack oldItemStack = score.copy();
-        score = ItemStack.EMPTY;
-        setChangedAndUpdate();
+        this.score = ItemStack.EMPTY;
+        updateStatus();
         return oldItemStack;
+    }
+
+    public Instrument getInstrument() {
+        return this.instrument;
+    }
+
+    public boolean isPlaying() {
+        return this.isPlaying;
+    }
+
+    public void updateStatus() { //server. update status and synchronize data to client
+        if(this.level != null && !this.level.isClientSide) {
+            this.instrument = detectInstrument();
+            updatePlaying(level.hasNeighborSignal(getBlockPos()), containsScore() && !this.instrument.isEmpty() && level.hasNeighborSignal(getBlockPos()));
+            setChangedAndUpdate();
+        }
     }
 
     @Nullable
     public Instrument detectInstrument() { //server
-        if(level!=null){
-            if(level.getBlockEntity(getBlockPos().above()) instanceof InstrumentBlockEntity be) {
+        if (level != null) {
+            if (level.getBlockEntity(getBlockPos().above()) instanceof InstrumentBlockEntity be) {
                 return be.getInstrument();
             }
         }
         return Instrument.EMPTY;
     }
 
-    public Instrument getInstrument(){
-        return this.instrument;
+    private void updatePlaying(boolean isPoweredNow, boolean isPlayingNow) { //server.
+        if (!this.powered && isPoweredNow && !this.isPlaying && isPlayingNow) {
+            this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> scoreTicker.start(
+                    score.getItem() instanceof ScoreItem scoreItem ? scoreItem.getTime(score) * 20 : 0L
+            ));
+        } else if(this.isPlaying && !isPlayingNow) {
+            this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(ScoreTicker::stop);
+        }
+        this.powered = isPoweredNow;
+        this.isPlaying = isPlayingNow;
     }
 
-    public void updateStatus() { //server. update status and synchronize data to client
-        this.instrument = detectInstrument();
-        this.powered = level.hasNeighborSignal(getBlockPos());
-        this.isPlaying = containsScore() && !this.instrument.isEmpty() && this.powered;
-        setChangedAndUpdate();
+    private void setChangedAndUpdate() { //server
+        this.setChanged();
+        if (level != null) {
+            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+        }
     }
 
     private void startSequence() { //client
@@ -74,19 +98,13 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         }
     }
 
-    private void setChangedAndUpdate() {
-        this.setChanged();
-        if(level!=null) {
-            level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-        }
-    }
-
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
-        this.score = ItemStack.of(compoundTag.getCompound("score"));
+        this.score = ItemStack.of(compoundTag.getCompound("score")); //score ticker has been loaded
         this.instrument = new Instrument(compoundTag.getCompound("instrument"));
         this.powered = compoundTag.getBoolean("powered");
+        this.isPlaying = compoundTag.getBoolean("isPlaying");
     }
 
     @Override
@@ -95,6 +113,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         compoundTag.put("score", this.score.save(new CompoundTag()));
         compoundTag.put("instrument", instrument.serializeNBT());
         compoundTag.putBoolean("powered", this.powered);
+        compoundTag.putBoolean("isPlaying", this.isPlaying);
     }
 
     @Override
@@ -107,8 +126,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         boolean previousPlaying = this.isPlaying;
         boolean previousPowered = this.powered;
         handleUpdateTag(pkt.getTag());
-        this.isPlaying = containsScore() && !this.instrument.isEmpty() && this.powered;
-        if(this.powered && !previousPowered && this.isPlaying && !previousPlaying) {
+        if (this.powered && !previousPowered && this.isPlaying && !previousPlaying) { //should be triggered only when powered
             startSequence(); //stop will be handled by tick in instance
         }
     }
@@ -125,16 +143,14 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         this.load(tag);
     }
 
-    public void updateSequenceStatus(float progress) {
-        this.progress = progress;
-        RomanticTp.info(progress);
-    }
-
-    public void stopPlaying() {
-        this.isPlaying = false;
-    }
-
-    public boolean isPlaying() {
-        return this.isPlaying;
+    public void tick() {
+        this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
+            scoreTicker.tick();
+            RomanticTp.LOGGER.info(String.valueOf(scoreTicker.getTick()));
+            if (!scoreTicker.isPlaying()) {
+                this.isPlaying = false;
+                setChangedAndUpdate();
+            }
+        });
     }
 }

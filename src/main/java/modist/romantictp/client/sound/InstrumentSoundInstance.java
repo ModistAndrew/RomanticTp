@@ -52,7 +52,6 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             this.volume = player.getVolume();
             updateInstrument();
             checkSequence();
-            updateSequenceStatus();
             if ((channelHandle.isDone() && channelHandle.join().isStopped()) || player.isRemoved()) {
                 destroy();
             }
@@ -86,19 +85,9 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     private void checkSequence() {
         if (sequencer != null) {
-            if (!player.isPlaying()) {
+            if (!player.isPlaying() || !sequencer.isRunning()) {
                 closeSequencer();
-            } else if (!sequencer.isRunning()) {
-                closeSequencer();
-                player.stopPlaying(); //avoid duplication
             }
-        }
-    }
-
-    private void updateSequenceStatus() {
-        if (this.sequencer != null) {
-            this.player.updateSequenceStatus
-                    ((float) sequencer.getTickPosition() / sequencer.getTickLength());
         }
     }
 

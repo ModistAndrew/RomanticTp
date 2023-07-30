@@ -48,18 +48,6 @@ public class NetworkHandler {
                 .encoder(ScoreSyncPacket::toBytes)
                 .consumerMainThread(ScoreSyncPacket::handle)
                 .add();
-
-        INSTANCE.messageBuilder(StopUsingItemPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(StopUsingItemPacket::new)
-                .encoder(StopUsingItemPacket::toBytes)
-                .consumerMainThread(StopUsingItemPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(StopPlayingPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(StopPlayingPacket::new)
-                .encoder(StopPlayingPacket::toBytes)
-                .consumerMainThread(StopPlayingPacket::handle)
-                .add();
     }
 
     public static <MSG> void sendToServer(MSG packet) {

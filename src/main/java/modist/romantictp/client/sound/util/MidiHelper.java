@@ -55,4 +55,12 @@ public class MidiHelper {
             throw new RuntimeException(e);
         }
     }
+
+    public static long getTime(byte[] data){
+        try {
+            return MidiSystem.getSequence(new ByteArrayInputStream(data)).getMicrosecondLength() / 1000000 + 1;
+        } catch (InvalidMidiDataException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -22,16 +22,16 @@ public class MidiFileLoader implements ResourceManagerReloadListener {
 
     public byte[] getMidiData(String name) {
         return resourceMap.get(name) == null ?
-                new byte[0] : resourceMap.get(name);
+                getDefault() : resourceMap.get(name);
     }
 
     public byte[] getDefault() {
-        return resourceMap.get("default");
+        return resourceMap.get("");
     }
 
     @Override
     public void onResourceManagerReload(ResourceManager pResourceManager) {
-        resourceMap.put("default", new byte[0]); //avoid deletion
+        resourceMap.put("", new byte[0]);
         pResourceManager.listResources("midi", l -> l.getPath().endsWith("mid")).forEach((l, r) -> {
             try {
                 String path = l.getPath();

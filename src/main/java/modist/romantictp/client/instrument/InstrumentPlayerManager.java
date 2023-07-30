@@ -1,18 +1,13 @@
 package modist.romantictp.client.instrument;
 
-import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
 import modist.romantictp.network.NetworkHandler;
-import modist.romantictp.network.StopPlayingPacket;
-import modist.romantictp.network.StopUsingItemPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class InstrumentPlayerManager {
     private static final Map<LivingEntity, InstrumentPlayer> entityMap = new HashMap<>();
@@ -76,16 +70,6 @@ public class InstrumentPlayerManager {
         }
 
         @Override
-        public void updateSequenceStatus(float progress) {
-        }
-
-        @Override
-        public void stopPlaying() {
-            entity.stopUsingItem();
-            NetworkHandler.sendToServer(new StopUsingItemPacket(entity));
-        }
-
-        @Override
         public CompoundTag serializeNBT() {
             CompoundTag ret = new CompoundTag();
             ret.putInt("id", entity.getId());
@@ -117,17 +101,6 @@ public class InstrumentPlayerManager {
         @Override
         public boolean isPlaying() {
             return blockEntity.isPlaying();
-        }
-
-        @Override
-        public void updateSequenceStatus(float progress) {
-            blockEntity.updateSequenceStatus(progress);
-        }
-
-        @Override
-        public void stopPlaying() {
-            blockEntity.stopPlaying();
-            NetworkHandler.sendToServer(new StopPlayingPacket(blockEntity));
         }
 
         @Override

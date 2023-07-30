@@ -22,32 +22,33 @@ public class ScoreItem extends Item {
     public byte[] getMidiData(ItemStack stack) {
         CompoundTag tag = stack.getTagElement("midiData");
         if(tag == null){
-            return MidiFileLoader.getInstance().getDefault();
+            return new byte[0];
         }
         return tag.getByteArray("data");
     }
 
-    public byte[] fillMidiData(ItemStack stack) { //client
-        return fillMidiData(stack, MidiFileLoader.getInstance().getMidiData(stack.getHoverName().getString()));
+    public long getTime(ItemStack stack) {
+        CompoundTag tag = stack.getTagElement("midiData");
+        if(tag == null){
+            return 0L;
+        }
+        return tag.getLong("time");
     }
 
-    public byte[] fillMidiData(ItemStack stack, byte[] data) { //server
+    public void fillMidiData(ItemStack stack, byte[] data, long time) {
         CompoundTag tag = new CompoundTag();
         tag.putByteArray("data", data);
+        tag.putLong("time", time);
         stack.addTagElement("midiData", tag);
-        return data;
     }
 
     public List<ItemStack> getDisplay() {
         ItemStack stack = new ItemStack(this);
-        CompoundTag tag = new CompoundTag();
-        tag.putString("name", "test");
-        stack.addTagElement("score", tag);
         return List.of(stack);
     }
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pIsAdvanced) {
-        pTooltip.add(Component.literal(String.valueOf((getMidiData(pStack).length))));
+        pTooltip.add(Component.literal(String.valueOf((getTime(pStack)))));
     }
 }

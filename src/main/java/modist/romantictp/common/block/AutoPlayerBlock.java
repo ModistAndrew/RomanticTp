@@ -10,10 +10,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nullable;
 
 public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
 
@@ -61,5 +65,15 @@ public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
     public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) { //TODO update
         return pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity &&
                 blockEntity.isPlaying() ? 15 : 0;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return (l, s, t, be) -> {
+            if (be instanceof AutoPlayerBlockEntity blockEntity && be.getType() == pBlockEntityType) {
+                blockEntity.tick();
+            }
+        };
     }
 }
