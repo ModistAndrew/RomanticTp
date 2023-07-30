@@ -77,8 +77,6 @@ public class AutoPlayerBlockEntity extends BlockEntity {
             this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> scoreTicker.start(
                     score.getItem() instanceof ScoreItem scoreItem ? scoreItem.getTime(score) * 20 : 0L
             ));
-        } else if(this.isPlaying && !isPlayingNow) {
-            this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(ScoreTicker::stop);
         }
         this.powered = isPoweredNow;
         this.isPlaying = isPlayingNow;
@@ -145,10 +143,12 @@ public class AutoPlayerBlockEntity extends BlockEntity {
 
     public void tick() {
         this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
-            scoreTicker.tick();
-            if (!scoreTicker.isPlaying()) {
-                this.isPlaying = false;
-                setChangedAndUpdate();
+            if(this.isPlaying) {
+                scoreTicker.tick();
+                if (!scoreTicker.isPlaying()) {
+                    this.isPlaying = false;
+                    setChangedAndUpdate();
+                }
             }
         });
     }

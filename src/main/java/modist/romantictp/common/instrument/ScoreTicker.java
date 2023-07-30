@@ -17,8 +17,6 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
 
     void start(long maxTick);
 
-    void stop();
-
     void tick();
 
     long getTick();
@@ -30,7 +28,6 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
         private final BlockEntity blockEntity;
         private long leftTick;
         private long maxTick;
-        private boolean isPlaying;
 
         public ScoreTickerImpl(BlockEntity blockEntity) {
             this.blockEntity = blockEntity;
@@ -40,25 +37,15 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
         public void start(long maxTick) {
             this.maxTick = maxTick;
             this.leftTick = maxTick; //lazy
-            this.isPlaying = true;
-            setChanged();
-        }
-
-        @Override
-        public void stop() {
-            this.isPlaying = false;
             setChanged();
         }
 
         public void tick() {
-            if (isPlaying) {
-                if (leftTick <= 0) {
-                    stop();
-                    return;
-                }
-                leftTick--;
-                setChanged();
+            if (leftTick <= 0) {
+                return;
             }
+            leftTick--;
+            setChanged();
         }
 
         @Override
@@ -67,7 +54,7 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
         }
 
         public boolean isPlaying() {
-            return isPlaying;
+            return leftTick > 0;
         }
 
         private void setChanged() {
@@ -81,7 +68,6 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
             CompoundTag ret = new CompoundTag();
             ret.putLong("leftTick", leftTick);
             ret.putLong("maxTick", maxTick);
-            ret.putBoolean("isPlaying", isPlaying);
             return ret;
         }
 
@@ -89,7 +75,6 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
         public void deserializeNBT(CompoundTag nbt) {
             leftTick = nbt.getLong("leftTick");
             maxTick = nbt.getLong("maxTick");
-            isPlaying = nbt.getBoolean("isPlaying");
         }
     }
 
