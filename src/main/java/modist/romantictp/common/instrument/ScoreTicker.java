@@ -12,12 +12,15 @@ import org.jetbrains.annotations.Nullable;
 //used on server to manage when the sequence should stop
 @AutoRegisterCapability
 public interface ScoreTicker extends INBTSerializable<CompoundTag> {
-    Capability<ScoreTicker> SCORE_TICKER = CapabilityManager.get(new CapabilityToken<ScoreTicker>() {});
+    Capability<ScoreTicker> SCORE_TICKER = CapabilityManager.get(new CapabilityToken<ScoreTicker>() {
+    });
 
     void start(long maxTick);
+
     void stop();
 
     void tick();
+
     long getTick();
 
     boolean isPlaying();
@@ -29,7 +32,7 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
         private long maxTick;
         private boolean isPlaying;
 
-        public ScoreTickerImpl(BlockEntity blockEntity){
+        public ScoreTickerImpl(BlockEntity blockEntity) {
             this.blockEntity = blockEntity;
         }
 
@@ -49,11 +52,12 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
 
         public void tick() {
             if (isPlaying) {
+                if (leftTick <= 0) {
+                    stop();
+                    return;
+                }
                 leftTick--;
                 setChanged();
-                if(leftTick <= 0) {
-                    stop();
-                }
             }
         }
 
@@ -63,11 +67,11 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
         }
 
         public boolean isPlaying() {
-            return  isPlaying;
+            return isPlaying;
         }
 
         private void setChanged() {
-            if(blockEntity!=null){
+            if (blockEntity != null) {
                 blockEntity.setChanged();
             }
         }

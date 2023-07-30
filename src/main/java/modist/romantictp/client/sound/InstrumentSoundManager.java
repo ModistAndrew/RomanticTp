@@ -70,7 +70,9 @@ public class InstrumentSoundManager {
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
             Sequence sequence = MidiHelper.loadSequence(midiData);
-            soundInstance.attachSequencer(sequence);
+            if(sequence != null) {
+                soundInstance.attachSequencer(sequence);
+            }
         }
         if (broadcast) {
             NetworkHandler.sendToServer(new InstrumentSoundPacket(player, midiData));

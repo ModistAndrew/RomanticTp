@@ -2,6 +2,7 @@ package modist.romantictp.client.sound.util;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.MathUtil;
 
 import javax.sound.midi.*;
@@ -48,9 +49,10 @@ public class MidiHelper {
         return message(command, data1, data2);
     }
 
+    @Nullable
     public static Sequence loadSequence(byte[] data){
         try {
-            return MidiSystem.getSequence(new ByteArrayInputStream(data));
+            return data.length>0 ? MidiSystem.getSequence(new ByteArrayInputStream(data)) : null;
         } catch (InvalidMidiDataException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +60,8 @@ public class MidiHelper {
 
     public static long getTime(byte[] data){
         try {
-            return MidiSystem.getSequence(new ByteArrayInputStream(data)).getMicrosecondLength() / 1000000 + 1;
+            return data.length>0 ?
+                    MidiSystem.getSequence(new ByteArrayInputStream(data)).getMicrosecondLength() / 1000000 + 1 : 0;
         } catch (InvalidMidiDataException | IOException e) {
             throw new RuntimeException(e);
         }
