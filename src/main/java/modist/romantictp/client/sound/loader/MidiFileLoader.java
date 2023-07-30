@@ -1,7 +1,6 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.util.FileHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.apache.commons.compress.utils.FileNameUtils;

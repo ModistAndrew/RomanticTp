@@ -19,7 +19,7 @@ public class LocalReceiver implements Receiver {
     public void send(MidiMessage message, long timeStamp) {
         if(message instanceof ShortMessage shortMessage) {
             LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
+            if (player != null && !Minecraft.getInstance().isPaused()) {
                 InstrumentSoundManager.getInstance().sendMessage
                         (InstrumentPlayerManager.getOrCreate(player), shortMessage, timeStamp, true);
             }

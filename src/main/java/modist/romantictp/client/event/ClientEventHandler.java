@@ -37,6 +37,9 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void startPlay(InputEvent.Key event) {
+        if(Minecraft.getInstance().screen!=null) { //not available, e.g. chatting
+            return;
+        }
         for (int i = 0; i < 7; i++) {
             Lazy<KeyMapping> k = InstrumentKeyMapping.PITCHES.get(i);
             if (event.getKey() != -1 && event.getKey() == k.get().getKey().getValue()) {

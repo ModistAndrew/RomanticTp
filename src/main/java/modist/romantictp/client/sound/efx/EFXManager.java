@@ -27,7 +27,7 @@ public class EFXManager {
         long currentContext = ALC10.alcGetCurrentContext();
         long currentDevice = ALC10.alcGetContextsDevice(currentContext);
         if (ALC10.alcIsExtensionPresent(currentDevice, "ALC_EXT_EFX")) {
-            RomanticTp.info("EFX Extension recognized");
+            RomanticTp.LOGGER.info("EFX Extension recognized");
         } else {
             RomanticTp.LOGGER.error("EFX Extension not found on current device. Aborting.");
             return;

@@ -6,7 +6,6 @@ import modist.romantictp.client.sound.audio.MyDataLine;
 import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
 import modist.romantictp.client.sound.util.AudioHelper;
-import modist.romantictp.client.sound.util.FileHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
@@ -17,7 +16,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class SynthesizerPool implements ResourceManagerReloadListener {
-    public volatile List<SynthesizerWrapper> availableSynthesizers = Collections.synchronizedList(new ArrayList<>());
+    public final List<SynthesizerWrapper> availableSynthesizers = Collections.synchronizedList(new ArrayList<>());
     private static final SynthesizerPool instance = new SynthesizerPool();
 
     private static final int INITIAL_COUNT = 4;
@@ -41,28 +40,24 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     public void delete(MyChannel channel) {
         CompletableFuture.runAsync(() -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-            RomanticTp.info("deletingSyn");
+            RomanticTp.LOGGER.info("Start deleting synthesizer {}", availableSynthesizers.size());
             channel.synthesizerWrapper.close();
-            RomanticTp.info("deleteFinish");
+            RomanticTp.LOGGER.info("Finish deleting synthesizer {}", availableSynthesizers.size());
         });
     }
 
     private void create() {
-        RomanticTp.info("syn" + availableSynthesizers.size());
         CompletableFuture.runAsync(() -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-            RomanticTp.info(FileHelper.class.getResource("/"));
+            RomanticTp.LOGGER.info("Start creating synthesizer {}", availableSynthesizers.size());
             availableSynthesizers.add(new SynthesizerWrapper());
-            RomanticTp.info("syn" + availableSynthesizers.size());
+            RomanticTp.LOGGER.info("Finish creating synthesizer {}", availableSynthesizers.size());
         });
     }
 
     @Override
     public void onResourceManagerReload(ResourceManager pResourceManager) {
         SoundbankLoader.getInstance().onResourceManagerReload(pResourceManager); //first load soundbank
-        if(SoundbankLoader.getInstance().soundbank!=null) {
-            RomanticTp.info("Soundbank loaded: " + SoundbankLoader.getInstance().soundbank.getName());
-        }
         init();
     }
 

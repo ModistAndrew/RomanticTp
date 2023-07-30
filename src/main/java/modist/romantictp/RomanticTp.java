@@ -31,8 +31,4 @@ public class RomanticTp
         EntityLoader.ENTITIES.register(modEventBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RomanticTpConfig.CONFIG_SPEC);
     }
-
-    public static void info(Object o){
-        //LOGGER.info(String.valueOf(o));
-    }
 }

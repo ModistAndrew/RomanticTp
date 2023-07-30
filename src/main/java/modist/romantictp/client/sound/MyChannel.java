@@ -101,7 +101,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
                 try {
                     pumpCount.wait();
                 } catch (InterruptedException e) {
-                    RomanticTp.info("Stopping Pusher");
+                    RomanticTp.LOGGER.info("Stopping pusher");
                     return;
                 }
             }

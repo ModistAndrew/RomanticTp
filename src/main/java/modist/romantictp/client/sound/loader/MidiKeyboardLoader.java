@@ -22,19 +22,21 @@ public class MidiKeyboardLoader {
     }
 
     public void init() {
-        RomanticTp.info("Available midi input device:");
-        getAvailableDevices().forEach(midiDevice -> RomanticTp.info(midiDevice.getDeviceInfo().getName()));
+        RomanticTp.LOGGER.info("Available midi input device:");
+        getAvailableDevices().forEach(midiDevice -> RomanticTp.LOGGER.info(midiDevice.getDeviceInfo().getName()));
         List<MidiDevice> device = getAvailableDevices().stream()
                 .filter(midiDevice -> midiDevice.getDeviceInfo().getName().equals(RomanticTpConfig.MIDI_KEYBOARD.get())).toList();
         if(!device.isEmpty()){
-            midiKeyboard = device.get(0); //TODO: conflict
+            midiKeyboard = device.get(0);
             try {
                 midiKeyboard.getTransmitter().setReceiver(LocalReceiver.getInstance());
                 midiKeyboard.open();
-                RomanticTp.info("Midi keyboard loaded: " + midiKeyboard.getDeviceInfo().getName());
+                RomanticTp.LOGGER.info("Midi keyboard loaded: {}", midiKeyboard.getDeviceInfo().getName());
             } catch (MidiUnavailableException e) {
                 RomanticTp.LOGGER.warn("Midi keyboard error: ", e);
             }
+        } else if(!RomanticTpConfig.MIDI_KEYBOARD.get().isEmpty()) {
+            RomanticTp.LOGGER.warn("Midi keyboard not found: {}", RomanticTpConfig.MIDI_KEYBOARD.get());
         }
     }
 
