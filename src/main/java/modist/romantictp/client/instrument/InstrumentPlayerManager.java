@@ -65,7 +65,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public boolean isPlaying() {
-            return getInstrument()!=null && entity.getOffhandItem().getItem() instanceof ScoreItem
+            return !getInstrument().isEmpty() && entity.getOffhandItem().getItem() instanceof ScoreItem
                     && entity.getUseItem().getItem() instanceof InstrumentItem;
         }
 

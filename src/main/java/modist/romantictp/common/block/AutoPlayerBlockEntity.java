@@ -146,7 +146,6 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public void tick() {
         this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
             scoreTicker.tick();
-            RomanticTp.LOGGER.info(String.valueOf(scoreTicker.getTick()));
             if (!scoreTicker.isPlaying()) {
                 this.isPlaying = false;
                 setChangedAndUpdate();

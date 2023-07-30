@@ -7,11 +7,13 @@ import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.instrument.ScoreTicker;
+import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.item.ScoreItem;
 import modist.romantictp.network.NetworkHandler;
 import modist.romantictp.network.ScoreSyncPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +22,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.AnvilRepairEvent;
@@ -94,5 +97,27 @@ public class CommonEventHandler {
             event.addCapability(new ResourceLocation(RomanticTp.MODID, "score_ticker"),
                     new ScoreTicker.ScoreTickerProvider(blockEntity));
         }
+    }
+
+    @SubscribeEvent
+    public  static void startUseItemEvent(LivingEntityUseItemEvent.Start event) {
+        LivingEntity entity = event.getEntity();
+        entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
+            if(entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+                scoreTicker.start(scoreItem.getTime(event.getEntity().getOffhandItem()) * 20);
+            }
+        });
+    }
+
+    @SubscribeEvent
+    public  static void tickUseItemEvent(LivingEntityUseItemEvent.Tick event) {
+        LivingEntity entity = event.getEntity();
+        entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
+            scoreTicker.tick();
+            if(!scoreTicker.isPlaying()){
+                entity.stopUsingItem();
+            }
+        });
     }
 }
