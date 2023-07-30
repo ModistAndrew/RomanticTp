@@ -7,6 +7,7 @@ import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.network.InstrumentSoundPacket;
 import modist.romantictp.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
@@ -27,7 +28,7 @@ public class InstrumentSoundManager {
     }
 
     @Nullable
-    private InstrumentSoundInstance getSound(InstrumentPlayer player) { //lazy
+    private InstrumentSoundInstance getSound(@NotNull InstrumentPlayer player) { //lazy
         InstrumentSoundInstance soundInstance = soundInstanceCache.get(player);
         if (soundInstance == null) {
             return tryCreate(player);
@@ -56,7 +57,7 @@ public class InstrumentSoundManager {
         return Minecraft.getInstance().getSoundManager().soundEngine.tickingSounds.contains(soundInstance);
     }
 
-    public void sendMessage(InstrumentPlayer player, ShortMessage message, long timeStamp, boolean broadcast) {
+    public void sendMessage(@NotNull InstrumentPlayer player, ShortMessage message, long timeStamp, boolean broadcast) {
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
             soundInstance.sendMessage(message, timeStamp);
@@ -66,7 +67,7 @@ public class InstrumentSoundManager {
         }
     }
 
-    public void startSequence(InstrumentPlayer player, byte[] midiData, boolean broadcast) {
+    public void startSequence(@NotNull InstrumentPlayer player, byte[] midiData, boolean broadcast) {
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
             Sequence sequence = MidiHelper.loadSequence(midiData);

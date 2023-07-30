@@ -36,10 +36,10 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void startPlay(InputEvent.Key event) { //TODO: F2, F3?
+    public static void startPlay(InputEvent.Key event) {
         for (int i = 0; i < 7; i++) {
             Lazy<KeyMapping> k = InstrumentKeyMapping.PITCHES.get(i);
-            if (event.getKey() == k.get().getKey().getValue()) {
+            if (event.getKey() != -1 && event.getKey() == k.get().getKey().getValue()) {
                 if (event.getAction() == InputConstants.PRESS) {
                     LocalReceiver.getInstance().send
                             (MidiHelper.startMessage(InstrumentKeyMapping.getPitch(i), 80), -1);
