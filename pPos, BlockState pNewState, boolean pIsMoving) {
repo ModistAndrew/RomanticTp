@@ -1,0 +1,80 @@
+[33m4ef9f82[m[33m ([m[1;36mHEAD -> [m[1;32mdevelopment[m[33m, [m[1;31morigin/teacon[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: reset: moving to 4ef9f825a9a007b40b66398dd1641d4130a216ba
+[33m9ace961[m HEAD@{1}: commit: block drop
+[33m4ef9f82[m[33m ([m[1;36mHEAD -> [m[1;32mdevelopment[m[33m, [m[1;31morigin/teacon[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{2}: commit: logger
+[33m3822e52[m HEAD@{3}: commit: logger
+[33mae5e0ca[m HEAD@{4}: commit: fix item layer bug
+[33m1562ee8[m HEAD@{5}: commit: OpenAL error log and bug fix
+[33mde7380c[m HEAD@{6}: commit: client cleanup finish!
+[33m1bdee85[m HEAD@{7}: commit: LOGGER cleanup
+[33mc798340[m HEAD@{8}: commit: pause
+[33m7af169a[m HEAD@{9}: commit: bank change bugfix
+[33m5bb584b[m HEAD@{10}: commit: hotkey bugfix
+[33mf8ac1af[m HEAD@{11}: reset: moving to f8ac1af3e308d146b1cae648001fb57e0456010a
+[33mf8ac1af[m HEAD@{12}: commit: removing score ticker stop
+[33m7bac3b3[m HEAD@{13}: commit: score ticker for entity
+[33m60047a8[m HEAD@{14}: commit: score ticker for block
+[33m60b9329[m HEAD@{15}: commit: score ticker for block
+[33mb20c9e8[m HEAD@{16}: commit: TODO cleanup
+[33mfe6dff5[m HEAD@{17}: commit: melody playing music
+[33m53bad99[m HEAD@{18}: reset: moving to 53bad99efed352e1ecf25bf2ed9cc2558193d1dc
+[33m53bad99[m HEAD@{19}: commit: melody simple ai
+[33m21db850[m HEAD@{20}: commit: silent
+[33m438e5a9[m HEAD@{21}: commit: entities
+[33m7bf09d2[m HEAD@{22}: commit: texture
+[33ma421c22[m HEAD@{23}: commit: InstrumentPlayer stop
+[33m7651e2c[m HEAD@{24}: commit: soundInstance management
+[33mbd3be18[m HEAD@{25}: commit: resource releasing
+[33ma5e1ee5[m HEAD@{26}: commit: midi keyboard loading and local receiver
+[33m032c09f[m HEAD@{27}: commit: soundbank loading
+[33m8fd8aed[m HEAD@{28}: commit: score loading
+[33ma18293d[m HEAD@{29}: commit: thread fix
+[33m09b3747[m HEAD@{30}: commit: change gervill path
+[33m079b2e6[m HEAD@{31}: commit: mixin fix and network
+[33mf4de488[m HEAD@{32}: commit: network
+[33m43def6a[m HEAD@{33}: commit: network
+[33mfe74f70[m HEAD@{34}: commit: auto player trigger fix
+[33mb6227ea[m HEAD@{35}: commit: reverb test
+[33m95ecae3[m HEAD@{36}: commit: receiver system
+[33m5674bce[m HEAD@{37}: commit: info cleanup
+[33mf00b62e[m HEAD@{38}: commit: cleanup
+[33mbcf1b42[m HEAD@{39}: commit: cleanup
+[33m39cf3a9[m HEAD@{40}: commit: receiver thread fix
+[33m84795e1[m HEAD@{41}: commit: license settings
+[33mcaa039e[m HEAD@{42}: commit: package cleanup
+[33m4b29129[m HEAD@{43}: commit: reconstruction of receiver
+[33m5de5053[m HEAD@{44}: commit: sequence check
+[33med4d5b7[m HEAD@{45}: reset: moving to ed4d5b765ff740750699aec4e8cf6aed8a0eed59
+[33med4d5b7[m HEAD@{46}: commit: sequencer
+[33mce3178f[m HEAD@{47}: commit: reconstruct channel integration with mixin
+[33m7b02e6f[m HEAD@{48}: commit: instrument block entity
+[33m58c0c05[m HEAD@{49}: commit: auto player score
+[33mef51df7[m HEAD@{50}: commit: auto player init
+[33m6edd821[m HEAD@{51}: commit: auto player init
+[33m37eed3d[m HEAD@{52}: commit: creative tab
+[33meba36f5[m HEAD@{53}: commit: score
+[33m42fd912[m HEAD@{54}: commit: block
+[33mfc990d9[m HEAD@{55}: commit: midi player
+[33me326ead[m HEAD@{56}: commit: soundbank loader
+[33mb52212a[m HEAD@{57}: commit: synthesizer pool
+[33m97a19f1[m HEAD@{58}: commit: async channel
+[33m6e7bae4[m HEAD@{59}: commit: audio cleanup
+[33med383f2[m HEAD@{60}: commit: audio won't stop when paused
+[33m61f319a[m HEAD@{61}: commit: audio
+[33mc391fe0[m HEAD@{62}: commit: cleanup
+[33ma6d672d[m HEAD@{63}: commit (merge): Merge branch 'teacon' of https://github.com/ModistAndrew/RomanticTp into development
+[33m6014e8f[m HEAD@{64}: commit: trumpet and sound
+[33m583f869[m HEAD@{65}: checkout: moving from teacon to development
+[33m9f91639[m[33m ([m[1;32mteacon[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{66}: merge master: Fast-forward
+[33m583f869[m HEAD@{67}: checkout: moving from development to teacon
+[33m583f869[m HEAD@{68}: reset: moving to 583f86921964989df30f7553f5421a8f68412584
+[33m583f869[m HEAD@{69}: reset: moving to 583f86921964989df30f7553f5421a8f68412584
+[33m9f91639[m[33m ([m[1;32mteacon[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{70}: merge master: Fast-forward
+[33m583f869[m HEAD@{71}: checkout: moving from master to development
+[33m9f91639[m[33m ([m[1;32mteacon[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{72}: commit: cleanup
+[33m583f869[m HEAD@{73}: checkout: moving from development to master
+[33m583f869[m HEAD@{74}: checkout: moving from master to development
+[33m583f869[m HEAD@{75}: checkout: moving from teacon to master
+[33m583f869[m HEAD@{76}: checkout: moving from development to teacon
+[33m583f869[m HEAD@{77}: checkout: moving from master to development
+[33m583f869[m HEAD@{78}: commit: delete README.txt
+[33m6da5f49[m HEAD@{79}: commit (initial): Initial commit
