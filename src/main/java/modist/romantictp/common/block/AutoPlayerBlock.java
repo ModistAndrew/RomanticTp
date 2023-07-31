@@ -1,7 +1,9 @@
 package modist.romantictp.common.block;
 
+import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -75,5 +77,15 @@ public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
                 blockEntity.tick();
             }
         };
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (!pState.is(pNewState.getBlock())) {
+            if (pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity) {
+                Containers.dropContents(pLevel, pPos, blockEntity.getDrops());
+            }
+            super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        }
     }
 }

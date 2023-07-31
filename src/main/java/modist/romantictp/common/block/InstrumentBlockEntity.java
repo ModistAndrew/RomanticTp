@@ -2,9 +2,11 @@ package modist.romantictp.common.block;
 
 import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,20 +15,20 @@ import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class InstrumentBlockEntity extends BlockEntity {
-    private Instrument instrument = Instrument.EMPTY;
+    private ItemStack instrument = ItemStack.EMPTY;
 
     public InstrumentBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(BlockLoader.INSTRUMENT_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
-    public void setInstrument(Instrument instrument) {
-        this.instrument = instrument;
+    public void setInstrument(ItemStack instrument) {
+        this.instrument = instrument.copy();
         setChangedAndUpdate();
     }
 
-    public Instrument getInstrument() { //may be set by command
+    public ItemStack getInstrument() { //may be set by command
         return this.instrument.isEmpty() ?
-                ((InstrumentBlock)this.getBlockState().getBlock()).defaultInstrument : this.instrument;
+                ItemStack.EMPTY : this.instrument;
     }
 
     private void setChangedAndUpdate() {
@@ -39,7 +41,7 @@ public class InstrumentBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
-        this.instrument = new Instrument(compoundTag.getCompound("instrument"));
+        this.instrument = ItemStack.of(compoundTag.getCompound("instrument"));
     }
 
     @Override
@@ -68,5 +70,9 @@ public class InstrumentBlockEntity extends BlockEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
+    }
+
+    public NonNullList<ItemStack> getDrops() {
+        return NonNullList.of(ItemStack.EMPTY, this.instrument);
     }
 }

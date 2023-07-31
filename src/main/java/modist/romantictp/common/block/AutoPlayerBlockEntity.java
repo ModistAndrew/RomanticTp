@@ -5,8 +5,10 @@ import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.instrument.ScoreTicker;
+import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -66,7 +68,9 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public Instrument detectInstrument() { //server
         if (level != null) {
             if (level.getBlockEntity(getBlockPos().above()) instanceof InstrumentBlockEntity be) {
-                return be.getInstrument();
+                if(be.getInstrument().getItem() instanceof InstrumentItem instrumentItem) {
+                    return instrumentItem.getInstrument(be.getInstrument());
+                }
             }
         }
         return Instrument.EMPTY;
@@ -151,5 +155,9 @@ public class AutoPlayerBlockEntity extends BlockEntity {
                 }
             }
         });
+    }
+
+    public NonNullList<ItemStack> getDrops() {
+        return NonNullList.of(ItemStack.EMPTY, this.score);
     }
 }

@@ -21,7 +21,7 @@ public class ItemLoader {
 
     public static final Map<String, RegistryObject<Item>> INSTRUMENTS = new HashMap<>();
 
-    static {//TODO: client ghost item cannot be cleared
+    static {
         BlockLoader.INSTRUMENTS.forEach((s, b) -> INSTRUMENTS.put
                 (s, ITEMS.register(s, () -> new InstrumentItem((InstrumentBlock) b.get()))));
     }
