@@ -22,8 +22,8 @@ public class MidiKeyboardLoader {
     }
 
     public void init() {
-        RomanticTp.LOGGER.info("Available midi input device:");
-        getAvailableDevices().forEach(midiDevice -> RomanticTp.LOGGER.info(midiDevice.getDeviceInfo().getName()));
+        getAvailableDevices().forEach(midiDevice ->
+                RomanticTp.LOGGER.info("Available midi input device founded: {}", midiDevice.getDeviceInfo().getName()));
         List<MidiDevice> device = getAvailableDevices().stream()
                 .filter(midiDevice -> midiDevice.getDeviceInfo().getName().equals(RomanticTpConfig.MIDI_KEYBOARD.get())).toList();
         if(!device.isEmpty()){
