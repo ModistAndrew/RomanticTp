@@ -114,9 +114,12 @@ public class CommonEventHandler {
     public  static void tickUseItemEvent(LivingEntityUseItemEvent.Tick event) {
         LivingEntity entity = event.getEntity();
         entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
-            scoreTicker.tick();
-            if(!scoreTicker.isPlaying()){
-                entity.stopUsingItem();
+            if(entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem) {
+                scoreTicker.tick();
+                if (!scoreTicker.isPlaying()) {
+                    entity.stopUsingItem();
+                }
             }
         });
     }
