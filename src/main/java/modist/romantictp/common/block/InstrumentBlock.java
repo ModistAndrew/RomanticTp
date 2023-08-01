@@ -1,6 +1,5 @@
 package modist.romantictp.common.block;
 
-import io.github.tofodroid.mods.mimi.util.VoxelShapeUtils;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import net.minecraft.core.BlockPos;
