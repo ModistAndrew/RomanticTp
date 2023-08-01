@@ -30,6 +30,7 @@ public class BlockLoader {
                                     new Instrument(0,1F, 62, true, ReverbType.TEST)));
     }
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
+    public static final RegistryObject<Block> REVERB_HELMET = BLOCKS.register("reverb_helmet", ReverbHelmetBlock::new);
 
     public static final RegistryObject<BlockEntityType<InstrumentBlockEntity>> INSTRUMENT_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("instrument_block_entity", ()-> BlockEntityType.Builder.of

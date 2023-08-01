@@ -23,6 +23,10 @@ public class BlockStateGenerator extends BlockStateProvider {
                 this.models().getExistingFile(modLoc("auto_player")));
         simpleBlockItem(BlockLoader.AUTO_PLAYER.get(),
                 this.models().getExistingFile(modLoc("auto_player")));
+        simpleBlock(BlockLoader.REVERB_HELMET.get(),
+                this.models().getExistingFile(modLoc("reverb_helmet")));
+        simpleBlockItem(BlockLoader.REVERB_HELMET.get(),
+                this.models().getExistingFile(modLoc("reverb_helmet")));
         BlockLoader.INSTRUMENTS.forEach((s, b) -> {
             simpleBlock(b.get(), this.models().getExistingFile(modLoc("instrument")));
         });

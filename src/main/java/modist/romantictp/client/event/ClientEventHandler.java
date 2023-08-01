@@ -7,18 +7,23 @@ import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.client.sound.audio.LocalReceiver;
 import modist.romantictp.client.sound.efx.EFXManager;
+import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.util.MidiHelper;
+import modist.romantictp.common.block.ReverbHelmetBlock;
 import modist.romantictp.common.item.InstrumentItem;
+import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.sound.PlaySoundSourceEvent;
+import net.minecraftforge.client.event.sound.PlayStreamingSourceEvent;
 import net.minecraftforge.client.event.sound.SoundEngineLoadEvent;
 import net.minecraftforge.client.event.sound.SoundEvent;
 import net.minecraftforge.common.util.Lazy;
@@ -32,7 +37,18 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void changeSound(PlaySoundSourceEvent event) {
-        //EFXManager.getInstance().applyEFX(event.getChannel().source);
+        LocalPlayer player = Minecraft.getInstance().player;
+        if(player!=null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get())) {
+            EFXManager.getInstance().applyEFX(ReverbType.TEST, event.getChannel().source);
+        }
+    }
+
+    @SubscribeEvent
+    public static void changeSound(PlayStreamingSourceEvent event) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if(player!=null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get())) {
+            EFXManager.getInstance().applyEFX(ReverbType.TEST, event.getChannel().source);
+        }
     }
 
     @SubscribeEvent

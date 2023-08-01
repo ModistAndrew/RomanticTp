@@ -3,11 +3,13 @@ package modist.romantictp.common.item;
 import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.block.InstrumentBlock;
+import modist.romantictp.common.block.ReverbHelmetBlock;
 import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,7 +32,8 @@ public class ItemLoader {
 
     public static final RegistryObject<Item> SCORE = ITEMS.register("score", ScoreItem::new);
     public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));
-    public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFF99, new Item.Properties()));
+    public static final RegistryObject<Item> REVERB_HELMET = ITEMS.register("reverb_helmet", () -> new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFFFF, new Item.Properties()));
 
     public static final RegistryObject<CreativeModeTab> ROMANTICTP_TAB = TABS.register("romantictp_tab",() -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.romantictp_tab"))
@@ -38,6 +41,7 @@ public class ItemLoader {
                 INSTRUMENTS.forEach((s, i) -> ((InstrumentItem)i.get()).getDisplay().forEach(output::accept));
                 ((ScoreItem)SCORE.get()).getDisplay().forEach(output::accept);
                 output.accept(AUTO_PLAYER.get());
+                output.accept(REVERB_HELMET.get());
                 output.accept(MELODY_EGG.get());
             })
             .icon(() -> new ItemStack(SCORE.get()))
