@@ -19,6 +19,8 @@ public class ItemModelGenerator extends ItemModelProvider {
                 modLoc("item/"+ItemLoader.SCORE.getId().getPath()));
         ItemLoader.INSTRUMENTS.forEach((s, i) -> singleTexture
                 (s, mcLoc("item/generated"), "layer0", modLoc("item/"+s)));
+        singleTexture(ItemLoader.NATURAL_TRUMPET.getId().getPath(), mcLoc("item/generated"), "layer0",
+                modLoc("item/"+ItemLoader.NATURAL_TRUMPET.getId().getPath()));
         withExistingParent(ItemLoader.MELODY_EGG.getId().getPath(), mcLoc("item/template_spawn_egg"));
     }
 }

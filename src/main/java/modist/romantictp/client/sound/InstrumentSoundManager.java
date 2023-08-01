@@ -1,19 +1,16 @@
 package modist.romantictp.client.sound;
 
-import io.netty.util.internal.ConcurrentSet;
-import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.network.InstrumentSoundPacket;
 import modist.romantictp.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 //management of sound instance,
@@ -81,5 +78,9 @@ public class InstrumentSoundManager {
 
     public void remove(InstrumentPlayer player) {
         soundInstanceCache.remove(player);
+    }
+
+    public void playNaturalTrumpet(LivingEntity player) {
+        Minecraft.getInstance().getSoundManager().play(new NaturalTrumpetSoundInstance(player));
     }
 }

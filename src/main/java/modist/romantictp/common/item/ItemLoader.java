@@ -33,6 +33,7 @@ public class ItemLoader {
     public static final RegistryObject<Item> SCORE = ITEMS.register("score", ScoreItem::new);
     public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));
     public static final RegistryObject<Item> REVERB_HELMET = ITEMS.register("reverb_helmet", () -> new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> NATURAL_TRUMPET = ITEMS.register("natural_trumpet", NaturalTrumpetItem::new);
     public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFFFF, new Item.Properties()));
 
     public static final RegistryObject<CreativeModeTab> ROMANTICTP_TAB = TABS.register("romantictp_tab",() -> CreativeModeTab.builder()
@@ -43,6 +44,7 @@ public class ItemLoader {
                 output.accept(AUTO_PLAYER.get());
                 output.accept(REVERB_HELMET.get());
                 output.accept(MELODY_EGG.get());
+                output.accept(NATURAL_TRUMPET.get());
             })
             .icon(() -> new ItemStack(SCORE.get()))
             .build());

@@ -1,6 +1,7 @@
 package modist.romantictp.common.sound;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.fork.gervill.SoftAudioBuffer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
@@ -15,4 +16,6 @@ public class SoundEventLoader {
 
     public static final RegistryObject<SoundEvent> BLANK = SOUNDS.register("blank", () -> SoundEvent.createFixedRangeEvent(
             new ResourceLocation(RomanticTp.MODID, "blank"), 1.0F));
+    public static final RegistryObject<SoundEvent> NATURAL_TRUMPET = SOUNDS.register("natural_trumpet",
+            () -> SoundEvent.createFixedRangeEvent(new ResourceLocation(RomanticTp.MODID, "natural_trumpet"), 1.0F));
 }

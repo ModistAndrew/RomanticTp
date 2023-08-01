@@ -8,5 +8,15 @@
       }
     ],
     "subtitle": "sound.romantictp.blank"
+  },
+  "natural_trumpet": {
+    "sounds": [
+      {
+        "name":"romantictp:natural_trumpet",
+        "attenuation_distance": 64,
+        "stream": true
+      }
+    ],
+    "subtitle": "sound.romantictp.natural_trumpet"
   }
 }
