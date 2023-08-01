@@ -9,7 +9,10 @@ import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ItemLoader;
+import modist.romantictp.common.item.NaturalTrumpetItem;
 import modist.romantictp.common.item.ScoreItem;
+import modist.romantictp.common.sound.ServerInstrumentSoundManager;
+import modist.romantictp.network.InstrumentSoundBroadcastPacket;
 import modist.romantictp.network.NetworkHandler;
 import modist.romantictp.network.ScoreSyncPacket;
 import net.minecraft.core.Holder;
@@ -17,6 +20,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -105,26 +109,34 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void startUseItemEvent(LivingEntityUseItemEvent.Start event) {
         LivingEntity entity = event.getEntity();
-        entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
-            if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
-                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
-                scoreTicker.start(scoreItem.getTime(event.getEntity().getOffhandItem()) * 20);
+        if(!entity.level().isClientSide) {
+            entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
+                if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                        && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+                    ServerInstrumentSoundManager.getInstance().startSequence(entity, scoreItem.getMidiData(event.getEntity().getOffhandItem()));
+                    scoreTicker.start(scoreItem.getTime(event.getEntity().getOffhandItem()) * 20);
+                }
+            });
+            if (entity.getUseItem().getItem() instanceof NaturalTrumpetItem) {
+                ServerInstrumentSoundManager.getInstance().playNaturalTrumpet(entity);
             }
-        });
+        }
     }
 
     @SubscribeEvent
     public static void tickUseItemEvent(LivingEntityUseItemEvent.Tick event) {
         LivingEntity entity = event.getEntity();
-        entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
-            if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
-                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem) {
-                scoreTicker.tick();
-                if (!scoreTicker.isPlaying()) {
-                    entity.stopUsingItem();
+        if(!entity.level().isClientSide) {
+            entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
+                if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                        && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem) {
+                    scoreTicker.tick();
+                    if (!scoreTicker.isPlaying()) {
+                        entity.stopUsingItem();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @SubscribeEvent

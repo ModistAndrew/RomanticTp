@@ -64,7 +64,6 @@ public class Melody extends PathfinderMob {
     private float dancingAnimationTicks;
     private float spinningAnimationTicks;
     private float spinningAnimationTicks0;
-    private boolean startedUsingItem; //used to synchronize used item from server. Keep same with isDancing.
 
     public Melody(EntityType<? extends Melody> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -101,40 +100,6 @@ public class Melody extends PathfinderMob {
         super.defineSynchedData();
         this.entityData.define(DATA_DANCING, false);
         this.entityData.define(DATA_CAN_DUPLICATE, true);
-    }
-
-    @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> pKey) {
-        super.onSyncedDataUpdated(pKey);
-        if (DATA_LIVING_ENTITY_FLAGS.equals(pKey)) {
-            boolean flag = (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 1) > 0;
-            InteractionHand interactionhand = (this.entityData.get(DATA_LIVING_ENTITY_FLAGS) & 2) > 0 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-            if (flag && !this.startedUsingItem) {
-                this.startUsingItem(interactionhand);
-            } else if (!flag && this.startedUsingItem) {
-                this.stopUsingItem();
-            }
-        }
-    }
-
-    @Override
-    public boolean isUsingItem() {
-        return this.startedUsingItem;
-    }
-
-    @Override
-    public void stopUsingItem() {
-        super.stopUsingItem();
-        this.startedUsingItem = false;
-    }
-
-    @Override
-    public void startUsingItem(InteractionHand pHand) {
-        ItemStack itemstack = this.getItemInHand(pHand);
-        if (!itemstack.isEmpty() && !this.isUsingItem()) {
-            super.startUsingItem(pHand);
-            this.startedUsingItem = true;
-        }
     }
 
     public void travel(Vec3 pTravelVector) {

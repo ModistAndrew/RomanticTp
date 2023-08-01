@@ -63,7 +63,7 @@ public class InstrumentSoundManager {
             soundInstance.sendMessage(message, timeStamp);
         }
         if (broadcast) {
-            NetworkHandler.sendToServer(new InstrumentSoundPacket(player, message, timeStamp));
+            NetworkHandler.sendToServer(new InstrumentSoundPacket(message, timeStamp));
         }
     }
 
@@ -76,14 +76,14 @@ public class InstrumentSoundManager {
             }
         }
         if (broadcast) {
-            NetworkHandler.sendToServer(new InstrumentSoundPacket(player, midiData));
+            NetworkHandler.sendToServer(new InstrumentSoundPacket(midiData));
         }
     }
 
     public void playNaturalTrumpet(LivingEntity player, boolean broadcast) {
         Minecraft.getInstance().getSoundManager().play(new NaturalTrumpetSoundInstance(player));
         if(broadcast) {
-            NetworkHandler.sendToServer(new InstrumentSoundPacket(player));
+            NetworkHandler.sendToServer(new InstrumentSoundPacket());
         }
     }
 }

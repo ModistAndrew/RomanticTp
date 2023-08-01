@@ -51,9 +51,9 @@ public class InstrumentItem extends BlockItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if(pUsedHand == InteractionHand.MAIN_HAND && pPlayer.getOffhandItem().getItem() instanceof ScoreItem) {
-                pPlayer.startUsingItem(pUsedHand); //see client event
-                return InteractionResultHolder.success(pPlayer.getMainHandItem());
+        if (pUsedHand == InteractionHand.MAIN_HAND && pPlayer.getOffhandItem().getItem() instanceof ScoreItem) {
+            pPlayer.startUsingItem(pUsedHand); //see server event
+            return InteractionResultHolder.success(pPlayer.getMainHandItem());
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }

@@ -20,21 +20,21 @@ public class InstrumentSoundPacket {
     protected final long timeStamp;
     protected final byte[] midiData;
 
-    public InstrumentSoundPacket(InstrumentPlayer player, ShortMessage message, long timeStamp){
+    public InstrumentSoundPacket(ShortMessage message, long timeStamp){
         this.op = 0;
         this.midiMessage = message;
         this.timeStamp = timeStamp;
         this.midiData = new byte[0];
     }
 
-    public InstrumentSoundPacket(InstrumentPlayer player, byte[] midiData) {
+    public InstrumentSoundPacket(byte[] midiData) {
         this.op = 1;
         this.midiMessage = new ShortMessage();
         this.timeStamp = 0;
         this.midiData = midiData;
     }
 
-    public InstrumentSoundPacket(LivingEntity player) {
+    public InstrumentSoundPacket() {
         this.op = 2;
         this.midiMessage = new ShortMessage();
         this.timeStamp = 0;
@@ -57,7 +57,7 @@ public class InstrumentSoundPacket {
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
-        ServerPlayer player = ctx.getSender();
+        ServerPlayer player = ctx.getSender(); //should always be sender
         NetworkHandler.broadcast(player, player.getX(), player.getY(), player.getZ(), 64D, player.level().dimension(),
                 new InstrumentSoundBroadcastPacket(this, player.getId()));
     }

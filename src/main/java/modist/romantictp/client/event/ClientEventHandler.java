@@ -12,11 +12,13 @@ import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.block.ReverbHelmetBlock;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ItemLoader;
+import modist.romantictp.common.item.NaturalTrumpetItem;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -64,20 +66,6 @@ public class ClientEventHandler {
                             (MidiHelper.stopMessage(InstrumentKeyMapping.getPitch(i)), -1);
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void startPlaySequence(UseItemEnd event) {
-        if(event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
-            InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(event.getEntity()),
-                    scoreItem.getMidiData(event.getEntity().getOffhandItem()), false);
-        }
-    }
-
-    public static class UseItemEnd extends LivingEntityUseItemEvent.Start { //client only
-        public UseItemEnd(LivingEntity entity, @NotNull ItemStack item, int duration) {
-            super(entity, item, duration);
         }
     }
 }

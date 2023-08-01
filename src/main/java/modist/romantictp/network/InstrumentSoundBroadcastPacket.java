@@ -37,7 +37,7 @@ public class InstrumentSoundBroadcastPacket {
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
         Entity entity = Minecraft.getInstance().level.getEntity(playerId);
-        if(entity instanceof Player player) {
+        if(entity instanceof LivingEntity player) {
             switch (packet.op) {
                 case 0 -> InstrumentSoundManager.getInstance().sendMessage(InstrumentPlayerManager.getOrCreate(player), packet.midiMessage, packet.timeStamp, false);
                 case 1 -> InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(player), packet.midiData, false);
