@@ -28,13 +28,12 @@ public class ServerInstrumentSoundManager {
     }
 
     public void startSequence(@NotNull LivingEntity entity, byte[] midiData) {
-        NetworkHandler.broadcast(null, entity.getX(), entity.getY(), entity.getZ(), 64D, entity.level().dimension(),
+        NetworkHandler.broadcast(null, entity,
                 new InstrumentSoundBroadcastPacket(new InstrumentSoundPacket(midiData), entity.getId()));
     }
 
     public void playNaturalTrumpet(@NotNull LivingEntity entity) {
-        NetworkHandler.broadcast(entity instanceof ServerPlayer player ? player : null,
-                entity.getX(), entity.getY(), entity.getZ(), 64D, entity.level().dimension(),
+        NetworkHandler.broadcast(null, entity,
                 new InstrumentSoundBroadcastPacket(new InstrumentSoundPacket(), entity.getId()));
     }
 }

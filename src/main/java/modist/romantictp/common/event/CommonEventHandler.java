@@ -15,6 +15,7 @@ import modist.romantictp.common.sound.ServerInstrumentSoundManager;
 import modist.romantictp.network.InstrumentSoundBroadcastPacket;
 import modist.romantictp.network.NetworkHandler;
 import modist.romantictp.network.ScoreSyncPacket;
+import modist.romantictp.network.UseItemPacket;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -109,15 +110,16 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void startUseItemEvent(LivingEntityUseItemEvent.Start event) {
         LivingEntity entity = event.getEntity();
-        if(!entity.level().isClientSide) {
-            entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
-                if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
-                        && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+        if (!entity.level().isClientSide) {
+            if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
+                NetworkHandler.broadcast(null, entity, new UseItemPacket(entity.getId(), true, entity.getUsedItemHand() == InteractionHand.OFF_HAND));
+                entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
                     ServerInstrumentSoundManager.getInstance().startSequence(entity, scoreItem.getMidiData(event.getEntity().getOffhandItem()));
                     scoreTicker.start(scoreItem.getTime(event.getEntity().getOffhandItem()) * 20);
-                }
-            });
-            if (entity.getUseItem().getItem() instanceof NaturalTrumpetItem) {
+                });
+            } else if (event.getItem().getItem() instanceof NaturalTrumpetItem) {
+                NetworkHandler.broadcast(null, entity, new UseItemPacket(entity.getId(), true, entity.getUsedItemHand() == InteractionHand.OFF_HAND));
                 ServerInstrumentSoundManager.getInstance().playNaturalTrumpet(entity);
             }
         }
@@ -126,16 +128,29 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void tickUseItemEvent(LivingEntityUseItemEvent.Tick event) {
         LivingEntity entity = event.getEntity();
-        if(!entity.level().isClientSide) {
-            entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
-                if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
-                        && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem) {
+        if (!entity.level().isClientSide) {
+            if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem) {
+                entity.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> {
                     scoreTicker.tick();
                     if (!scoreTicker.isPlaying()) {
                         entity.stopUsingItem();
                     }
-                }
-            });
+                });
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void tickUseItemEvent(LivingEntityUseItemEvent.Stop event) {
+        LivingEntity entity = event.getEntity();
+        if (!entity.level().isClientSide) {
+            if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
+                    && event.getEntity().getOffhandItem().getItem() instanceof ScoreItem) {
+                NetworkHandler.broadcast(null, entity, new UseItemPacket(entity.getId(), false, entity.getUsedItemHand() == InteractionHand.OFF_HAND));
+            } else if (event.getItem().getItem() instanceof NaturalTrumpetItem) {
+                NetworkHandler.broadcast(null, entity, new UseItemPacket(entity.getId(), false, entity.getUsedItemHand() == InteractionHand.OFF_HAND));
+            }
         }
     }
 

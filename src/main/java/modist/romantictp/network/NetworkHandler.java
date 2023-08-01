@@ -5,6 +5,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkDirection;
@@ -48,15 +49,21 @@ public class NetworkHandler {
                 .encoder(ScoreSyncPacket::toBytes)
                 .consumerMainThread(ScoreSyncPacket::handle)
                 .add();
+
+        INSTANCE.messageBuilder(UseItemPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(UseItemPacket::new)
+                .encoder(UseItemPacket::toBytes)
+                .consumerMainThread(UseItemPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG packet) {
         INSTANCE.sendToServer(packet);
     }
 
-    public static <MSG> void broadcast(@Nullable ServerPlayer pExcept,
-                                       double pX, double pY, double pZ, double pRadius, ResourceKey<Level> pDimension, MSG packet) {
+    public static <MSG> void broadcast(@Nullable ServerPlayer pExcept, LivingEntity entity, MSG packet) {
         INSTANCE.send(PacketDistributor.NEAR.with
-                (() -> new PacketDistributor.TargetPoint(pExcept, pX, pY, pZ, pRadius, pDimension)), packet);
+                (() -> new PacketDistributor.TargetPoint
+                        (pExcept, entity.getX(), entity.getY(), entity.getZ(), 64D, entity.level().dimension())), packet);
     }
 }

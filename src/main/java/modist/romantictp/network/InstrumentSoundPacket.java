@@ -58,7 +58,6 @@ public class InstrumentSoundPacket {
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context ctx = contextSupplier.get();
         ServerPlayer player = ctx.getSender(); //should always be sender
-        NetworkHandler.broadcast(player, player.getX(), player.getY(), player.getZ(), 64D, player.level().dimension(),
-                new InstrumentSoundBroadcastPacket(this, player.getId()));
+        NetworkHandler.broadcast(player, player, new InstrumentSoundBroadcastPacket(this, player.getId()));
     }
 }
