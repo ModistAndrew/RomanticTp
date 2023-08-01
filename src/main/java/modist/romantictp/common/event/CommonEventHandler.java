@@ -142,7 +142,7 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void tickUseItemEvent(LivingEntityUseItemEvent.Stop event) {
+    public static void stopUseItemEvent(LivingEntityUseItemEvent.Stop event) {
         LivingEntity entity = event.getEntity();
         if (!entity.level().isClientSide) {
             if (entity.getUsedItemHand() == InteractionHand.MAIN_HAND && event.getItem().getItem() instanceof InstrumentItem
