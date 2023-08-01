@@ -6,6 +6,7 @@ import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.InstrumentItem;
+import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;

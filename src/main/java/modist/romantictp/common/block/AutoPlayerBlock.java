@@ -81,6 +81,9 @@ public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if(pLevel.getBlockState(pPos.above()).getBlock() instanceof InstrumentBlock) {
+            pLevel.destroyBlock(pPos.above(), true);
+        }
         if (!pState.is(pNewState.getBlock())) {
             if (pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity) {
                 Containers.dropContents(pLevel, pPos, blockEntity.getDrops());

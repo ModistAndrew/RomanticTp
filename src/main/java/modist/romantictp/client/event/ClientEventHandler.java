@@ -55,7 +55,7 @@ public class ClientEventHandler {
     public static void startPlaySequence(UseItemEnd event) {
         if(event.getEntity().getOffhandItem().getItem() instanceof ScoreItem scoreItem) {
             InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(event.getEntity()),
-                    scoreItem.getMidiData(event.getEntity().getOffhandItem()), true);
+                    scoreItem.getMidiData(event.getEntity().getOffhandItem()), false);
         }
     }
 

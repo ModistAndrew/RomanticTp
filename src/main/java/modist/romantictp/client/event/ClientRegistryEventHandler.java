@@ -1,6 +1,7 @@
 package modist.romantictp.client.event;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.block.entity.AutoPlayerRenderer;
 import modist.romantictp.client.block.entity.InstrumentRenderer;
 import modist.romantictp.client.entity.MelodyModel;
 import modist.romantictp.client.entity.MelodyRenderer;
@@ -34,10 +35,10 @@ public class ClientRegistryEventHandler {
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST) //avoid MIDI Keyboard conflict?
-    public static void initAudio(FMLClientSetupEvent event) {
+    public static void init(FMLClientSetupEvent event) {
         MidiKeyboardLoader.getInstance().init();
         BlockEntityRenderers.register(BlockLoader.INSTRUMENT_BLOCK_ENTITY.get(), c -> new InstrumentRenderer(c.getItemRenderer()));
-        ItemBlockRenderTypes.setRenderLayer(BlockLoader.AUTO_PLAYER.get(), RenderType.cutout());
+        BlockEntityRenderers.register(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), c -> new AutoPlayerRenderer(c.getItemRenderer()));
     }
 
     @SubscribeEvent

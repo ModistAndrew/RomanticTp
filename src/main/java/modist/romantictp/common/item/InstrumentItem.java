@@ -10,11 +10,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -37,10 +39,21 @@ public class InstrumentItem extends BlockItem { //TODO right click to drop
     }
 
     @Override
+    public InteractionResult useOn(UseOnContext pContext) {
+        InteractionResult interactionresult = this.place(new BlockPlaceContext(pContext));
+        if (!interactionresult.consumesAction()) { //can use
+            InteractionResult interactionresult1 = this.use(pContext.getLevel(), pContext.getPlayer(), pContext.getHand()).getResult();
+            return interactionresult1;
+        } else {
+            return interactionresult;
+        }
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if (pUsedHand == InteractionHand.MAIN_HAND) {
+        if(pUsedHand == InteractionHand.MAIN_HAND && pPlayer.getOffhandItem().getItem() instanceof ScoreItem) {
                 pPlayer.startUsingItem(pUsedHand); //see client event
-                return InteractionResultHolder.consume(pPlayer.getMainHandItem());
+                return InteractionResultHolder.success(pPlayer.getMainHandItem());
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }
