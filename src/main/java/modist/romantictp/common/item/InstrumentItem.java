@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class InstrumentItem extends BlockItem { //TODO right click to drop
+public class InstrumentItem extends BlockItem {
     public final Instrument defaultInstrument;
     public final List<Instrument> display;
 

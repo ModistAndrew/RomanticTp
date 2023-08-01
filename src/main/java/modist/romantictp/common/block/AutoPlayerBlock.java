@@ -21,7 +21,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 
-public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
+public class AutoPlayerBlock extends Block implements EntityBlock {
 
     public AutoPlayerBlock() {
         super(BlockBehaviour.Properties.of().instabreak().noOcclusion());
@@ -64,7 +64,7 @@ public class AutoPlayerBlock extends Block implements EntityBlock { //TODO: drop
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) { //TODO update
+    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
         return pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity &&
                 blockEntity.isPlaying() ? 15 : 0;
     }

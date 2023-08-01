@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class InstrumentBlock extends Block implements EntityBlock { //TODO: drop
+public class InstrumentBlock extends Block implements EntityBlock {
     public final Instrument defaultInstrument;
     public final List<Instrument> display;
 

@@ -36,7 +36,7 @@ public class InstrumentRenderer implements BlockEntityRenderer<InstrumentBlockEn
                 pPoseStack, pBuffer, pBlockEntity.getLevel(), 0);
         pPoseStack.popPose();
     }
-    private static float diffFunction(long time, long delta, float scale) {
+    static float diffFunction(long time, long delta, float scale) {
         long dt = time % (delta * 2);
         if (dt > delta) {
             dt = 2 * delta - dt;
@@ -44,7 +44,7 @@ public class InstrumentRenderer implements BlockEntityRenderer<InstrumentBlockEn
         return dt * scale;
     }
 
-    private static float getAngle(long time, long delta) {
+    static float getAngle(long time, long delta) {
         return (float) ((time / delta) % 360 / 180F * Math.PI);
     }
 }

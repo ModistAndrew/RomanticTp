@@ -23,7 +23,14 @@ public class AutoPlayerRenderer implements BlockEntityRenderer<AutoPlayerBlockEn
     public void render(AutoPlayerBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         pPoseStack.pushPose();
         pPoseStack.translate(0.5D, 0.5D, 0.5D);
-        if(pBlockEntity.isPlaying()) {
+        if(pBlockEntity.containsScore()) {
+            if(pBlockEntity.isPlaying()) {
+                long time = System.currentTimeMillis();
+                float angle = InstrumentRenderer.getAngle(time, 20);
+                float trans = InstrumentRenderer.diffFunction(time, 1000, 0.0002F);
+                pPoseStack.translate(0, trans, 0);
+                pPoseStack.mulPose(new Quaternionf().rotationY(angle));
+            }
             itemRenderer.renderStatic(new ItemStack(Items.APPLE), ItemDisplayContext.GROUND, pPackedLight, pPackedOverlay,
                     pPoseStack, pBuffer, pBlockEntity.getLevel(), 0);
         }

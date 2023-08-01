@@ -21,9 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class AutoPlayerBlockEntity extends BlockEntity {
-    //TODO: get message from sequencer for animation
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
-    //TODO: manage instrument?
     public Instrument instrument = Instrument.EMPTY; //updated from server
     public boolean powered; //whether is powered
     private boolean isPlaying; //updated from server
@@ -60,7 +58,10 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     public void updateStatus() { //server. update status and synchronize data to client
         if(this.level != null && !this.level.isClientSide) {
             this.instrument = detectInstrument();
-            updatePlaying(level.hasNeighborSignal(getBlockPos()), containsScore() && !this.instrument.isEmpty() && level.hasNeighborSignal(getBlockPos()));
+            boolean previousPowered = this.powered;
+            this.powered = level.hasNeighborSignal(getBlockPos());
+            updatePlaying(containsScore() && !this.instrument.isEmpty() &&
+                    !previousPowered && this.powered);
             setChangedAndUpdate();
         }
     }
@@ -77,13 +78,12 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return Instrument.EMPTY;
     }
 
-    private void updatePlaying(boolean isPoweredNow, boolean isPlayingNow) { //server.
-        if (!this.powered && isPoweredNow && !this.isPlaying && isPlayingNow) {
+    private void updatePlaying(boolean isPlayingNow) { //server.
+        if (!this.isPlaying && isPlayingNow) {
             this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> scoreTicker.start(
                     score.getItem() instanceof ScoreItem scoreItem ? scoreItem.getTime(score) * 20 : 0L
             ));
         }
-        this.powered = isPoweredNow;
         this.isPlaying = isPlayingNow;
     }
 
@@ -127,9 +127,8 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) { //called when data from server is updated
         boolean previousPlaying = this.isPlaying;
-        boolean previousPowered = this.powered;
         handleUpdateTag(pkt.getTag());
-        if (this.powered && !previousPowered && this.isPlaying && !previousPlaying) { //should be triggered only when powered
+        if (!previousPlaying && this.isPlaying) { //should be triggered only when powered
             startSequence(); //stop will be handled by tick in instance
         }
     }
