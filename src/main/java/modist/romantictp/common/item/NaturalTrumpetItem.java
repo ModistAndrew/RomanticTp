@@ -17,7 +17,7 @@ public class NaturalTrumpetItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         pPlayer.startUsingItem(pUsedHand);
         if(pPlayer.level().isClientSide) {
-            InstrumentSoundManager.getInstance().playNaturalTrumpet(pPlayer);
+            InstrumentSoundManager.getInstance().playNaturalTrumpet(pPlayer, false);
         }
         return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));
     }

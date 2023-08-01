@@ -40,17 +40,6 @@ public class InstrumentPlayerManager {
         blockEntityMap.values().remove(player);
     }
 
-    @Nullable
-    public static InstrumentPlayer fromNbt(CompoundTag tag) {
-        if(tag.contains("id")){
-            Entity entity = Minecraft.getInstance().level.getEntity(tag.getInt("id"));
-            return entity instanceof LivingEntity livingEntity ? getOrCreate(livingEntity) : null;
-        } else {
-            BlockEntity blockEntity = Minecraft.getInstance().level.getBlockEntity(NbtUtils.readBlockPos(tag));
-            return blockEntity instanceof AutoPlayerBlockEntity autoPlayerBlockEntity ? getOrCreate(autoPlayerBlockEntity) : null;
-        }
-    }
-
     private record Player(LivingEntity entity) implements InstrumentPlayer {
         @Override
         public Vec3 getPos() {
@@ -72,13 +61,6 @@ public class InstrumentPlayerManager {
         public boolean isPlaying() {
             return !getInstrument().isEmpty() && entity.getOffhandItem().getItem() instanceof ScoreItem
                     && entity.getUseItem().getItem() instanceof InstrumentItem;
-        }
-
-        @Override
-        public CompoundTag serializeNBT() {
-            CompoundTag ret = new CompoundTag();
-            ret.putInt("id", entity.getId());
-            return ret;
         }
 
         @Override
@@ -106,11 +88,6 @@ public class InstrumentPlayerManager {
         @Override
         public boolean isPlaying() {
             return blockEntity.isPlaying();
-        }
-
-        @Override
-        public CompoundTag serializeNBT() {
-            return NbtUtils.writeBlockPos(blockEntity.getBlockPos());
         }
 
         @Override

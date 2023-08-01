@@ -53,6 +53,10 @@ public class InstrumentSoundManager {
         return Minecraft.getInstance().getSoundManager().soundEngine.tickingSounds.contains(soundInstance);
     }
 
+    public void remove(InstrumentPlayer player) {
+        soundInstanceCache.remove(player);
+    }
+
     public void sendMessage(@NotNull InstrumentPlayer player, ShortMessage message, long timeStamp, boolean broadcast) {
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
@@ -76,11 +80,10 @@ public class InstrumentSoundManager {
         }
     }
 
-    public void remove(InstrumentPlayer player) {
-        soundInstanceCache.remove(player);
-    }
-
-    public void playNaturalTrumpet(LivingEntity player) {
+    public void playNaturalTrumpet(LivingEntity player, boolean broadcast) {
         Minecraft.getInstance().getSoundManager().play(new NaturalTrumpetSoundInstance(player));
+        if(broadcast) {
+            NetworkHandler.sendToServer(new InstrumentSoundPacket(player));
+        }
     }
 }
