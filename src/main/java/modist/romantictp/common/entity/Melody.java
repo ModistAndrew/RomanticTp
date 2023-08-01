@@ -376,10 +376,15 @@ public class Melody extends PathfinderMob {
 
     protected void dropEquipment() {
         super.dropEquipment();
-        ItemStack itemstack = this.getItemBySlot(EquipmentSlot.MAINHAND);
+        dropHoldingItem(EquipmentSlot.MAINHAND);
+        dropHoldingItem(EquipmentSlot.OFFHAND);
+    }
+
+    private void dropHoldingItem(EquipmentSlot slot) {
+        ItemStack itemstack = this.getItemBySlot(slot);
         if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack)) {
             this.spawnAtLocation(itemstack);
-            this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            this.setItemSlot(slot, ItemStack.EMPTY);
         }
     }
 

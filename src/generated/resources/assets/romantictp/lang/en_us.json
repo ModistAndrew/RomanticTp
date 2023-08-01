@@ -1,5 +1,11 @@
 {
   "itemGroup.romantictp_tab": "romantictp",
   "key.categories.romantictp.instrument": "instrument",
-  "key.romantictp.pitch.D": "D"
+  "key.romantictp.pitch.A": "A",
+  "key.romantictp.pitch.B": "B",
+  "key.romantictp.pitch.C": "C",
+  "key.romantictp.pitch.D": "D",
+  "key.romantictp.pitch.E": "E",
+  "key.romantictp.pitch.F": "F",
+  "key.romantictp.pitch.G": "G"
 }
