@@ -2,8 +2,6 @@ package modist.romantictp.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -15,11 +13,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ReverbHelmetBlock extends HorizontalDirectionalBlock implements Equipable {
-    protected static final VoxelShape X_SHAPE = Block.box(4.0D, 4.0D, 3.0D, 12.0D, 12.0D, 13.0D);
-    protected static final VoxelShape Z_SHAPE = Block.box(3.0D, 4.0D, 4.0D, 13.0D, 12.0D, 12.0D);
+public class MusicianBustBlock extends HorizontalDirectionalBlock {
+    protected static final VoxelShape BOTTOM_SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 2.0D, 13.0D);
+    protected static final VoxelShape Z_SHAPE = Shapes.or(BOTTOM_SHAPE, Block.box(0.0D, 2.0D, 7.0D, 16.0D, 16.0D, 9.0D));
+    protected static final VoxelShape X_SHAPE = Shapes.or(BOTTOM_SHAPE, Block.box(7.0D, 2.0D, 0.0D, 9.0D, 16.0D, 16.0D));
 
-    public ReverbHelmetBlock() {
+    protected MusicianBustBlock() {
         super(BlockBehaviour.Properties.of().instabreak());
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.SOUTH));
     }
@@ -37,10 +36,5 @@ public class ReverbHelmetBlock extends HorizontalDirectionalBlock implements Equ
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
-    }
-
-    @Override
-    public EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.HEAD;
     }
 }

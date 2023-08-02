@@ -1,0 +1,31 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"render_type": "cutout",
+	"textures": {
+		"0": "minecraft:block/quartz_block_bottom",
+		"particle": "minecraft:block/quartz_block_bottom"
+	},
+	"elements": [
+		{
+			"from": [3, 0, 3],
+			"to": [13, 2, 13],
+			"faces": {
+				"north": {"uv": [3, 0, 13, 2], "texture": "#0"},
+				"east": {"uv": [3, 0, 13, 2], "texture": "#0"},
+				"south": {"uv": [3, 0, 13, 2], "texture": "#0"},
+				"west": {"uv": [3, 0, 13, 2], "texture": "#0"},
+				"up": {"uv": [3, 3, 13, 13], "texture": "#0"},
+				"down": {"uv": [3, 3, 13, 13], "texture": "#0"}
+			}
+		},
+		{
+			"from": [0, 2, 8],
+			"to": [16, 16, 8],
+			"faces": {
+				"north": {"uv": [0, 2, 16, 16], "texture": "#1"},
+				"south": {"uv": [16, 2, 0, 16], "texture": "#1"}
+			}
+		}
+	]
+}

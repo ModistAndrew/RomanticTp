@@ -11,14 +11,15 @@ import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.entity.EntityLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +39,7 @@ public class ClientRegistryEventHandler {
     public static void init(FMLClientSetupEvent event) {
         MidiKeyboardLoader.getInstance().init();
         BlockEntityRenderers.register(BlockLoader.INSTRUMENT_BLOCK_ENTITY.get(), c -> new InstrumentRenderer(c.getItemRenderer()));
-        BlockEntityRenderers.register(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), c -> new AutoPlayerRenderer(c.getItemRenderer()));
+        BlockEntityRenderers.register(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), c -> new AutoPlayerRenderer(c.getBlockRenderDispatcher()));
     }
 
     @SubscribeEvent
@@ -55,5 +56,10 @@ public class ClientRegistryEventHandler {
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(EntityLoader.MELODY.get(), MelodyRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void addSpecialModels(ModelEvent.RegisterAdditional event) {
+        event.register(AutoPlayerRenderer.DISC_LOCATION);
     }
 }

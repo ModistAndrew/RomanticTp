@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "romantictp:block/reverb_helmet",
+      "y": 90
+    },
+    "facing=north": {
       "model": "romantictp:block/reverb_helmet"
+    },
+    "facing=south": {
+      "model": "romantictp:block/reverb_helmet",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/reverb_helmet",
+      "y": 270
     }
   }
 }

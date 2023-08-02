@@ -1,39 +1,46 @@
 package modist.romantictp.client.block.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import modist.romantictp.common.block.AutoPlayerBlock;
+import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
-import modist.romantictp.common.block.InstrumentBlockEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Quaternionf;
 
 public class AutoPlayerRenderer implements BlockEntityRenderer<AutoPlayerBlockEntity> {
-    private final ItemRenderer itemRenderer;
+    private final BlockRenderDispatcher blockRenderer;
+    public static final ResourceLocation DISC_LOCATION = new ResourceLocation(RomanticTp.MODID, "block/disc");
 
-    public AutoPlayerRenderer(ItemRenderer itemRenderer) {
-        this.itemRenderer = itemRenderer;
+    public AutoPlayerRenderer(BlockRenderDispatcher blockRenderer) {
+        this.blockRenderer = blockRenderer;
     }
 
     @Override
     public void render(AutoPlayerBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
-        pPoseStack.pushPose();
-        pPoseStack.translate(0.5D, 0.5D, 0.5D);
-        if(pBlockEntity.containsScore()) {
-            if(pBlockEntity.isPlaying()) {
+        if (pBlockEntity.containsScore()) {
+            pPoseStack.pushPose();
+            if (pBlockEntity.isPlaying()) {
+                pPoseStack.translate(0.5D, 0.5D, 0.5D);
                 long time = System.currentTimeMillis();
-                float angle = InstrumentRenderer.getAngle(time, 20);
-                float trans = InstrumentRenderer.diffFunction(time, 1000, 0.0002F);
-                pPoseStack.translate(0, trans, 0);
+                float angle = InstrumentRenderer.getAngle(time, 5);
+                //float trans = InstrumentRenderer.diffFunction(time, 1000, 0.0002F);
+                //pPoseStack.translate(0, trans, 0);
                 pPoseStack.mulPose(new Quaternionf().rotationY(angle));
+                pPoseStack.translate(-0.5D, -0.5D, -0.5D);
             }
-            itemRenderer.renderStatic(new ItemStack(Items.APPLE), ItemDisplayContext.GROUND, pPackedLight, pPackedOverlay,
-                    pPoseStack, pBuffer, pBlockEntity.getLevel(), 0);
+            blockRenderer.getModelRenderer().renderModel(pPoseStack.last(), pBuffer.getBuffer(Sheets.cutoutBlockSheet()),
+                    null, blockRenderer.getBlockModelShaper().getModelManager().getModel(DISC_LOCATION), 1F, 1F, 1F,
+                    pPackedLight, pPackedOverlay, ModelData.EMPTY, null);
+            pPoseStack.popPose();
         }
-        pPoseStack.popPose();
     }
 }

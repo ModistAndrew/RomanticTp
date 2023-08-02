@@ -1,6 +1,7 @@
 package modist.romantictp.data;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.item.ItemLoader;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;

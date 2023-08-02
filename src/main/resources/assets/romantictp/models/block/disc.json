@@ -1,0 +1,17 @@
+{
+	"credit": "Made with Blockbench",
+	"render_type": "cutout",
+	"textures": {
+		"0": "romantictp:block/disc"
+	},
+	"elements": [
+		{
+			"from": [3, 11, 3],
+			"to": [13, 11, 13],
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		}
+	]
+}

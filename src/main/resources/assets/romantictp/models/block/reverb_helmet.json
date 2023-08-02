@@ -1,7 +1,54 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "render_type": "cutout",
-  "textures": {
-    "all": "minecraft:block/glass"
-  }
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"1": "romantictp:block/reverb_helmet_face",
+		"2": "romantictp:block/reverb_helmet_side_1",
+		"3": "romantictp:block/reverb_helmet_side_2",
+		"4": "romantictp:block/reverb_helmet_head",
+		"5": "romantictp:block/reverb_helmet_bottom",
+		"6": "romantictp:block/reverb_helmet_eye",
+		"particle": "romantictp:block/reverb_helmet_side_1"
+	},
+	"elements": [
+		{
+			"from": [3, 4, 4],
+			"to": [13, 12, 12],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"south": {"uv": [0, 0, 16, 2], "texture": "#4"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#4"},
+				"down": {"uv": [16, 0, 0, 16], "texture": "#5"}
+			}
+		},
+		{
+			"from": [5.5, 8.75, 3.75],
+			"to": [6.5, 9.75, 4],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#6"},
+				"east": {"uv": [0, 0, 0.25, 1], "texture": "#6"},
+				"west": {"uv": [0, 0, 0.25, 1], "texture": "#6"},
+				"up": {"uv": [0, 0, 1, 0.25], "texture": "#6"},
+				"down": {"uv": [0, 0, 1, 0.25], "texture": "#6"}
+			}
+		},
+		{
+			"from": [9.5, 8.75, 3.75],
+			"to": [10.5, 9.75, 4],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#6"},
+				"east": {"uv": [0, 0, 0.25, 1], "texture": "#6"},
+				"west": {"uv": [0, 0, 0.25, 1], "texture": "#6"},
+				"up": {"uv": [0, 0, 1, 0.25], "texture": "#6"},
+				"down": {"uv": [0, 0, 1, 0.25], "texture": "#6"}
+			}
+		}
+	],
+	"display": {
+		"head": {
+			"scale": [1.75, 1.75, 1.75]
+		}
+	}
 }

@@ -22,15 +22,17 @@ import java.util.function.Supplier;
 public class ItemLoader {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RomanticTp.MODID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, RomanticTp.MODID);
-
-    public static final Map<String, RegistryObject<Item>> INSTRUMENTS = new HashMap<>();
+    public static final Map<String, RegistryObject<InstrumentItem>> INSTRUMENTS = new HashMap<>();
+    public static final Map<String, RegistryObject<Item>> MUSICIAN_BUSTS = new HashMap<>();
 
     static {
         BlockLoader.INSTRUMENTS.forEach((s, b) -> INSTRUMENTS.put
-                (s, ITEMS.register(s, () -> new InstrumentItem((InstrumentBlock) b.get()))));
+                (s, ITEMS.register(s, () -> new InstrumentItem(b.get()))));
+        BlockLoader.MUSICIAN_BUSTS.forEach((s, b) -> MUSICIAN_BUSTS.put
+                (s, ITEMS.register(s, () -> new BlockItem(b.get(), new Item.Properties().stacksTo(1)))));
     }
 
-    public static final RegistryObject<Item> SCORE = ITEMS.register("score", ScoreItem::new);
+    public static final RegistryObject<ScoreItem> SCORE = ITEMS.register("score", ScoreItem::new);
     public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));
     public static final RegistryObject<Item> REVERB_HELMET = ITEMS.register("reverb_helmet", () -> new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> NATURAL_TRUMPET = ITEMS.register("natural_trumpet", NaturalTrumpetItem::new);
@@ -39,12 +41,13 @@ public class ItemLoader {
     public static final RegistryObject<CreativeModeTab> ROMANTICTP_TAB = TABS.register("romantictp_tab",() -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.romantictp_tab"))
             .displayItems((parameters, output) -> {
-                INSTRUMENTS.forEach((s, i) -> ((InstrumentItem)i.get()).getDisplay().forEach(output::accept));
-                ((ScoreItem)SCORE.get()).getDisplay().forEach(output::accept);
+                INSTRUMENTS.forEach((s, i) -> i.get().getDisplay().forEach(output::accept));
+                SCORE.get().getDisplay().forEach(output::accept);
                 output.accept(AUTO_PLAYER.get());
                 output.accept(REVERB_HELMET.get());
                 output.accept(MELODY_EGG.get());
                 output.accept(NATURAL_TRUMPET.get());
+                MUSICIAN_BUSTS.values().forEach(i -> output.accept(i.get()));
             })
             .icon(() -> new ItemStack(SCORE.get()))
             .build());
