@@ -14,8 +14,7 @@ import java.util.function.IntFunction;
 
 public class InstrumentKeyMapping {
     private static final String[] pitchNames = new String[]{"C", "D", "E", "F", "G", "A", "B"};
-    private static final int[] pitchKeys = new int[]{GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ESCAPE,
-            GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_ESCAPE};
+    private static final int[] pitchKeys = new int[]{-1, -1, -1, -1, -1, -1, -1};
     private static final int[] intervals = new int[]{0, 2, 4, 5, 7, 9, 11};
     public static final List<Lazy<KeyMapping>> PITCHES = new ArrayList<>();
     static{
