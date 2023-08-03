@@ -1,6 +1,7 @@
 {
   "parent": "romantictp:block/musician_bust",
   "textures": {
+    "0": "minecraft:block/red_concrete",
     "1": "romantictp:block/mozart"
   }
 }

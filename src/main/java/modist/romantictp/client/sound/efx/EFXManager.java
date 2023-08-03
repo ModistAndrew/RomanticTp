@@ -54,17 +54,17 @@ public class EFXManager {
     }
 
     protected static void setReverbParams(int auxFXSlot, int reverbSlot) {
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DENSITY, 1F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DIFFUSION, 1F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_GAIN, 0.4F * 0.7F * 0.85F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_GAINHF, 0.89F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DECAY_TIME, 4.142F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DECAY_HFRATIO, 0.7F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, 2.5F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, 1.26F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY, 0.021F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, 0.994F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, 0.11F);
+//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DENSITY, 1F);
+//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DIFFUSION, 1F);
+        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_GAIN, 1F);
+        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_GAINHF, 1F);
+        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DECAY_TIME, 4F);
+//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DECAY_HFRATIO, 2.0F);
+        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, 3.16F);
+        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, 10.0F);
+//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY, 0.1F);
+        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, 1.0F);
+//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, 1F);
         // Attach updated effect object
         EXTEfx.alAuxiliaryEffectSloti(auxFXSlot, EXTEfx.AL_EFFECTSLOT_EFFECT, reverbSlot);
     }
@@ -73,6 +73,6 @@ public class EFXManager {
         EXTEfx.alFilterf(sendFilter, EXTEfx.AL_LOWPASS_GAIN, 1F);
         EXTEfx.alFilterf(sendFilter, EXTEfx.AL_LOWPASS_GAINHF, 1F);
         AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER, type == ReverbType.EMPTY ?
-                EXTEfx.AL_EFFECT_NULL : auxFXSlot, 0, EXTEfx.AL_FILTER_NULL);
+                EXTEfx.AL_EFFECT_NULL : auxFXSlot, 0, type == ReverbType.EMPTY ? EXTEfx.AL_FILTER_NULL : sendFilter);
     }
 }

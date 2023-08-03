@@ -1,0 +1,7 @@
+{
+  "parent": "romantictp:block/musician_bust",
+  "textures": {
+    "0": "minecraft:block/yellow_concrete",
+    "1": "romantictp:block/haydn"
+  }
+}

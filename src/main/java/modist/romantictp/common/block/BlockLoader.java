@@ -37,6 +37,7 @@ public class BlockLoader {
         registerMusicianBust("beethoven");
         registerMusicianBust("mozart");
         registerMusicianBust("mahler");
+        registerMusicianBust("haydn");
     }
 
     public static final RegistryObject<BlockEntityType<InstrumentBlockEntity>> INSTRUMENT_BLOCK_ENTITY =
