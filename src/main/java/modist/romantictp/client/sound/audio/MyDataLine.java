@@ -1,21 +1,25 @@
 package modist.romantictp.client.sound.audio;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.MyChannel;
 
 import javax.annotation.Nullable;
 import javax.sound.sampled.*;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class MyDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
     @Nullable
-    private MyChannel channel;
+    private final CompletableFuture<MyChannel> channel = new CompletableFuture<>();
 
     public MyDataLine(SourceDataLine line) {
         this.dataLine = line;
     }
 
     public void bindChannel(MyChannel channel) {
-        this.channel = channel;
+        this.channel.complete(channel);
     }
 
     @Override
@@ -30,9 +34,8 @@ public class MyDataLine implements SourceDataLine {
 
     @Override
     public int write(byte[] b, int off, int len) {
-        if (channel != null) {
-            channel.write(b, off, len);
-        }
+        MyChannel myChannel = channel.join();
+        myChannel.write(b, off, len);
         return len;
     }
 
