@@ -29,7 +29,7 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
         return tag;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return this.equals(EMPTY);
     }
 
@@ -41,8 +41,48 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
     }
 
     public static void addTooltip(String name, Object value, List<Component> pTooltip, ChatFormatting... pFormats) {
-        MutableComponent mutablecomponent = Component.translatable(PREFIX+name);
+        MutableComponent mutablecomponent = Component.translatable(PREFIX + name);
         mutablecomponent.append(": ").append(String.valueOf(value));
         pTooltip.add(mutablecomponent.withStyle(pFormats));
+    }
+
+    public static class Builder {
+        private final int instrumentId;
+        private int initialPitch = 0;
+        private float initialVolume = 1F;
+        private boolean singleTone = true;
+        private ReverbType reverb = ReverbType.TEST;
+
+        private Builder(int instrumentId){
+            this.instrumentId = instrumentId;
+        }
+
+        public static Builder of(int instrumentId) {
+            return new Builder(instrumentId);
+        }
+
+        public Builder initialPitch(int initialPitch) {
+            this.initialPitch = initialPitch;
+            return this;
+        }
+
+        public Builder initialVolume(float initialVolume) {
+            this.initialVolume = initialVolume;
+            return this;
+        }
+
+        public Builder singleTone(boolean singleTone) {
+            this.singleTone = singleTone;
+            return this;
+        }
+
+        public Builder reverb(ReverbType reverb) {
+            this.reverb = reverb;
+            return this;
+        }
+
+        public Instrument build() {
+            return new Instrument(initialPitch, initialVolume, instrumentId, singleTone, reverb);
+        }
     }
 }

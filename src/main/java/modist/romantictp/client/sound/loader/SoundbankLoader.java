@@ -27,7 +27,7 @@ public class SoundbankLoader implements ResourceManagerReloadListener {
     public void onResourceManagerReload(ResourceManager pResourceManager) {
             try {
                 soundbank = RomanticTpConfig.SOUNDBANK_LOCATION.get().isEmpty() ?
-                        new SF2Soundbank(pResourceManager.getResource(new ResourceLocation(RomanticTp.MODID, "soundbank/touhou.sf2")).get().open()) :
+                        new SF2Soundbank(pResourceManager.getResource(new ResourceLocation(RomanticTp.MODID, "soundbank/romantictp.sf2")).get().open()) :
                         new SF2Soundbank(new File(RomanticTpConfig.SOUNDBANK_LOCATION.get()));
                 RomanticTp.LOGGER.info("Soundbank loaded: {}", SoundbankLoader.getInstance().soundbank.getName());
             } catch(Exception e) {

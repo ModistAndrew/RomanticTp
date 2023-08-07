@@ -16,7 +16,7 @@ import java.util.Set;
 public class CountingChannelPoolMixin implements ICountingChannelPoolSpecial {
     @Shadow
     @Final
-    private int limit;
+    private int limit; //ignore limit?
     @Shadow
     @Final
     private Set<Channel> activeChannels;
@@ -24,17 +24,10 @@ public class CountingChannelPoolMixin implements ICountingChannelPoolSpecial {
 
     @Override
     public Channel romanticTp$acquireSpecial() {
-        if (this.activeChannels.size() >= this.limit) {
-            if (SharedConstants.IS_RUNNING_IN_IDE) {
-                RomanticTp.LOGGER.warn("Maximum sound pool size {} reached", this.limit);
-            }
-            return null;
-        } else {
-            Channel channel = MyChannel.create();
-            if (channel != null) {
-                this.activeChannels.add(channel);
-            }
-            return channel;
+        Channel channel = MyChannel.create();
+        if (channel != null) {
+            this.activeChannels.add(channel);
         }
+        return channel;
     }
 }

@@ -1,12 +1,10 @@
 package modist.romantictp.common.block;
 
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.InstrumentItem;
-import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -60,8 +58,15 @@ public class AutoPlayerBlockEntity extends BlockEntity {
             this.instrument = detectInstrument();
             boolean previousPowered = this.powered;
             this.powered = level.hasNeighborSignal(getBlockPos());
-            updatePlaying(containsScore() && !this.instrument.isEmpty() &&
-                    !previousPowered && this.powered);
+            boolean canStart = containsScore() && !this.instrument.isEmpty() && this.powered;
+            if (!previousPowered && !this.isPlaying && canStart) { //enabled: must be ignited
+                this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> scoreTicker.start(
+                        score.getItem() instanceof ScoreItem scoreItem ? scoreItem.getTime(score) * 20 : 0L
+                ));
+                this.isPlaying = canStart;
+            } else if(!canStart) { //disabled
+                this.isPlaying = canStart;
+            }
             setChangedAndUpdate();
         }
     }
@@ -76,15 +81,6 @@ public class AutoPlayerBlockEntity extends BlockEntity {
             }
         }
         return Instrument.EMPTY;
-    }
-
-    private void updatePlaying(boolean isPlayingNow) { //server.
-        if (!this.isPlaying && isPlayingNow) {
-            this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> scoreTicker.start(
-                    score.getItem() instanceof ScoreItem scoreItem ? scoreItem.getTime(score) * 20 : 0L
-            ));
-        }
-        this.isPlaying = isPlayingNow;
     }
 
     private void setChangedAndUpdate() { //server
