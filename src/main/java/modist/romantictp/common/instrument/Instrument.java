@@ -49,9 +49,9 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
     public static class Builder {
         private final int instrumentId;
         private int initialPitch = 0;
-        private float initialVolume = 1F;
+        private float initialVolume = 2F;
         private boolean singleTone = true;
-        private ReverbType reverb = ReverbType.TEST;
+        private ReverbType reverb = ReverbType.EMPTY;
 
         private Builder(int instrumentId){
             this.instrumentId = instrumentId;

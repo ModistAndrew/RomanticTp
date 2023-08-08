@@ -26,11 +26,10 @@ public class BlockLoader {
 
     public static final Map<String, RegistryObject<InstrumentBlock>> INSTRUMENTS = new HashMap<>();
     static {
-        registerInstrument("piano", Instrument.Builder.of(Instruments.PIANO).build());
-        registerInstrument("timpani", Instrument.Builder.of(Instruments.TIMPANI).build());
-        registerInstrument("music_box", Instrument.Builder.of(Instruments.MUSIC_BOX).build());
-        registerInstrument("marimba", Instrument.Builder.of(Instruments.MARIMBA).build());
-        registerInstrument("bell", Instrument.Builder.of(Instruments.BELL).build());
+        registerInstrument("timpani", Instrument.Builder.of(Instruments.TIMPANI).singleTone(false).build());
+        registerInstrument("music_box", Instrument.Builder.of(Instruments.MUSIC_BOX).singleTone(false).build());
+        registerInstrument("marimba", Instrument.Builder.of(Instruments.MARIMBA).singleTone(false).build());
+        registerInstrument("bell", Instrument.Builder.of(Instruments.BELL).singleTone(false).build());
         registerInstrument("violin", Instrument.Builder.of(Instruments.VIOLIN).build());
         registerInstrument("viola", Instrument.Builder.of(Instruments.VIOLA).build());
         registerInstrument("cello", Instrument.Builder.of(Instruments.CELLO).build());
@@ -47,6 +46,14 @@ public class BlockLoader {
         registerInstrument("clarinet", Instrument.Builder.of(Instruments.CLARINET).build());
         registerInstrument("piccolo", Instrument.Builder.of(Instruments.PICCOLO).build());
         registerInstrument("flute", Instrument.Builder.of(Instruments.FLUTE).build());
+        registerInstrument("organ", Instrument.Builder.of(Instruments.ORGAN).singleTone(false).build());
+        registerInstrument("harp", Instrument.Builder.of(Instruments.HARP).singleTone(false).build());
+        registerInstrument("harpsichord", Instrument.Builder.of(Instruments.HARPSICHORD).singleTone(false).build());
+        registerInstrument("piano", Instrument.Builder.of(Instruments.PIANO).singleTone(false).build());
+        registerInstrument("guitar", Instrument.Builder.of(Instruments.GUITAR).singleTone(false).build());
+        registerInstrument("bass", Instrument.Builder.of(Instruments.BASS).singleTone(false).build());
+        registerInstrument("drum_kit", Instrument.Builder.of(Instruments.DRUM_KIT).singleTone(false).build());
+
     }
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
     public static final RegistryObject<Block> REVERB_HELMET = BLOCKS.register("reverb_helmet", ReverbHelmetBlock::new);
