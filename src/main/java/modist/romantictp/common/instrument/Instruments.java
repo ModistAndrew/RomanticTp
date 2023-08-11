@@ -9,6 +9,7 @@ public class Instruments {
     public static final int VIOLA = 41;
     public static final int CELLO = 42;
     public static final int CONTRABASS = 43;
+    public static final int STRINGS = 48;
     public static final int TRUMPET = 56;
     public static final int TROMBONE = 57;
     public static final int TUBA = 58;

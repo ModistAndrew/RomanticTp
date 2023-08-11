@@ -34,6 +34,7 @@ public class BlockLoader {
         registerInstrument("viola", Instrument.Builder.of(Instruments.VIOLA).build());
         registerInstrument("cello", Instrument.Builder.of(Instruments.CELLO).build());
         registerInstrument("contrabass", Instrument.Builder.of(Instruments.CONTRABASS).build());
+        registerInstrument("strings", Instrument.Builder.of(Instruments.STRINGS).singleTone(false).build());
         registerInstrument("trumpet", Instrument.Builder.of(Instruments.TRUMPET).build(),
                 Instrument.Builder.of(Instruments.TRUMPET).reverb(ReverbType.TEST).build());
         registerInstrument("trombone", Instrument.Builder.of(Instruments.TROMBONE).build());
@@ -53,7 +54,6 @@ public class BlockLoader {
         registerInstrument("guitar", Instrument.Builder.of(Instruments.GUITAR).singleTone(false).build());
         registerInstrument("bass", Instrument.Builder.of(Instruments.BASS).singleTone(false).build());
         registerInstrument("drum_kit", Instrument.Builder.of(Instruments.DRUM_KIT).singleTone(false).build());
-
     }
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
     public static final RegistryObject<Block> REVERB_HELMET = BLOCKS.register("reverb_helmet", ReverbHelmetBlock::new);
