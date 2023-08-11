@@ -43,7 +43,6 @@ public class InstrumentRenderer implements BlockEntityRenderer<InstrumentBlockEn
         }
         return dt * scale;
     }
-
     static float getAngle(long time, long delta) {
         return (float) ((time / delta) % 360 / 180F * Math.PI);
     }
