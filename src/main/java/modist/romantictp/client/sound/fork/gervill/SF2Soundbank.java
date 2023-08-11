@@ -78,6 +78,7 @@ public final class SF2Soundbank implements Soundbank {
     private final List<SF2Instrument> instruments = new ArrayList<>();
     private final List<SF2Layer> layers = new ArrayList<>();
     private final List<SF2Sample> samples = new ArrayList<>();
+    private boolean sf3;
 
     public SF2Soundbank() {
     }
@@ -131,6 +132,7 @@ public final class SF2Soundbank implements Soundbank {
             if (format.equals("ifil")) {
                 major = chunk.readUnsignedShort();
                 minor = chunk.readUnsignedShort();
+                sf3 = major >= 3;
             } else if (format.equals("isng")) {
                 this.targetEngine = chunk.readString(chunk.available());
             } else if (format.equals("INAM")) {
@@ -417,28 +419,30 @@ public final class SF2Soundbank implements Soundbank {
                     sample.name = chunk.readString(20);
                     long start = chunk.readUnsignedInt();
                     long end = chunk.readUnsignedInt();
-                    if (sampleData != null)
-                        sample.data = sampleData.subbuffer(start * 2, end * 2, true);
-                    if (sampleData24 != null)
-                        sample.data24 = sampleData24.subbuffer(start, end, true);
-                    /*
-                    sample.data = new ModelByteBuffer(sampleData, (int)(start*2),
-                            (int)((end - start)*2));
-                    if (sampleData24 != null)
-                        sample.data24 = new ModelByteBuffer(sampleData24,
-                                (int)start, (int)(end - start));
-                     */
-                    sample.startLoop = chunk.readUnsignedInt() - start;
-                    sample.endLoop = chunk.readUnsignedInt() - start;
-                    if (sample.startLoop < 0)
-                        sample.startLoop = -1;
-                    if (sample.endLoop < 0)
-                        sample.endLoop = -1;
+                    sample.startLoop = chunk.readUnsignedInt();
+                    sample.endLoop = chunk.readUnsignedInt();
                     sample.sampleRate = chunk.readUnsignedInt();
                     sample.originalPitch = chunk.readUnsignedByte();
                     sample.pitchCorrection = chunk.readByte();
                     sample.sampleLink = chunk.readUnsignedShort();
                     sample.sampleType = chunk.readUnsignedShort();
+                    sample.setOgg((sample.sampleType & 16) > 0);
+                    if(!sample.isOgg()){
+                        sample.startLoop -= start;
+                        sample.endLoop -= start;
+                    }
+                    if (sample.startLoop < 0)
+                        sample.startLoop = -1;
+                    if (sample.endLoop < 0)
+                        sample.endLoop = -1;
+                    if(!sample.isOgg()){
+                        if (sampleData != null)
+                            sample.setDataBuffer(sampleData.subbuffer(start * 2, end * 2, true));
+                        if (sampleData24 != null)
+                            sample.setData24Buffer(sampleData24.subbuffer(start, end, true));
+                    } else {
+                        sample.setDataBuffer(sampleData.subbuffer(start, end, true));
+                    }
                     if (i != count - 1)
                         this.samples.add(sample);
                 }
@@ -791,7 +795,7 @@ public final class SF2Soundbank implements Soundbank {
         for (SF2Sample sample : samples) {
             shdr_chunk.writeString(sample.name, 20);
             long start = sample_pos;
-            sample_pos += sample.data.capacity() / 2;
+            sample_pos += sample.getDataBuffer().capacity() / 2;
             long end = sample_pos;
             long startLoop = sample.startLoop + start;
             long endLoop = sample.endLoop + start;

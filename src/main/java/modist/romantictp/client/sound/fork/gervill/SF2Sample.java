@@ -25,11 +25,16 @@
 
 package modist.romantictp.client.sound.fork.gervill;
 
+import com.mojang.blaze3d.audio.OggAudioStream;
+import modist.romantictp.RomanticTp;
+
 import javax.sound.midi.Soundbank;
 import javax.sound.midi.SoundbankResource;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 /**
  * Soundfont sample storage.
@@ -46,56 +51,21 @@ public final class SF2Sample extends SoundbankResource {
     byte pitchCorrection = 0;
     int sampleLink = 0;
     int sampleType = 0;
-    ModelByteBuffer data;
-    ModelByteBuffer data24;
+    private ModelByteBuffer data;
+    private ModelByteBuffer data24;
+    private boolean ogg;
 
     public SF2Sample(Soundbank soundBank) {
         super(soundBank, null, AudioInputStream.class);
     }
 
-    public SF2Sample() {
-        super(null, null, AudioInputStream.class);
+    public void setOgg(boolean ogg) {
+        this.ogg = ogg;
     }
 
     @Override
     public Object getData() {
-
         AudioFormat format = getFormat();
-        /*
-        if (sampleFile != null) {
-            FileInputStream fis;
-            try {
-                fis = new FileInputStream(sampleFile);
-                RIFFReader riff = new RIFFReader(fis);
-                if (!riff.getFormat().equals("RIFF")) {
-                    throw new RIFFInvalidDataException(
-                        "Input stream is not a valid RIFF stream!");
-                }
-                if (!riff.getType().equals("sfbk")) {
-                    throw new RIFFInvalidDataException(
-                        "Input stream is not a valid SoundFont!");
-                }
-                while (riff.hasNextChunk()) {
-                    RIFFReader chunk = riff.nextChunk();
-                    if (chunk.getFormat().equals("LIST")) {
-                        if (chunk.getType().equals("sdta")) {
-                            while(chunk.hasNextChunk()) {
-                                RIFFReader chunkchunk = chunk.nextChunk();
-                                if(chunkchunk.getFormat().equals("smpl")) {
-                                    chunkchunk.skip(sampleOffset);
-                                    return new AudioInputStream(chunkchunk,
-                                            format, sampleLen);
-                                }
-                            }
-                        }
-                    }
-                }
-                return null;
-            } catch (Exception e) {
-                return new Throwable(e.toString());
-            }
-        }
-        */
         InputStream is = data.getInputStream();
         if (is == null)
             return null;
@@ -108,6 +78,26 @@ public final class SF2Sample extends SoundbankResource {
 
     public ModelByteBuffer getData24Buffer() {
         return data24;
+    }
+
+    public void setDataBuffer(ModelByteBuffer data) {
+        if(ogg) {
+            try {
+                OggAudioStream ogg = new OggAudioStream(data.getInputStream());
+                ByteBuffer buf = ogg.readAll();
+                byte[] arr = new byte[buf.remaining()];
+                buf.get(arr);
+                this.data = new ModelByteBuffer(arr);
+            } catch (IOException e) {
+                RomanticTp.LOGGER.warn("fail to load sample {}: {}", this.name, e);
+            }
+        } else {
+            this.data = data;
+        }
+    }
+
+    public void setData24Buffer(ModelByteBuffer data24) {
+        this.data24 = data24;
     }
 
     public AudioFormat getFormat() {
@@ -137,15 +127,6 @@ public final class SF2Sample extends SoundbankResource {
     public void setData24(byte[] data24, int offset, int length) {
         this.data24 = new ModelByteBuffer(data24, offset, length);
     }
-
-    /*
-    public void setData(File file, int offset, int length) {
-        this.data = null;
-        this.sampleFile = file;
-        this.sampleOffset = offset;
-        this.sampleLen = length;
-    }
-    */
 
     @Override
     public String getName() {
@@ -215,5 +196,9 @@ public final class SF2Sample extends SoundbankResource {
     @Override
     public String toString() {
         return "Sample: " + name;
+    }
+
+    public boolean isOgg() {
+        return ogg;
     }
 }
