@@ -1,4 +1,4 @@
-package modist.romantictp.common.sound;
+package modist.romantictp.client.sound;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.fork.gervill.SoftAudioBuffer;

@@ -2,10 +2,10 @@ package modist.romantictp;
 
 import com.mojang.logging.LogUtils;
 import modist.romantictp.client.config.RomanticTpConfig;
+import modist.romantictp.client.sound.SoundEventLoader;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.item.ItemLoader;
-import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

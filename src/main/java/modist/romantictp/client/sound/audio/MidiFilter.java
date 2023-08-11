@@ -28,6 +28,10 @@ public class MidiFilter implements Receiver {
         updateInstrument();
     }
 
+    public int getLastNote(){
+        return lastNote;
+    }
+
     private void updateInstrument() {
         executeOnReceiver(receiver -> {
             for (int i = 0; i < 128; i++) {

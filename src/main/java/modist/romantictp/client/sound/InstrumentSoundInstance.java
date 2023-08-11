@@ -4,7 +4,6 @@ import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.audio.MidiFilter;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
-import modist.romantictp.common.sound.SoundEventLoader;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.ChannelAccess;
@@ -23,6 +22,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     public Instrument instrument = Instrument.EMPTY;
     @Nullable
     private Sequencer sequencer;
+    private int lastNote = -1;
 
     public InstrumentSoundInstance(InstrumentPlayer player) {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
@@ -48,10 +48,20 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             this.y = player.getPos().y;
             this.z = player.getPos().z;
             this.volume = player.getVolume();
+            generateParticle();
             updateInstrument();
             checkSequence();
             if ((channelHandle.isDone() && channelHandle.join().isStopped()) || player.isRemoved()) {
                 destroy();
+            }
+        }
+    }
+
+    private void generateParticle() {
+        if(this.lastNote != receiver.getLastNote()){
+            this.lastNote = receiver.getLastNote();
+            if(lastNote >= 0) {
+                player.addParticle(lastNote);
             }
         }
     }

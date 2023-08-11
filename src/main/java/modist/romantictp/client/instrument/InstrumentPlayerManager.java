@@ -4,15 +4,9 @@ import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
-import modist.romantictp.network.NetworkHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,10 +34,15 @@ public class InstrumentPlayerManager {
         blockEntityMap.values().remove(player);
     }
 
+    private static double getVelocity(int note) {
+        return note < 32 ? 0D : note > 96 ? 1D : (note-32) / 64D;
+    }
+
     private record Player(LivingEntity entity) implements InstrumentPlayer {
         @Override
         public Vec3 getPos() {
-            return entity.position();
+            return entity.getEyePosition().add(entity.getForward().scale(0.5D))
+                    .add(0, -entity.getBoundingBox().getYsize() / 2D, 0);
         }
 
         @Override
@@ -66,6 +65,13 @@ public class InstrumentPlayerManager {
         @Override
         public boolean isRemoved() {
             return entity.isRemoved();
+        }
+
+        @Override
+        public void addParticle(int note) {
+            entity.level().addParticle
+                    (ParticleTypes.NOTE, getPos().x, getPos().y + 0.7D, getPos().z,
+                            getVelocity(note), 0.0D, 0.0D);
         }
     }
 
@@ -93,6 +99,13 @@ public class InstrumentPlayerManager {
         @Override
         public boolean isRemoved() {
             return blockEntity.isRemoved();
+        }
+
+        @Override
+        public void addParticle(int note) {
+            blockEntity.getLevel().addParticle
+                    (ParticleTypes.NOTE, getPos().x, getPos().y + 0.7D, getPos().z,
+                            getVelocity(note), 0.0D, 0.0D);
         }
     }
 }

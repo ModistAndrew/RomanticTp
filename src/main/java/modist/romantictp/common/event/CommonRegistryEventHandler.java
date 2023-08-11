@@ -7,6 +7,7 @@ import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.entity.Melody;
 import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.network.NetworkHandler;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
