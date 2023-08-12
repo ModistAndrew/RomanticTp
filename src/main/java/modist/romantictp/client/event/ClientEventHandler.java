@@ -39,18 +39,21 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void changeSound(PlaySoundSourceEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if(player!=null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get())) {
+        if(hasReverbHelmet()) {
             EFXManager.getInstance().applyEFX(ReverbType.TEST, event.getChannel().source);
         }
     }
 
     @SubscribeEvent
     public static void changeSound(PlayStreamingSourceEvent event) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if(player!=null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get())) {
+        if(hasReverbHelmet()) {
             EFXManager.getInstance().applyEFX(ReverbType.TEST, event.getChannel().source);
         }
+    }
+
+    public static boolean hasReverbHelmet(){
+        LocalPlayer player = Minecraft.getInstance().player;
+        return player!=null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get());
     }
 
     @SubscribeEvent

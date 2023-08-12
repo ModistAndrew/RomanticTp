@@ -24,6 +24,9 @@ public class MidiFilter implements Receiver {
     }
 
     public void setInstrument(Instrument instrument) {
+        if(this.instrument.equals(instrument)){
+            return;
+        }
         this.instrument = instrument;
         updateInstrument();
     }

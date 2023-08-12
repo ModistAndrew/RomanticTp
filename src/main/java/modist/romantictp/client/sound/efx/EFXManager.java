@@ -1,21 +1,23 @@
 package modist.romantictp.client.sound.efx;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.util.AlHelper;
 import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EXTEfx;
 
-public class EFXManager {
-    private int auxFXSlot;
-    private int reverb;
-    private int directFilter;
-    private int sendFilter;
-    private int maxAuxSends;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
 
+public class EFXManager {
+    private final HashMap<ReverbType, Integer> auxFXSlots = new HashMap<>();
     private static EFXManager instance;
+    private static final Random RANDOM = new Random();
 
     public static void init() {
         instance = new EFXManager();
+        AlHelper.checkALError();
     }
 
     public static EFXManager getInstance() {
@@ -32,47 +34,22 @@ public class EFXManager {
             RomanticTp.LOGGER.error("EFX Extension not found on current device. Aborting.");
             return;
         }
-
-        maxAuxSends = ALC10.alcGetInteger(currentDevice, EXTEfx.ALC_MAX_AUXILIARY_SENDS);
-        RomanticTp.LOGGER.info("Max auxiliary sends: {}", maxAuxSends);
-
         // Create auxiliary effect slots
-        auxFXSlot = EXTEfx.alGenAuxiliaryEffectSlots();
-        RomanticTp.LOGGER.info("Aux slot {} created", auxFXSlot);
-        EXTEfx.alAuxiliaryEffectSloti(auxFXSlot, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, AL11.AL_TRUE);
-
-        reverb = EXTEfx.alGenEffects();
-        EXTEfx.alEffecti(reverb, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
-
-        directFilter = EXTEfx.alGenFilters();
-        EXTEfx.alFilteri(directFilter, EXTEfx.AL_FILTER_TYPE, EXTEfx.AL_FILTER_LOWPASS);
-
-        sendFilter = EXTEfx.alGenFilters();
-        EXTEfx.alFilteri(sendFilter, EXTEfx.AL_FILTER_TYPE, EXTEfx.AL_FILTER_LOWPASS);
-
-        setReverbParams(auxFXSlot, reverb);
-    }
-
-    protected static void setReverbParams(int auxFXSlot, int reverbSlot) {
-//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DENSITY, 1F);
-//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DIFFUSION, 1F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_GAIN, 1F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_GAINHF, 1F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DECAY_TIME, 4F);
-//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_DECAY_HFRATIO, 2.0F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, 3.16F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, 10.0F);
-//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_LATE_REVERB_DELAY, 0.1F);
-        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, 1.0F);
-//        EXTEfx.alEffectf(reverbSlot, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, 1F);
-        // Attach updated effect object
-        EXTEfx.alAuxiliaryEffectSloti(auxFXSlot, EXTEfx.AL_EFFECTSLOT_EFFECT, reverbSlot);
+        Arrays.stream(ReverbType.values()).forEach(r -> {
+            int slot = EXTEfx.alGenAuxiliaryEffectSlots();
+            EXTEfx.alAuxiliaryEffectSloti(slot, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, AL11.AL_TRUE);
+            int reverb = EXTEfx.alGenEffects();
+            EXTEfx.alEffecti(reverb, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
+            r.setReverb.accept(reverb);
+            EXTEfx.alAuxiliaryEffectSloti(slot, EXTEfx.AL_EFFECTSLOT_EFFECT, reverb);
+            auxFXSlots.put(r, slot);
+            RomanticTp.LOGGER.info("Aux slot {} created for reverb type {}", slot, r);
+            AlHelper.checkALError();
+        });
     }
 
     public void applyEFX(ReverbType type, int source) {
-        EXTEfx.alFilterf(sendFilter, EXTEfx.AL_LOWPASS_GAIN, 1F);
-        EXTEfx.alFilterf(sendFilter, EXTEfx.AL_LOWPASS_GAINHF, 1F);
-        AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER, type == ReverbType.EMPTY ?
-                EXTEfx.AL_EFFECT_NULL : auxFXSlot, 0, type == ReverbType.EMPTY ? EXTEfx.AL_FILTER_NULL : sendFilter);
+        AL11.alSource3i(source, EXTEfx.AL_AUXILIARY_SEND_FILTER, auxFXSlots.get(type), 0, EXTEfx.AL_FILTER_NULL);
+        AlHelper.checkALError();
     }
 }

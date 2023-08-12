@@ -1,7 +1,9 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.client.event.ClientEventHandler;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.audio.MidiFilter;
+import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
@@ -20,6 +22,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     private final MidiFilter receiver;
     private final CompletableFuture<ChannelAccess.ChannelHandle> channelHandle = new CompletableFuture<>();
     public Instrument instrument = Instrument.EMPTY;
+    private boolean hasReverbHelmet;
     @Nullable
     private Sequencer sequencer;
     private int lastNote = -1;
@@ -76,12 +79,15 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     private void updateInstrument() {
         Instrument instrumentNow = player.getInstrument();
-        if (this.instrument.equals(instrumentNow)) {
+        boolean hasReverbHelmetNow = ClientEventHandler.hasReverbHelmet();
+        if (this.instrument.equals(instrumentNow) && hasReverbHelmetNow == hasReverbHelmet) {
             return;
         }
         this.instrument = instrumentNow;
+        this.hasReverbHelmet = hasReverbHelmetNow;
         this.receiver.setInstrument(this.instrument);
-        executeOnChannel(myChannel -> myChannel.setReverb(this.instrument.reverb()));
+        executeOnChannel(myChannel -> myChannel.setReverb(hasReverbHelmet ? ReverbType.TEST : this.instrument.reverb()));
+        //reverb helmet can override instrument reverb
     }
 
     private void executeOnChannel(Consumer<MyChannel> execution) {
