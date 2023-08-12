@@ -12,6 +12,9 @@ import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.item.NaturalTrumpetItem;
 import modist.romantictp.common.item.ScoreItem;
 import modist.romantictp.common.sound.ServerInstrumentSoundManager;
+import modist.romantictp.common.village.MusicianHouse;
+import modist.romantictp.common.village.MusicianTrade;
+import modist.romantictp.common.village.VillageLoader;
 import modist.romantictp.network.InstrumentSoundBroadcastPacket;
 import modist.romantictp.network.NetworkHandler;
 import modist.romantictp.network.ScoreSyncPacket;
@@ -57,8 +60,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CommonEventHandler {
     private static final Map<Integer, ItemStack> scoreToBeFilled = new HashMap<>(); //cache on server
     private static final Map<Integer, Pair<byte[], Long>> cachedData = new HashMap<>(); //cache on server
-    private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(
-            Registries.PROCESSOR_LIST, new ResourceLocation("minecraft", "empty"));
 
     @SubscribeEvent
     public static void fillMidiData(AnvilRepairEvent event) {
@@ -156,57 +157,13 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void addTrades(VillagerTradesEvent event) {
-        if (event.getType() == EntityLoader.MUSICIAN.get()) {
-            event.getTrades().get(1).add((trader, rand) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 5),
-                    new ItemStack(ItemLoader.SCORE.get()),
-                    1, 1, 1F
-            ));
+        if (event.getType() == VillageLoader.MUSICIAN.get()) {
+            event.getTrades().forEach((i, l) -> l.addAll(List.of(MusicianTrade::getScore, MusicianTrade::getInstrument)));
         }
     }
 
     @SubscribeEvent
     public static void addNewVillageBuilding(ServerAboutToStartEvent event) {
-        Registry<StructureTemplatePool> templatePoolRegistry = event.getServer().registryAccess().registry(Registries.TEMPLATE_POOL).orElseThrow();
-        Registry<StructureProcessorList> processorListRegistry = event.getServer().registryAccess().registry(Registries.PROCESSOR_LIST).orElseThrow();
-
-        addBuildingToPool(templatePoolRegistry, processorListRegistry,
-                new ResourceLocation("minecraft:village/plains/houses"),
-                "romantictp:musician_house", 5);
-
-        addBuildingToPool(templatePoolRegistry, processorListRegistry,
-                new ResourceLocation("minecraft:village/snowy/houses"),
-                "romantictp:musician_house", 5);
-
-        addBuildingToPool(templatePoolRegistry, processorListRegistry,
-                new ResourceLocation("minecraft:village/savanna/houses"),
-                "romantictp:musician_house", 5);
-
-        addBuildingToPool(templatePoolRegistry, processorListRegistry,
-                new ResourceLocation("minecraft:village/taiga/houses"),
-                "romantictp:musician_house", 5);
-
-        addBuildingToPool(templatePoolRegistry, processorListRegistry,
-                new ResourceLocation("minecraft:village/desert/houses"),
-                "romantictp:musician_house", 5);
-    }
-
-    private static void addBuildingToPool(Registry<StructureTemplatePool> templatePoolRegistry, Registry<StructureProcessorList> processorListRegistry,
-                                          ResourceLocation poolRL, String nbtPieceRL, int weight) {
-        Holder<StructureProcessorList> emptyProcessorList = processorListRegistry.getHolderOrThrow(EMPTY_PROCESSOR_LIST_KEY);
-
-        StructureTemplatePool pool = templatePoolRegistry.get(poolRL);
-        if (pool == null) return;
-
-        SinglePoolElement piece = SinglePoolElement.legacy(nbtPieceRL,
-                emptyProcessorList).apply(StructureTemplatePool.Projection.RIGID);
-
-        for (int i = 0; i < weight; i++) {
-            pool.templates.add(piece);
-        }
-
-        List<Pair<StructurePoolElement, Integer>> listOfPieceEntries = new ArrayList<>(pool.rawTemplates);
-        listOfPieceEntries.add(new Pair<>(piece, weight));
-        pool.rawTemplates = listOfPieceEntries;
+        MusicianHouse.addNewVillageBuilding(event);
     }
 }

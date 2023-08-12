@@ -64,8 +64,9 @@ public class MelodyAi {
                 Pair.of(0, GoToWantedItem.create((p_218428_) -> true, 1.75F, true, 32)),
                 Pair.of(1, SetEntityPlayInstrumentSometimes.create(UniformInt.of(60, 200))),
                 Pair.of(2, StayCloseToTarget.create(MelodyAi::getItemDepositPosition, Predicate.not(MelodyAi::hasWantedItem), 4, 16, 2.25F)),
-                Pair.of(3, SetEntityLookTargetSometimes.create(6.0F, UniformInt.of(30, 60))), //random
-                Pair.of(4, new RunOne<>(ImmutableList.of(
+                Pair.of(3, FlyAroundTarget.create(MelodyAi::getItemDepositPosition)),
+                Pair.of(4, SetEntityLookTargetSometimes.create(6.0F, UniformInt.of(30, 60))),
+                Pair.of(5, new RunOne<>(ImmutableList.of(
                         Pair.of(RandomStroll.fly(1.0F), 2),
                         Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 2),
                         Pair.of(new DoNothing(30, 60), 1))))), ImmutableSet.of());

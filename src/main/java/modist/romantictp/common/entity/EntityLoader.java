@@ -15,17 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Set;
 
 public class EntityLoader {
-    public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, RomanticTp.MODID);
-    public static final DeferredRegister<VillagerProfession> VILLAGER_PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, RomanticTp.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, RomanticTp.MODID);
-
-
-    public static final RegistryObject<PoiType> MUSICIAN_POI = POI_TYPES.register("musician_poi", () ->
-            new PoiType(Set.of(BlockLoader.AUTO_PLAYER.get().defaultBlockState()), 1, 1));
-    public static final RegistryObject<VillagerProfession> MUSICIAN = VILLAGER_PROFESSIONS.register("musician", () ->
-            new VillagerProfession("musician", poiTypeHolder -> poiTypeHolder.get() == MUSICIAN_POI.get(),
-                    poiTypeHolder -> poiTypeHolder.get() == MUSICIAN_POI.get(),
-                    ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_FISHERMAN));
     public static final RegistryObject<EntityType<Melody>> MELODY = ENTITIES.register("melody", () -> EntityType.Builder.of(Melody::new, MobCategory.CREATURE)
             .sized(0.7F, 1.2F)
             .clientTrackingRange(8)

@@ -31,10 +31,6 @@ public class InstrumentBlock extends Block implements EntityBlock {
         this.display = display;
     }
 
-    public InstrumentBlock(Instrument defaultInstrument) {
-        this(defaultInstrument, List.of(defaultInstrument));
-    }
-
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new InstrumentBlockEntity(pPos, pState);

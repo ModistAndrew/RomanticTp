@@ -6,6 +6,8 @@ import modist.romantictp.client.sound.SoundEventLoader;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.item.ItemLoader;
+import modist.romantictp.common.village.VillageLoader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -26,8 +28,8 @@ public class RomanticTp
         ItemLoader.ITEMS.register(modEventBus);
         ItemLoader.TABS.register(modEventBus);
         SoundEventLoader.SOUNDS.register(modEventBus);
-        EntityLoader.POI_TYPES.register(modEventBus);
-        EntityLoader.VILLAGER_PROFESSIONS.register(modEventBus);
+        VillageLoader.POI_TYPES.register(modEventBus);
+        VillageLoader.VILLAGER_PROFESSIONS.register(modEventBus);
         EntityLoader.ENTITIES.register(modEventBus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RomanticTpConfig.CONFIG_SPEC);
     }
