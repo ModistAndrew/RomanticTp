@@ -71,8 +71,14 @@ public class MidiFilter implements Receiver {
                             lastNote = -1;
                         }
                     }
-                    case ShortMessage.CONTROL_CHANGE, ShortMessage.PROGRAM_CHANGE -> {
+                    case ShortMessage.PROGRAM_CHANGE -> {
                         //skip instrument change
+                    }
+                    case ShortMessage.CONTROL_CHANGE -> {
+                        if(shortMessage.getData1() != 0) { //skip instrument bank change
+                            receiver.send
+                                    (MidiHelper.message(shortMessage.getCommand(), shortMessage.getData1(), shortMessage.getData2()), -1);
+                        }
                     }
                     default -> receiver.send
                             (MidiHelper.message(shortMessage.getCommand(), shortMessage.getData1(), shortMessage.getData2()), -1);
