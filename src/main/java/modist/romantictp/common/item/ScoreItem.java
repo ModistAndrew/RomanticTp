@@ -2,7 +2,8 @@ package modist.romantictp.common.item;
 
 import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.client.sound.util.MidiHelper;
-import net.minecraft.nbt.ByteArrayTag;
+import modist.romantictp.client.sound.util.MidiInfo;
+import modist.romantictp.util.ItemDisplayProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -11,44 +12,46 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
-import javax.swing.text.html.parser.TagElement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreItem extends Item {
+public class ScoreItem extends Item implements ItemDisplayProvider {
     public ScoreItem() {
-        super(new Item.Properties().stacksTo(1));
+        super(new Item.Properties().stacksTo(16));
+    }
+
+    public MidiInfo getMidiInfo(ItemStack stack) {
+        CompoundTag tag = stack.getTagElement("midiData");
+        return tag == null ? MidiInfo.EMPTY : new MidiInfo(tag);
     }
 
     public byte[] getMidiData(ItemStack stack) {
-        CompoundTag tag = stack.getTagElement("midiData");
-        if (tag == null) {
-            return new byte[0];
-        }
-        return tag.getByteArray("data");
+        return getMidiInfo(stack).data();
     }
 
     public long getTime(ItemStack stack) {
-        CompoundTag tag = stack.getTagElement("midiData");
-        if (tag == null) {
-            return 0L;
-        }
-        return tag.getLong("time");
+        return getMidiInfo(stack).time();
     }
 
-    public void fillMidiData(ItemStack stack, byte[] data, long time) {
-        CompoundTag tag = new CompoundTag();
-        tag.putByteArray("data", data);
-        tag.putLong("time", time);
-        stack.addTagElement("midiData", tag);
+    public MidiInfo setMidiData(ItemStack stack) { //client only
+        String name = stack.getHoverName().getString();
+        MidiInfo info = MidiHelper.getInfo(name);
+        fillMidiData(stack, info);
+        return info;
     }
 
-    public List<ItemStack> getDisplay() {
+    public void fillMidiData(ItemStack stack, MidiInfo info) { //server only
+        stack.addTagElement("midiData", info.serializeNBT());
+    }
+
+    @Override
+    public List<ItemStack> getDisplay() { //client only
         List<ItemStack> list = new ArrayList<>();
-        MidiFileLoader.getInstance().resourceMap.forEach((s, d) -> {
+        list.add(new ItemStack(this));
+        MidiFileLoader.getInstance().resourceMap.keySet().forEach(s -> {
             if (!s.isEmpty()) {
                 ItemStack stack = new ItemStack(this).setHoverName(Component.literal(s));
-                fillMidiData(stack, d, MidiHelper.getTime(d));
+                setMidiData(stack);
                 list.add(stack);
             }
         });
@@ -57,6 +60,6 @@ public class ScoreItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pIsAdvanced) {
-        pTooltip.add(Component.literal(String.valueOf((getTime(pStack)))));
+        getMidiInfo(pStack).addText(pTooltip, pIsAdvanced.isAdvanced());
     }
 }

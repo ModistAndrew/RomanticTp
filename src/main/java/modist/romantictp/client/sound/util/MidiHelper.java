@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound.util;
 
+import modist.romantictp.client.sound.loader.MidiFileLoader;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Nullable;
@@ -58,10 +59,13 @@ public class MidiHelper {
         }
     }
 
-    public static long getTime(byte[] data){
+    public static MidiInfo getInfo(String name) {
         try {
-            return data.length>0 ?
+            byte[] data = MidiFileLoader.getInstance().getMidiData(name);
+            long time = data.length>0 ?
                     MidiSystem.getSequence(new ByteArrayInputStream(data)).getMicrosecondLength() / 1000000 + 1 : 0;
+            String author = name;
+            return new MidiInfo(data, time, author);
         } catch (InvalidMidiDataException | IOException e) {
             throw new RuntimeException(e);
         }

@@ -5,6 +5,7 @@ import com.mojang.math.Axis;
 import modist.romantictp.common.block.AutoPlayerBlock;
 import modist.romantictp.common.block.InstrumentBlock;
 import modist.romantictp.common.instrument.Instrument;
+import modist.romantictp.util.ItemDisplayProvider;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
@@ -31,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class InstrumentItem extends BlockItem {
+public class InstrumentItem extends BlockItem implements ItemDisplayProvider {
     public final Instrument defaultInstrument;
     public final List<Instrument> display;
 
@@ -75,6 +76,7 @@ public class InstrumentItem extends BlockItem {
         instrument.addText(pTooltip, pIsAdvanced.isAdvanced());
     }
 
+    @Override
     public List<ItemStack> getDisplay() {
         return this.display.stream().map(instrument -> {
             ItemStack stack = new ItemStack(this);

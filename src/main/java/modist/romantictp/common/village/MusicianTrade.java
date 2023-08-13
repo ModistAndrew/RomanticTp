@@ -19,8 +19,7 @@ public class MusicianTrade {
     }
 
     public static MerchantOffer getScore(Entity pTrader, RandomSource pRandom) {
-        List<ItemStack> stacks = ItemLoader.SCORE_LIST.orElse(null);
-        ItemStack stack = stacks.get(pRandom.nextInt(stacks.size()));
+        ItemStack stack = new ItemStack(ItemLoader.SCORE.get());
         return new MerchantOffer
                 (new ItemStack(Items.EMERALD, 5), stack, 12, 10, 0.2F);
     }

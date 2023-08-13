@@ -1,6 +1,7 @@
 package modist.romantictp.common.instrument;
 
 import modist.romantictp.client.sound.efx.ReverbType;
+import modist.romantictp.util.TooltipProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -8,7 +9,8 @@ import net.minecraft.network.chat.MutableComponent;
 
 import java.util.List;
 
-public record Instrument(int initialPitch, float initialVolume, int instrumentId, boolean singleTone, ReverbType reverb) {
+public record Instrument(int initialPitch, float initialVolume, int instrumentId, boolean singleTone, ReverbType reverb)
+        implements TooltipProvider {
     //initialPitch: added to pitch in midi
     //initialVolume: multiplied to velocity in midi
     public static final String PREFIX = "instrument_properties.romantictp.";
@@ -30,20 +32,19 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
     }
 
     public boolean isEmpty() {
-        return this.equals(EMPTY);
+        return instrumentId < 0;
     }
 
+    @Override
     public void addText(List<Component> pTooltip, boolean showItems) {
-        addTooltip("initialPitch", initialPitch, pTooltip, ChatFormatting.AQUA);
-        addTooltip("initialVolume", initialVolume, pTooltip, ChatFormatting.AQUA);
-        addTooltip("singleTone", singleTone, pTooltip, ChatFormatting.AQUA);
-        addTooltip("reverb", reverb, pTooltip, ChatFormatting.AQUA);
-    }
-
-    public static void addTooltip(String name, Object value, List<Component> pTooltip, ChatFormatting... pFormats) {
-        MutableComponent mutablecomponent = Component.translatable(PREFIX + name);
-        mutablecomponent.append(": ").append(String.valueOf(value));
-        pTooltip.add(mutablecomponent.withStyle(pFormats));
+        if(!this.isEmpty()) {
+            TooltipProvider.addTooltip("initialPitch", initialPitch, pTooltip, ChatFormatting.AQUA);
+            TooltipProvider.addTooltip("initialVolume", initialVolume, pTooltip, ChatFormatting.AQUA);
+            TooltipProvider.addTooltip("singleTone", singleTone, pTooltip, ChatFormatting.AQUA);
+            TooltipProvider.addTooltip("reverb", reverb, pTooltip, ChatFormatting.AQUA);
+        } else {
+            TooltipProvider.addTooltip("empty", pTooltip, ChatFormatting.RED);
+        }
     }
 
     public static class Builder {

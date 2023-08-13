@@ -25,23 +25,23 @@ public class MusicianHouse {
 
         addBuildingToPool(templatePoolRegistry, processorListRegistry,
                 new ResourceLocation("minecraft:village/plains/houses"),
-                "romantictp:musician_house", 50);
+                "romantictp:musician_house", 5);
 
         addBuildingToPool(templatePoolRegistry, processorListRegistry,
                 new ResourceLocation("minecraft:village/snowy/houses"),
-                "romantictp:musician_house", 50);
+                "romantictp:musician_house", 5);
 
         addBuildingToPool(templatePoolRegistry, processorListRegistry,
                 new ResourceLocation("minecraft:village/savanna/houses"),
-                "romantictp:musician_house", 50);
+                "romantictp:musician_house", 5);
 
         addBuildingToPool(templatePoolRegistry, processorListRegistry,
                 new ResourceLocation("minecraft:village/taiga/houses"),
-                "romantictp:musician_house", 50);
+                "romantictp:musician_house", 5);
 
         addBuildingToPool(templatePoolRegistry, processorListRegistry,
                 new ResourceLocation("minecraft:village/desert/houses"),
-                "romantictp:musician_house", 50);
+                "romantictp:musician_house", 5);
     }
 
     private static void addBuildingToPool(Registry<StructureTemplatePool> templatePoolRegistry, Registry<StructureProcessorList> processorListRegistry,
