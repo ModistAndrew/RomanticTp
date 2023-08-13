@@ -2,6 +2,7 @@ package modist.romantictp.common.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import modist.romantictp.client.item.InstrumentAnim;
 import modist.romantictp.common.block.AutoPlayerBlock;
 import modist.romantictp.common.block.InstrumentBlock;
 import modist.romantictp.common.instrument.Instrument;
@@ -98,14 +99,6 @@ public class InstrumentItem extends BlockItem implements ItemDisplayProvider {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         super.initializeClient(consumer);
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
-                if (player.isUsingItem()) {
-                    poseStack.mulPose(Axis.YP.rotationDegrees(45F));
-                }
-                return false;
-            }
-        });
+        consumer.accept(new InstrumentAnim());
     }
 }

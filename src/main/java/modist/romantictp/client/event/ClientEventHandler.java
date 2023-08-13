@@ -5,6 +5,7 @@ import modist.romantictp.RomanticTp;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.InstrumentSoundManager;
+import modist.romantictp.client.sound.NaturalTrumpetSoundInstance;
 import modist.romantictp.client.sound.audio.LocalReceiver;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
@@ -46,7 +47,7 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void changeSound(PlayStreamingSourceEvent event) {
-        if(hasReverbHelmet()) {
+        if(hasReverbHelmet() || event.getSound() instanceof NaturalTrumpetSoundInstance) { //natural trumpet should be SONARE
             EFXManager.getInstance().applyEFX(ReverbType.TEST, event.getChannel().source);
         }
     }
