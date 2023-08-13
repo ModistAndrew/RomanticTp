@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound.audio;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.MyChannel;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.instrument.Instrument;
@@ -55,6 +56,8 @@ public class MidiFilter implements Receiver {
             if(this.instrument.isEmpty()){
                 return;
             }
+            RomanticTp.LOGGER.info("midi event {} {} {} on channel {}", shortMessage.getCommand(), shortMessage.getData1(),
+                    shortMessage.getData2(), shortMessage.getChannel());
             executeOnReceiver(receiver -> {
                 switch (shortMessage.getCommand()) {
                     case ShortMessage.NOTE_ON -> {
@@ -85,7 +88,8 @@ public class MidiFilter implements Receiver {
                 }
             });
         } else {
-            executeOnReceiver(receiver -> receiver.send(message, timeStamp));
+            RomanticTp.LOGGER.info("midi event {} {}", message.getClass(), message.getMessage());
+//            executeOnReceiver(receiver -> receiver.send(message, timeStamp));
         }
     }
 
