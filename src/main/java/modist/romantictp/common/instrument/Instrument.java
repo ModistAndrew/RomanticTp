@@ -14,7 +14,7 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
     //initialPitch: added to pitch in midi
     //initialVolume: multiplied to velocity in midi
     public static final String PREFIX = "instrument_properties.romantictp.";
-    public static final Instrument EMPTY = new Instrument(0, 0, -1, false, ReverbType.EMPTY);
+    public static final Instrument EMPTY = new Instrument(0, 0, -1, false, ReverbType.GENERIC);
 
     public Instrument(CompoundTag tag) {
         this(tag.getInt("initialPitch"), tag.getFloat("initialVolume"), tag.getInt("instrumentId"), tag.getBoolean("singleTone"),
@@ -37,22 +37,22 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
 
     @Override
     public void addText(List<Component> pTooltip, boolean showItems) {
-        if(!this.isEmpty()) {
-            TooltipProvider.addTooltip("initialPitch", initialPitch, pTooltip, ChatFormatting.AQUA);
-            TooltipProvider.addTooltip("initialVolume", initialVolume, pTooltip, ChatFormatting.AQUA);
-            TooltipProvider.addTooltip("singleTone", singleTone, pTooltip, ChatFormatting.AQUA);
-            TooltipProvider.addTooltip("reverb", reverb, pTooltip, ChatFormatting.AQUA);
-        } else {
-            TooltipProvider.addTooltip("empty", pTooltip, ChatFormatting.RED);
-        }
+//        if(!this.isEmpty()) {
+//            TooltipProvider.addTooltip("initialPitch", initialPitch, pTooltip, ChatFormatting.AQUA);
+//            TooltipProvider.addTooltip("initialVolume", initialVolume, pTooltip, ChatFormatting.AQUA);
+//            TooltipProvider.addTooltip("singleTone", singleTone, pTooltip, ChatFormatting.AQUA);
+//            TooltipProvider.addTooltip("reverb", reverb.name(), pTooltip, ChatFormatting.AQUA);
+//        } else {
+//            TooltipProvider.addTooltip("empty", pTooltip, ChatFormatting.RED);
+//        }
     }
 
     public static class Builder {
         private final int instrumentId;
         private int initialPitch = 0;
-        private float initialVolume = 2F;
-        private boolean singleTone = true;
-        private ReverbType reverb = ReverbType.EMPTY;
+        private float initialVolume = 1F;
+        private boolean singleTone = false;
+        private ReverbType reverb = ReverbType.GENERIC;
 
         private Builder(int instrumentId){
             this.instrumentId = instrumentId;

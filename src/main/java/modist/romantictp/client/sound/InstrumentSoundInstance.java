@@ -86,7 +86,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.instrument = instrumentNow;
         this.hasReverbHelmet = hasReverbHelmetNow;
         this.receiver.setInstrument(this.instrument);
-        executeOnChannel(myChannel -> myChannel.setReverb(hasReverbHelmet ? ReverbType.TEST : this.instrument.reverb()));
+        executeOnChannel(myChannel -> myChannel.setReverb(hasReverbHelmet ? ReverbType.CONCERT_HALL : this.instrument.reverb()));
         //reverb helmet can override instrument reverb
     }
 

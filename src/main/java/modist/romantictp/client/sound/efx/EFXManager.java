@@ -35,12 +35,12 @@ public class EFXManager {
             return;
         }
         // Create auxiliary effect slots
-        Arrays.stream(ReverbType.values()).forEach(r -> {
+        ReverbType.REVERB_TYPES.values().forEach(r -> {
             int slot = EXTEfx.alGenAuxiliaryEffectSlots();
             EXTEfx.alAuxiliaryEffectSloti(slot, EXTEfx.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, AL11.AL_TRUE);
             int reverb = EXTEfx.alGenEffects();
             EXTEfx.alEffecti(reverb, EXTEfx.AL_EFFECT_TYPE, EXTEfx.AL_EFFECT_EAXREVERB);
-            r.setReverb.accept(reverb);
+            r.setReverb(reverb);
             EXTEfx.alAuxiliaryEffectSloti(slot, EXTEfx.AL_EFFECTSLOT_EFFECT, reverb);
             auxFXSlots.put(r, slot);
             RomanticTp.LOGGER.info("Aux slot {} created for reverb type {}", slot, r);

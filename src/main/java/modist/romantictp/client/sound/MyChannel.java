@@ -26,7 +26,7 @@ public class MyChannel extends Channel {  //Thread safety: handling audio is OK.
     public final Receiver receiver; //synthesizer receiver
     private final int BUFFER_SIZE = 1024;
     private final int BUFFER_COUNT = 8;
-    private ReverbType reverb = ReverbType.EMPTY;
+    private ReverbType reverb = ReverbType.GENERIC;
     private final AtomicBoolean alive = new AtomicBoolean(true);
     private CompletableFuture<InstrumentSoundInstance> instance = new CompletableFuture<>();
 
