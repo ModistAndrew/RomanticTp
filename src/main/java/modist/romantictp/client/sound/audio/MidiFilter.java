@@ -25,14 +25,14 @@ public class MidiFilter implements Receiver {
     }
 
     public void setInstrument(Instrument instrument) {
-        if(this.instrument.equals(instrument)){
+        if (this.instrument.equals(instrument)) {
             return;
         }
         this.instrument = instrument;
         updateInstrument();
     }
 
-    public int getLastNote(){
+    public int getLastNote() {
         return lastNote;
     }
 
@@ -53,11 +53,11 @@ public class MidiFilter implements Receiver {
     @Override
     public void send(MidiMessage message, long timeStamp) {
         if (message instanceof ShortMessage shortMessage) {
-            if(this.instrument.isEmpty()){
+            if (this.instrument.isEmpty()) {
                 return;
             }
-            RomanticTp.LOGGER.info("midi event {} {} {} on channel {}", shortMessage.getCommand(), shortMessage.getData1(),
-                    shortMessage.getData2(), shortMessage.getChannel());
+//            RomanticTp.LOGGER.info("midi event {} {} {} on channel {}", shortMessage.getCommand(), shortMessage.getData1(),
+//                    shortMessage.getData2(), shortMessage.getChannel());
             executeOnReceiver(receiver -> {
                 switch (shortMessage.getCommand()) {
                     case ShortMessage.NOTE_ON -> {
@@ -78,7 +78,7 @@ public class MidiFilter implements Receiver {
                         //skip instrument change
                     }
                     case ShortMessage.CONTROL_CHANGE -> {
-                        if(shortMessage.getData1() != 0) { //skip instrument bank change
+                        if (shortMessage.getData1() != 0) { //skip instrument bank change
                             receiver.send
                                     (MidiHelper.message(shortMessage.getCommand(), shortMessage.getData1(), shortMessage.getData2()), -1);
                         }
@@ -88,8 +88,8 @@ public class MidiFilter implements Receiver {
                 }
             });
         } else {
-            RomanticTp.LOGGER.info("midi event {} {}", message.getClass(), message.getMessage());
-//            executeOnReceiver(receiver -> receiver.send(message, timeStamp));
+//            RomanticTp.LOGGER.info("midi event {} {}", message.getClass(), message.getMessage());
+            executeOnReceiver(receiver -> receiver.send(message, timeStamp));
         }
     }
 

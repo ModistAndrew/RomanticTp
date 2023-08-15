@@ -41,10 +41,14 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
 //            TooltipProvider.addTooltip("initialPitch", initialPitch, pTooltip, ChatFormatting.AQUA);
 //            TooltipProvider.addTooltip("initialVolume", initialVolume, pTooltip, ChatFormatting.AQUA);
 //            TooltipProvider.addTooltip("singleTone", singleTone, pTooltip, ChatFormatting.AQUA);
-//            TooltipProvider.addTooltip("reverb", reverb.name(), pTooltip, ChatFormatting.AQUA);
+            TooltipProvider.addTooltip("reverb", reverb.name(), pTooltip, ChatFormatting.AQUA);
 //        } else {
 //            TooltipProvider.addTooltip("empty", pTooltip, ChatFormatting.RED);
 //        }
+    }
+
+    public boolean isSpecial() {
+        return reverb != ReverbType.GENERIC;
     }
 
     public static class Builder {

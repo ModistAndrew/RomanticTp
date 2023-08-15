@@ -4,17 +4,17 @@ import org.lwjgl.openal.EXTEfx;
 
 import java.util.HashMap;
 
-public record ReverbType(String name, float density, float diffusion, float gain, float gainHF, float gainLF,
+public record ReverbType(String name, float volume, float density, float diffusion, float gain, float gainHF, float gainLF,
                          float decayTime, float decayHFRatio, float decayLFRatio, float reflectionsGain,
                          float reflectionsDelay, float[] reflectionsPan, float lateReverbGain, float lateReverbDelay,
                          float[] lateReverbPan, float echoTime, float echoDepth, float modulationTime,
                          float modulationDepth, float airAbsorptionGainHF, float hfReference, float lfReference,
                          float roomRollOffFactor, int decayHFLimit) {
     public static final HashMap<String, ReverbType> REVERB_TYPES = new HashMap<>();
-    public static final ReverbType GENERIC = register(new ReverbType("generic", 1.0000f, 1.0000f, 0.3162f, 0.8913f, 1.0000f, 1.4900f, 0.8300f, 1.0000f, 0.0500f, 0.0070f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.2589f, 0.0110f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
-    public static final ReverbType ROOM = register(new ReverbType("room", 0.4287f, 1.0000f, 0.3162f, 0.5929f, 1.0000f, 0.4000f, 0.8300f, 1.0000f, 0.1503f, 0.0020f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.0629f, 0.0030f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
-    public static final ReverbType CONCERT_HALL = register(new ReverbType("concert_hall", 1.0000f, 1.0000f, 0.3162f, 0.5623f, 1.0000f, 3.9200f, 0.7000f, 1.0000f, 0.2427f, 0.0200f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.9977f, 0.0290f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
-    public static final ReverbType LARGE_ROOM = register(new ReverbType("large_room", 1.0000f, 0.8200f, 0.3162f, 0.2818f, 0.1259f, 2.5300f, 0.8300f, 0.5000f, 0.4467f, 0.0340f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.2589f, 0.0160f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.1850f, 0.0700f, 0.2500f, 0.0000f, 0.9943f, 5168.6001f, 139.5000f, 0.0000f, 0x1));
+    public static final ReverbType GENERIC = register(new ReverbType("generic", 2f, 1.0000f, 1.0000f, 0.3162f, 0.8913f, 1.0000f, 1.4900f, 0.8300f, 1.0000f, 0.0500f, 0.0070f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.2589f, 0.0110f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
+    public static final ReverbType ROOM = register(new ReverbType("room", 2f, 0.4287f, 1.0000f, 0.3162f, 0.5929f, 1.0000f, 0.4000f, 0.8300f, 1.0000f, 0.1503f, 0.0020f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.0629f, 0.0030f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
+    public static final ReverbType CONCERT_HALL = register(new ReverbType("concert_hall", 10f, 1.0000f, 1.0000f, 0.3162f, 0.5623f, 1.0000f, 3.9200f, 0.7000f, 1.0000f, 0.2427f, 0.0200f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.9977f, 0.0290f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
+    public static final ReverbType LARGE_ROOM = register(new ReverbType("large_room", 2f, 1.0000f, 0.8200f, 0.3162f, 0.2818f, 0.1259f, 2.5300f, 0.8300f, 0.5000f, 0.4467f, 0.0340f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.2589f, 0.0160f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.1850f, 0.0700f, 0.2500f, 0.0000f, 0.9943f, 5168.6001f, 139.5000f, 0.0000f, 0x1));
 
     public static ReverbType fromString(String name) {
         return REVERB_TYPES.getOrDefault(name, GENERIC);
@@ -58,11 +58,11 @@ public record ReverbType(String name, float density, float diffusion, float gain
 //        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, 1.0F);
     }
 
-    private static float m(float f, float max){
-        return Math.min(max, f * 2);
+    private float m(float f, float max){
+        return Math.min(max, f * volume);
     }
 
-    private static float m(float f){
+    private float m(float f){
         return m(f, 1);
     }
 }

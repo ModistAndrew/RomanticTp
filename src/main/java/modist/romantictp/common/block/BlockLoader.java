@@ -44,7 +44,8 @@ public class BlockLoader {
         registerInstrument("organ", Instrument.Builder.of(Instruments.ORGAN).reverb(ReverbType.LARGE_ROOM).build());
         registerInstrument("harp", Instrument.Builder.of(Instruments.HARP).build());
         registerInstrument("harpsichord", Instrument.Builder.of(Instruments.HARPSICHORD).build());
-        registerInstrument("piano", Instrument.Builder.of(Instruments.PIANO).build());
+        registerInstrument("piano", Instrument.Builder.of(Instruments.PIANO).build(),
+                                    Instrument.Builder.of(Instruments.PIANO).reverb(ReverbType.CONCERT_HALL).build());
         registerInstrument("guitar", Instrument.Builder.of(Instruments.GUITAR).build());
         registerInstrument("bass", Instrument.Builder.of(Instruments.BASS).build());
         registerInstrument("drum_kit", Instrument.Builder.of(Instruments.DRUM_KIT).build());

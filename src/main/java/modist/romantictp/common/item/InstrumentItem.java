@@ -101,4 +101,9 @@ public class InstrumentItem extends BlockItem implements ItemDisplayProvider {
         super.initializeClient(consumer);
         consumer.accept(new InstrumentAnim());
     }
+
+    @Override
+    public boolean isFoil(ItemStack pStack) {
+        return getInstrument(pStack).isSpecial();
+    }
 }

@@ -39,4 +39,9 @@ public class NaturalTrumpetItem extends Item {
         super.initializeClient(consumer);
         consumer.accept(new InstrumentAnim());
     }
+
+    @Override
+    public boolean isFoil(ItemStack pStack) {
+        return true;
+    }
 }
