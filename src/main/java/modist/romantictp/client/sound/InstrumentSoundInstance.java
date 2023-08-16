@@ -24,6 +24,8 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     public final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
     @Nullable
     private Sequencer sequencer;
+    @Nullable
+    private Sequencer sequencerCache;
     public Instrument instrument = Instrument.EMPTY;
     private boolean hasReverbHelmet;
 
@@ -109,16 +111,32 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.sequencer = null;
     }
 
-    public void attachSequencer(Sequence sequence) {
-        closeSequencer();
+    public void attachSequencer(Sequence sequence, boolean shouldStart) { //if false, only preparing
         try {
-            this.sequencer = MidiSystem.getSequencer(false);
-            sequencer.open();
-            sequencer.setSequence(sequence);
-            sequencer.getTransmitter().setReceiver(midiFilter);
-            sequencer.start();
+            this.sequencerCache = MidiSystem.getSequencer(false);
+            sequencerCache.open();
+            sequencerCache.setSequence(sequence);
+            if(shouldStart) {
+                closeSequencer();
+                this.sequencer = sequencerCache;
+                sequencer.getTransmitter().setReceiver(midiFilter);
+                sequencer.start();
+            }
         } catch (MidiUnavailableException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void startSequencer() {
+        if(sequencerCache != null) {
+            try {
+                closeSequencer();
+                this.sequencer = sequencerCache;
+                sequencer.getTransmitter().setReceiver(midiFilter);
+                sequencer.start();
+            } catch (MidiUnavailableException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

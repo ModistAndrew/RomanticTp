@@ -1,6 +1,5 @@
 package modist.romantictp.client.sound;
 
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.network.InstrumentSoundPacket;
@@ -59,12 +58,12 @@ public class InstrumentSoundManager {
         }
     }
 
-    public void startSequence(@NotNull InstrumentPlayer player, byte[] midiData, boolean broadcast) {
+    public void attachSequence(@NotNull InstrumentPlayer player, byte[] midiData, boolean broadcast) {
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
             Sequence sequence = MidiHelper.loadSequence(midiData);
             if (sequence != null) {
-                soundInstance.attachSequencer(sequence);
+                soundInstance.attachSequencer(sequence, true);
             }
         }
         if (broadcast) {
@@ -79,14 +78,20 @@ public class InstrumentSoundManager {
         }
     }
 
-    public void preLoad(@NotNull InstrumentPlayer player, byte[] midiData) {
+    public void preLoad(@NotNull InstrumentPlayer player, byte[] midiData) { //for autoPlayer
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
             Sequence sequence = MidiHelper.loadSequence(midiData);
             if (sequence != null) {
-                soundInstance.attachSequencer(sequence);
-                soundInstance.pause();
+                soundInstance.attachSequencer(sequence, false);
             }
+        }
+    }
+
+    public void startSequence(@NotNull InstrumentPlayer player) { //for autoPlayer
+        InstrumentSoundInstance soundInstance = getSound(player);
+        if (soundInstance != null) {
+            soundInstance.startSequencer();
         }
     }
 

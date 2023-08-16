@@ -1,6 +1,5 @@
 package modist.romantictp.common.block;
 
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
@@ -39,6 +38,10 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         return !score.isEmpty();
     }
 
+    public boolean containsInstrument() {
+        return !instrument.isEmpty();
+    }
+
     public ItemStack ejectScore() {
         ItemStack oldItemStack = score.copy();
         this.score = ItemStack.EMPTY;
@@ -59,7 +62,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
             this.instrument = detectInstrument();
             boolean previousPowered = this.powered;
             this.powered = level.hasNeighborSignal(getBlockPos());
-            boolean canStart = containsScore() && !this.instrument.isEmpty() && this.powered;
+            boolean canStart = containsScore() && containsInstrument() && this.powered;
             if (!previousPowered && !this.isPlaying && canStart) { //enabled: must be ignited
                 this.getCapability(ScoreTicker.SCORE_TICKER).ifPresent(scoreTicker -> scoreTicker.start(
                         score.getItem() instanceof ScoreItem scoreItem ? scoreItem.getTime(score) * 20 : 0L
@@ -92,10 +95,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     }
 
     private void startSequence() { //client
-        if (score.getItem() instanceof ScoreItem scoreItem) {
-            InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(this),
-                    scoreItem.getMidiData(score), false);
-        }
+        InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(this));
     }
 
     private void preLoad() { //client
@@ -147,7 +147,7 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
-        if(this.isPlaying) {
+        if(containsScore() && containsInstrument()) {
             preLoad();
         }
     }
