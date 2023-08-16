@@ -1,25 +1,22 @@
 package modist.romantictp.client.sound.audio;
 
-import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.MyChannel;
+import modist.romantictp.client.sound.InstrumentSoundInstance;
 
 import javax.annotation.Nullable;
 import javax.sound.sampled.*;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class MyDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
     @Nullable
-    private final CompletableFuture<MyChannel> channel = new CompletableFuture<>();
+    private final CompletableFuture<InstrumentSoundInstance> instance = new CompletableFuture<>();
 
     public MyDataLine(SourceDataLine line) {
         this.dataLine = line;
     }
 
-    public void bindChannel(MyChannel channel) {
-        this.channel.complete(channel);
+    public void bindInstance(InstrumentSoundInstance instance) {
+        this.instance.complete(instance);
     }
 
     @Override

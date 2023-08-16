@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.network.InstrumentSoundPacket;
@@ -13,7 +14,7 @@ import javax.sound.midi.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//management of sound instance,
+//management of sound instance, creating, pausing, resuming, destroying
 //thus providing method sending midi message and starting sequence and broadcasting (close is managed by soundInstance tick automatically)
 public class InstrumentSoundManager {
     static InstrumentSoundManager instance = new InstrumentSoundManager();
@@ -26,23 +27,14 @@ public class InstrumentSoundManager {
     @Nullable
     private InstrumentSoundInstance getSound(@NotNull InstrumentPlayer player) { //lazy
         InstrumentSoundInstance soundInstance = soundInstanceCache.get(player);
-        if (soundInstance == null) {
-            return tryCreate(player);
-        } else {
-            if(checkContains(soundInstance)){
-                return soundInstance;
-            } else {
-                soundInstance.destroy();
-                return tryCreate(player);
-            }
-        }
+        return soundInstance != null ? soundInstance : tryCreate(player);
     }
 
     @Nullable
-    private InstrumentSoundInstance tryCreate(InstrumentPlayer player) { //try to create. if muted, do nothing and return null
+    private InstrumentSoundInstance tryCreate(InstrumentPlayer player) { //try to create and put. if failed, do nothing and return null
         InstrumentSoundInstance soundInstance = new InstrumentSoundInstance(player);
         Minecraft.getInstance().getSoundManager().play(soundInstance);
-        if(checkContains(soundInstance)){
+        if (checkContains(soundInstance)) {
             soundInstanceCache.put(player, soundInstance);
             return soundInstance;
         }
@@ -71,7 +63,7 @@ public class InstrumentSoundManager {
         InstrumentSoundInstance soundInstance = getSound(player);
         if (soundInstance != null) {
             Sequence sequence = MidiHelper.loadSequence(midiData);
-            if(sequence != null) {
+            if (sequence != null) {
                 soundInstance.attachSequencer(sequence);
             }
         }
@@ -82,8 +74,31 @@ public class InstrumentSoundManager {
 
     public void playNaturalTrumpet(LivingEntity player, boolean broadcast) {
         Minecraft.getInstance().getSoundManager().play(new NaturalTrumpetSoundInstance(player));
-        if(broadcast) {
+        if (broadcast) {
             NetworkHandler.sendToServer(new InstrumentSoundPacket());
         }
+    }
+
+    public void preLoad(@NotNull InstrumentPlayer player, byte[] midiData) {
+        InstrumentSoundInstance soundInstance = getSound(player);
+        if (soundInstance != null) {
+            Sequence sequence = MidiHelper.loadSequence(midiData);
+            if (sequence != null) {
+                soundInstance.attachSequencer(sequence);
+                soundInstance.pause();
+            }
+        }
+    }
+
+    public void destroy() {
+        soundInstanceCache.values().forEach(InstrumentSoundInstance::destroy);
+    }
+
+    public void pause() {
+        soundInstanceCache.values().forEach(InstrumentSoundInstance::pause);
+    }
+
+    public void resume() {
+        soundInstanceCache.values().forEach(InstrumentSoundInstance::unpause);
     }
 }

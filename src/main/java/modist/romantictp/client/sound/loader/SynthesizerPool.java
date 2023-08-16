@@ -1,7 +1,7 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.MyChannel;
+import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.audio.MyDataLine;
 import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
@@ -31,17 +31,17 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         return instance;
     }
 
-    public SynthesizerWrapper request(MyChannel channel) {
+    public SynthesizerWrapper request(InstrumentSoundInstance instance) {
         create();
         return availableSynthesizers.isEmpty() ?
                 new SynthesizerWrapper() : availableSynthesizers.remove(availableSynthesizers.size()-1);
     }
 
-    public void delete(MyChannel channel) {
+    public void delete(InstrumentSoundInstance instance) {
         CompletableFuture.runAsync(() -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             RomanticTp.LOGGER.info("Start deleting synthesizer {}", availableSynthesizers.size());
-            channel.synthesizerWrapper.close();
+            instance.synthesizerWrapper.close();
             RomanticTp.LOGGER.info("Finish deleting synthesizer {}", availableSynthesizers.size());
         });
     }
@@ -97,8 +97,8 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
             }
         }
 
-        public void bindChannel(MyChannel channel){
-            this.dataLine.bindChannel(channel);
+        public void bindInstance(InstrumentSoundInstance instance){
+            this.dataLine.bindInstance(instance);
         }
 
         public void close(){

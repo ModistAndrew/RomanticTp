@@ -1,5 +1,6 @@
 package modist.romantictp.common.block;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.common.instrument.Instrument;
@@ -97,6 +98,13 @@ public class AutoPlayerBlockEntity extends BlockEntity {
         }
     }
 
+    private void preLoad() { //client
+        if (score.getItem() instanceof ScoreItem scoreItem) {
+            InstrumentSoundManager.getInstance().preLoad(InstrumentPlayerManager.getOrCreate(this),
+                    scoreItem.getMidiData(score));
+        }
+    }
+
     @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
@@ -139,6 +147,9 @@ public class AutoPlayerBlockEntity extends BlockEntity {
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
+        if(this.isPlaying) {
+            preLoad();
+        }
     }
 
     public void tick() {

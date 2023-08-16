@@ -36,7 +36,7 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (level.getBlockEntity(blockPos) instanceof AutoPlayerBlockEntity blockEntity) {
-            if (blockEntity.containsScore()) {
+            if (blockEntity.containsScore() && itemStack.isEmpty()) {
                 ItemHandlerHelper.giveItemToPlayer(player, blockEntity.ejectScore());
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
