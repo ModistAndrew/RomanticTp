@@ -2,7 +2,6 @@ package modist.romantictp.common.item;
 
 import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.client.sound.util.MidiHelper;
-import modist.romantictp.client.sound.util.MidiInfo;
 import modist.romantictp.util.ItemDisplayProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -20,9 +19,9 @@ public class ScoreItem extends Item implements ItemDisplayProvider {
         super(new Item.Properties().stacksTo(16));
     }
 
-    public MidiInfo getMidiInfo(ItemStack stack) {
+    public MidiHelper.MidiInfo getMidiInfo(ItemStack stack) {
         CompoundTag tag = stack.getTagElement("midiData");
-        return tag == null ? MidiInfo.EMPTY : new MidiInfo(tag);
+        return tag == null ? MidiHelper.MidiInfo.EMPTY : new MidiHelper.MidiInfo(tag);
     }
 
     public byte[] getMidiData(ItemStack stack) {
@@ -33,14 +32,14 @@ public class ScoreItem extends Item implements ItemDisplayProvider {
         return getMidiInfo(stack).time();
     }
 
-    public MidiInfo setMidiData(ItemStack stack) { //client only
+    public MidiHelper.MidiInfo setMidiData(ItemStack stack) { //client only
         String name = stack.getHoverName().getString();
-        MidiInfo info = MidiHelper.getInfo(name);
+        MidiHelper.MidiInfo info = MidiHelper.getInfo(name);
         fillMidiData(stack, info);
         return info;
     }
 
-    public void fillMidiData(ItemStack stack, MidiInfo info) { //server only
+    public void fillMidiData(ItemStack stack, MidiHelper.MidiInfo info) { //server only
         stack.addTagElement("midiData", info.serializeNBT());
     }
 

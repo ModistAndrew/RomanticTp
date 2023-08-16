@@ -2,7 +2,7 @@ package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.config.RomanticTpConfig;
-import modist.romantictp.client.sound.audio.LocalReceiver;
+import modist.romantictp.client.sound.midi.LocalReceiver;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.MidiDevice;

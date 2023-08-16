@@ -2,16 +2,15 @@ package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
-import modist.romantictp.client.sound.audio.MyDataLine;
 import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
-import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
+import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
-import javax.sound.sampled.*;
+import javax.sound.midi.Synthesizer;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -20,9 +19,10 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     private static final SynthesizerPool instance = new SynthesizerPool();
 
     private static final int INITIAL_COUNT = 4;
+
     public void init() {
         availableSynthesizers.clear();
-        for(int i=0; i<INITIAL_COUNT; i++){
+        for (int i = 0; i < INITIAL_COUNT; i++) {
             create();
         }
     }
@@ -34,7 +34,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     public SynthesizerWrapper request(InstrumentSoundInstance instance) {
         create();
         return availableSynthesizers.isEmpty() ?
-                new SynthesizerWrapper() : availableSynthesizers.remove(availableSynthesizers.size()-1);
+                new SynthesizerWrapper() : availableSynthesizers.remove(availableSynthesizers.size() - 1);
     }
 
     public void delete(InstrumentSoundInstance instance) {
@@ -62,46 +62,23 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     }
 
     public static class SynthesizerWrapper {
-        public final AudioSynthesizer synthesizer;
-        public final MyDataLine dataLine;
+        public final Synthesizer synthesizer;
         public final Receiver receiver;
+
         public SynthesizerWrapper() {
-            this.synthesizer = new SoftSynthesizer();
-
-            AudioFormat audioFormat = AudioHelper.AUDIO_FORMAT;
-            DataLine.Info info1 = new DataLine.Info(SourceDataLine.class, audioFormat);
-            SourceDataLine sourceDataLine;
             try {
-                sourceDataLine = (SourceDataLine) AudioSystem.getLine(info1);
-            } catch (LineUnavailableException e) {
-                throw new RuntimeException(e);
-            }
-
-            this.dataLine = new MyDataLine(sourceDataLine);
-            try {
-                Map<String, Object> params = new HashMap<>();
-                params.put("jitter correction", true);
-                this.synthesizer.open(this.dataLine, params);
-            } catch (MidiUnavailableException e) {
-                throw new RuntimeException(e);
-            }
-
-            if(SoundbankLoader.getInstance().soundbank != null) {
-                synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
-            }
-
-            try {
+                this.synthesizer = new SoftSynthesizer();
+                synthesizer.open();
+                if (SoundbankLoader.getInstance().soundbank != null) {
+                    synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
+                }
                 this.receiver = this.synthesizer.getReceiver();
             } catch (MidiUnavailableException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public void bindInstance(InstrumentSoundInstance instance){
-            this.dataLine.bindInstance(instance);
-        }
-
-        public void close(){
+        public void close() {
             this.synthesizer.close();
         }
     }

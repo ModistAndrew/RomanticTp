@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.NaturalTrumpetSoundInstance;
-import modist.romantictp.client.sound.audio.LocalReceiver;
+import modist.romantictp.client.sound.midi.LocalReceiver;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.util.MidiHelper;
