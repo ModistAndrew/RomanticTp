@@ -34,9 +34,10 @@ public class MyDataLine implements SourceDataLine {
 
     @Override
     public int write(byte[] b, int off, int len) {
-        MyChannel myChannel = channel.join();
-        myChannel.write(b, off, len);
-        return len;
+//        MyChannel myChannel = channel.join();
+//        myChannel.write(b, off, len);
+//        return len;
+        return dataLine.write(b, off, len);
     }
 
     @Override

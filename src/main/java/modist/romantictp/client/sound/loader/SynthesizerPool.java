@@ -80,7 +80,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
             this.dataLine = new MyDataLine(sourceDataLine);
             try {
                 Map<String, Object> params = new HashMap<>();
-                params.put("jitter correction", false);
+                params.put("jitter correction", true);
                 this.synthesizer.open(this.dataLine, params);
             } catch (MidiUnavailableException e) {
                 throw new RuntimeException(e);

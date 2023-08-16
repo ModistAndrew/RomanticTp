@@ -13,6 +13,7 @@ import net.minecraft.client.sounds.AudioStream;
 import org.lwjgl.openal.AL10;
 
 import javax.sound.midi.*;
+import javax.sound.sampled.FloatControl;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.CompletableFuture;
