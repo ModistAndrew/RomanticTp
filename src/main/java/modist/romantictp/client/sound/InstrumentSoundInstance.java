@@ -2,6 +2,7 @@ package modist.romantictp.client.sound;
 
 import modist.romantictp.client.event.ClientEventHandler;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
+import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.midi.MidiFilter;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.client.sound.util.MathHelper;
@@ -19,14 +20,14 @@ import javax.sound.midi.*;
 
 public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     //interact with channel and receiver and manage stop
-    public final InstrumentPlayer player;
+    private final InstrumentPlayer player;
     private final MidiFilter midiFilter;
-    public final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
+    private final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
     @Nullable
     private Sequencer sequencer;
     @Nullable
     private Sequencer sequencerCache;
-    public Instrument instrument = Instrument.EMPTY;
+    private Instrument instrument = Instrument.EMPTY;
     private boolean hasReverbHelmet;
 
     private int lastNote = -1;
@@ -34,9 +35,13 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     public InstrumentSoundInstance(InstrumentPlayer player) {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
-        this.synthesizerWrapper = SynthesizerPool.getInstance().request(this);
-        this.midiFilter = new MidiFilter(synthesizerWrapper.receiver);
+        this.synthesizerWrapper = SynthesizerPool.getInstance().request();
+        this.midiFilter = new MidiFilter(synthesizerWrapper.receiver());
         this.tick(); //init tick to update instrument, etc
+    }
+
+    public void bindChannel(AlChannel channel) { //give channel access to dataLine
+        this.synthesizerWrapper.dataLine().bindChannel(channel);
     }
 
     public void sendMessage(MidiMessage message, long timeStamp) {
@@ -50,7 +55,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             this.y = player.getPos().y;
             this.z = player.getPos().z;
             this.volume = player.getVolume();
-            updateVolumeAndPan();
+            //updateVolumeAndPan();
             generateParticle();
             updateInstrument();
             checkSequence();
@@ -81,7 +86,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         InstrumentSoundManager.getInstance().remove(player);
         InstrumentPlayerManager.remove(player);
         closeSequencer();
-        SynthesizerPool.getInstance().delete(this);
+        SynthesizerPool.getInstance().delete(this.synthesizerWrapper);
         this.stop();
     }
 
@@ -94,6 +99,8 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.instrument = instrumentNow;
         this.hasReverbHelmet = hasReverbHelmetNow;
         this.midiFilter.setInstrument(this.instrument);
+        synthesizerWrapper.dataLine().setReverb(hasReverbHelmet ? ReverbType.CONCERT_HALL : this.instrument.reverb());
+        //reverb helmet can override instrument reverb
     }
 
     private void checkSequence() {

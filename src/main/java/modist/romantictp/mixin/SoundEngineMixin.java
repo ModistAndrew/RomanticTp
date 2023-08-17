@@ -1,11 +1,13 @@
 package modist.romantictp.mixin;
 
-import modist.romantictp.RomanticTp;
+import com.mojang.blaze3d.audio.Library;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.InstrumentSoundManager;
+import modist.romantictp.client.sound.AlChannel;
 import modist.romantictp.client.sound.efx.EFXManager;
-import modist.romantictp.client.sound.loader.SynthesizerPool;
+import modist.romantictp.mixininterface.IChannelAccessSpecial;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.ChannelAccess;
 import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,12 +17,28 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Mixin(SoundEngine.class)
 public class SoundEngineMixin {
     @Shadow
     private boolean loaded;
     //protect instrument sound instance. only when stopAll or player dead can destroy
+    @Redirect(
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/client/sounds/ChannelAccess;createHandle(Lcom/mojang/blaze3d/audio/Library$Pool;)Ljava/util/concurrent/CompletableFuture;"
+            ),
+            method = "play"
+    )
+    public CompletableFuture<ChannelAccess.ChannelHandle> playSpecial(ChannelAccess channelAccess, Library.Pool pSystemMode, SoundInstance p_120313_) {
+        if(p_120313_ instanceof InstrumentSoundInstance instance){
+            CompletableFuture<ChannelAccess.ChannelHandle> ret = ((IChannelAccessSpecial)channelAccess).romanticTp$createHandleSpecial(pSystemMode);
+            ret.join().execute(channel -> instance.bindChannel((AlChannel) channel));
+            return ret;
+        }
+        return channelAccess.createHandle(pSystemMode);
+    }
+
     @Redirect(method = "tickNonPaused", at = @At(value = "INVOKE", target = "Ljava/util/List;remove(Ljava/lang/Object;)Z"))
     public boolean remove(List<SoundInstance> list, Object instance) { //TODO better mixin way?
         if(instance instanceof SoundInstance && !(instance instanceof InstrumentSoundInstance)) {
@@ -35,9 +53,9 @@ public class SoundEngineMixin {
     }
 
     @Inject(method = "stopAll", at = @At("HEAD"))
-    public void destroy(CallbackInfo ci) {
+    public void stopAll(CallbackInfo ci) {
         if (this.loaded) {
-            InstrumentSoundManager.getInstance().destroy();
+            InstrumentSoundManager.getInstance().stopAll();
         }
     }
 
@@ -53,10 +71,5 @@ public class SoundEngineMixin {
         if (this.loaded) {
             InstrumentSoundManager.getInstance().resume();
         }
-    }
-
-    @Inject(method = "tick", at = @At("HEAD"))
-    public void tick(CallbackInfo ci) {
-        SynthesizerPool.SynthesizerWrapper.tick();
     }
 }

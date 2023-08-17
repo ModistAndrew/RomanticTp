@@ -1,18 +1,14 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.ALDataLine;
-import modist.romantictp.client.sound.InstrumentSoundInstance;
-import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
+import modist.romantictp.client.sound.AlDataLine;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
 import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
-import javax.sound.midi.Synthesizer;
 import javax.sound.sampled.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -34,17 +30,17 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         return instance;
     }
 
-    public SynthesizerWrapper request(InstrumentSoundInstance instance) {
+    public SynthesizerWrapper request() {
         create();
         return availableSynthesizers.isEmpty() ?
-                new SynthesizerWrapper() : availableSynthesizers.remove(availableSynthesizers.size() - 1);
+                SynthesizerWrapper.create() : availableSynthesizers.remove(availableSynthesizers.size() - 1);
     }
 
-    public void delete(InstrumentSoundInstance instance) {
+    public void delete(SynthesizerWrapper wrapper) {
         CompletableFuture.runAsync(() -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             RomanticTp.LOGGER.info("Start deleting synthesizer {}", availableSynthesizers.size());
-            instance.synthesizerWrapper.close();
+            wrapper.close();
             RomanticTp.LOGGER.info("Finish deleting synthesizer {}", availableSynthesizers.size());
         });
     }
@@ -53,7 +49,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         CompletableFuture.runAsync(() -> {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             RomanticTp.LOGGER.info("Start creating synthesizer {}", availableSynthesizers.size());
-            availableSynthesizers.add(new SynthesizerWrapper());
+            availableSynthesizers.add(SynthesizerWrapper.create());
             RomanticTp.LOGGER.info("Finish creating synthesizer {}", availableSynthesizers.size());
         });
     }
@@ -64,39 +60,29 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         init();
     }
 
-    public static class SynthesizerWrapper {
-        public final SoftSynthesizer synthesizer;
-        public final Receiver receiver;
-        public final ALDataLine dataLine;
-        private static final List<ALDataLine> DATA_LINES = new ArrayList<>();
+    public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver, AlDataLine dataLine) {
 
-        public SynthesizerWrapper() {
+        public static SynthesizerWrapper create() {
             try {
-                this.synthesizer = new SoftSynthesizer();
+                SoftSynthesizer synthesizer = new SoftSynthesizer();
                 AudioFormat audioFormat = AudioHelper.AUDIO_FORMAT;
                 DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
                 SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
-                this.dataLine = new ALDataLine(sourceDataLine);
+                AlDataLine alDataLine = new AlDataLine(sourceDataLine);
                 Map<String, Object> params = new HashMap<>();
                 params.put("jitter correction", true);
-                synthesizer.open(dataLine, params);
+                synthesizer.open(alDataLine, params);
                 if (SoundbankLoader.getInstance().soundbank != null) {
                     synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
                 }
-                this.receiver = this.synthesizer.getReceiver();
-                DATA_LINES.add(this.dataLine);
+                return new SynthesizerWrapper(synthesizer, synthesizer.getReceiver(), alDataLine);
             } catch (MidiUnavailableException | LineUnavailableException e) {
                 throw new RuntimeException(e);
             }
         }
 
         public void close() {
-            DATA_LINES.remove(this.dataLine);
             this.synthesizer.close();
-        }
-
-        public static void tick() {
-            DATA_LINES.forEach(ALDataLine::tick);
         }
     }
 }

@@ -1,6 +1,7 @@
 package modist.romantictp.network;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -64,6 +65,6 @@ public class NetworkHandler {
     public static <MSG> void broadcast(@Nullable ServerPlayer pExcept, LivingEntity entity, MSG packet) {
         INSTANCE.send(PacketDistributor.NEAR.with
                 (() -> new PacketDistributor.TargetPoint
-                        (pExcept, entity.getX(), entity.getY(), entity.getZ(), 64D, entity.level().dimension())), packet);
+                        (pExcept, entity.getX(), entity.getY(), entity.getZ(), AudioHelper.MAX_DISTANCE, entity.level().dimension())), packet);
     }
 }

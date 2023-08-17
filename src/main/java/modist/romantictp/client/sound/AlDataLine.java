@@ -1,56 +1,26 @@
 package modist.romantictp.client.sound;
 
-import com.mojang.blaze3d.audio.SoundBuffer;
-import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.util.AlHelper;
-import modist.romantictp.client.sound.util.AudioHelper;
-import org.lwjgl.openal.AL10;
+import modist.romantictp.client.sound.efx.ReverbType;
 
 import javax.sound.sampled.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CompletableFuture;
 
-public class ALDataLine implements SourceDataLine {
+public class AlDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
-    private final int source;
-    public final AtomicInteger pumpCount = new AtomicInteger();
+    private final CompletableFuture<AlChannel> channel = new CompletableFuture<>();
 
-    public ALDataLine(SourceDataLine line) {
+    public AlDataLine(SourceDataLine line) {
         this.dataLine = line;
-        int[] aInt = new int[1];
-        AL10.alGenSources(aInt);
-        this.source = aInt[0];
-        AlHelper.checkALError(); //TODO destroy
     }
 
-    public void tick() {
-        int i = this.removeProcessedBuffers();
-        this.pumpBuffers(i);
-        if (AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING) { //start
-            this.pumpBuffers(8);
-        }
-        AlHelper.checkALError();
+    public void bindChannel(AlChannel channel) {
+        this.channel.complete(channel);
     }
 
-    private void pumpBuffers(int pReadCount) {
-        pumpCount.set(pReadCount);
-        synchronized (pumpCount) {
-            if (pumpCount.get() > 0) {
-                pumpCount.notify();
-            }
+    public void setReverb(ReverbType reverb){
+        if(channel.isDone()){
+            channel.join().setReverb(reverb);
         }
-    }
-
-    private int removeProcessedBuffers() {
-        int i = AL10.alGetSourcei(this.source, AL10.AL_BUFFERS_PROCESSED);
-        if (i > 0) {
-            int[] aInt = new int[i];
-            AL10.alSourceUnqueueBuffers(this.source, aInt);
-            AL10.alDeleteBuffers(aInt);
-        }
-        AlHelper.checkALError();
-        return i;
     }
 
     @Override
@@ -65,26 +35,11 @@ public class ALDataLine implements SourceDataLine {
 
     @Override
     public int write(byte[] b, int off, int len) {
-        synchronized (pumpCount) {
-            if (pumpCount.get() <= 0) {
-                try {
-                    pumpCount.wait();
-                } catch (InterruptedException e) {
-                    RomanticTp.LOGGER.info("Stopping dataLine");
-                    return 0;
-                }
-            }
+        if(!channel.isDone() || channel.join().stopped()){
+            return dataLine.write(b, off, len); //simply pass data to inner dataLine as there should be no sound
         }
-        pumpCount.decrementAndGet();
-        ByteBuffer bytebuffer = AudioHelper.convertAudioBytes(b, AudioHelper.AUDIO_FORMAT.getSampleSizeInBits() == 16,
-                AudioHelper.AUDIO_FORMAT.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
-        (new SoundBuffer(bytebuffer, AudioHelper.AUDIO_FORMAT)).releaseAlBuffer().ifPresent(i -> {
-            AL10.alSourceQueueBuffers(this.source, new int[]{i});
-            if (AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) != AL10.AL_PLAYING) { //start
-                AL10.alSourcePlay(this.source);
-            }
-            AlHelper.checkALError();
-        });
+        AlChannel alChannel = channel.join();
+        alChannel.write(b, off, len);
         return len;
     }
 

@@ -3,8 +3,8 @@
     "sounds": [
       {
         "name":"romantictp:blank",
-        "attenuation_distance": 64,
-        "stream": false
+        "attenuation_distance": 16,
+        "stream": true
       }
     ],
     "subtitle": "sound.romantictp.blank"
@@ -13,8 +13,8 @@
     "sounds": [
       {
         "name":"romantictp:natural_trumpet",
-        "attenuation_distance": 64,
-        "stream": false
+        "attenuation_distance": 16,
+        "stream": true
       }
     ],
     "subtitle": "sound.romantictp.natural_trumpet"
