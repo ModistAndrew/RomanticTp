@@ -1,8 +1,10 @@
 package modist.romantictp.mixin;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.client.sound.efx.EFXManager;
+import modist.romantictp.client.sound.loader.SynthesizerPool;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundEngine;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,5 +53,10 @@ public class SoundEngineMixin {
         if (this.loaded) {
             InstrumentSoundManager.getInstance().resume();
         }
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    public void tick(CallbackInfo ci) {
+        SynthesizerPool.SynthesizerWrapper.tick();
     }
 }

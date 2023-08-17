@@ -1,9 +1,11 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.ALDataLine;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.fork.gervill.AudioSynthesizer;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
+import modist.romantictp.client.sound.util.AudioHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
@@ -11,6 +13,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.Synthesizer;
+import javax.sound.sampled.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -62,24 +65,36 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     }
 
     public static class SynthesizerWrapper {
-        public final Synthesizer synthesizer;
+        public final SoftSynthesizer synthesizer;
         public final Receiver receiver;
+        public final ALDataLine dataLine;
+        private static final List<ALDataLine> DATA_LINES = new ArrayList<>();
 
         public SynthesizerWrapper() {
             try {
                 this.synthesizer = new SoftSynthesizer();
-                synthesizer.open();
+                AudioFormat audioFormat = AudioHelper.AUDIO_FORMAT;
+                DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+                SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
+                this.dataLine = new ALDataLine(sourceDataLine);
+                synthesizer.open(dataLine, null);
                 if (SoundbankLoader.getInstance().soundbank != null) {
                     synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
                 }
                 this.receiver = this.synthesizer.getReceiver();
-            } catch (MidiUnavailableException e) {
+                DATA_LINES.add(this.dataLine);
+            } catch (MidiUnavailableException | LineUnavailableException e) {
                 throw new RuntimeException(e);
             }
         }
 
         public void close() {
+            DATA_LINES.remove(this.dataLine);
             this.synthesizer.close();
+        }
+
+        public static void tick() {
+            DATA_LINES.forEach(ALDataLine::tick);
         }
     }
 }
