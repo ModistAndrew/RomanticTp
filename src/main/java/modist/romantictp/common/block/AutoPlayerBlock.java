@@ -40,7 +40,7 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
                 ItemHandlerHelper.giveItemToPlayer(player, blockEntity.ejectScore());
                 return InteractionResult.sidedSuccess(level.isClientSide);
             }
-            if (itemStack.getItem() instanceof ScoreItem) {
+            if (!blockEntity.containsScore() && itemStack.getItem() instanceof ScoreItem) {
                 blockEntity.injectScore(itemStack);
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);

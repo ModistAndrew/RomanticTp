@@ -17,10 +17,8 @@ public class AlDataLine implements SourceDataLine {
         this.channel.complete(channel);
     }
 
-    public void setReverb(ReverbType reverb){
-        if(channel.isDone()){
-            channel.join().setReverb(reverb);
-        }
+    public void setReverb(ReverbType reverb) { //may have not been completed
+        channel.thenAcceptAsync(channel -> channel.setReverb(reverb));
     }
 
     @Override
@@ -35,7 +33,7 @@ public class AlDataLine implements SourceDataLine {
 
     @Override
     public int write(byte[] b, int off, int len) {
-        if(!channel.isDone() || channel.join().stopped()){
+        if (!channel.isDone() || channel.join().stopped()) {
             return dataLine.write(b, off, len); //simply pass data to inner dataLine as there should be no sound
         }
         AlChannel alChannel = channel.join();
