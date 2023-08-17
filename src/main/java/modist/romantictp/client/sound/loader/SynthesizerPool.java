@@ -70,7 +70,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
                 SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
                 AlDataLine alDataLine = new AlDataLine(sourceDataLine);
                 Map<String, Object> params = new HashMap<>();
-                params.put("jitter correction", true);
+                params.put("jitter correction", true); //delay may be higher
                 synthesizer.open(alDataLine, params);
                 if (SoundbankLoader.getInstance().soundbank != null) {
                     synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
