@@ -22,7 +22,7 @@ public class SoundEngineMixin {
     private boolean loaded;
     //protect instrument sound instance. only when stopAll or player dead can destroy
     @Redirect(method = "tickNonPaused", at = @At(value = "INVOKE", target = "Ljava/util/List;remove(Ljava/lang/Object;)Z"))
-    public boolean remove(List<SoundInstance> list, Object instance) {
+    public boolean remove(List<SoundInstance> list, Object instance) { //TODO better mixin way?
         if(instance instanceof SoundInstance && !(instance instanceof InstrumentSoundInstance)) {
             return list.remove(instance);
         }

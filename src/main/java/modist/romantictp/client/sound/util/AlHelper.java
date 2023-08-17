@@ -30,4 +30,19 @@ public class AlHelper {
                 return "An unrecognized error occurred.";
         }
     }
+
+    public static void printSource(int source) {
+        RomanticTp.LOGGER.info("Status of {}: {}", source, AL10.alGetSourcei(source, AL10.AL_SOURCE_STATE));
+        RomanticTp.LOGGER.info("Queued buffers of {}: {}", source, AL10.alGetSourcei(source, AL10.AL_BUFFERS_QUEUED));
+        RomanticTp.LOGGER.info("Processed buffers of {}: {}", source, AL10.alGetSourcei(source, AL10.AL_BUFFERS_PROCESSED));
+        RomanticTp.LOGGER.info("Gain of {}: {}", source, AL10.alGetSourcef(source, AL10.AL_GAIN));
+        float[] f1 = new float[1];
+        float[] f2 = new float[1];
+        float[] f3 = new float[1];
+        AL10.alGetSource3f(source, AL10.AL_POSITION, f1, f2, f3);
+        RomanticTp.LOGGER.info("Position of {}: {} {} {}", source, f1[0], f2[0], f3[0]);
+        AL10.alGetListener3f( AL10.AL_POSITION, f1, f2, f3);
+        RomanticTp.LOGGER.info("Listener Position of {}: {} {} {}", source, f1[0], f2[0], f3[0]);
+        checkALError();
+    }
 }
