@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "d": {
+      "tag": "forge:gems/diamond"
+    },
+    "g": {
+      "tag": "forge:glass/colorless"
+    },
+    "x": {
+      "item": "minecraft:jukebox"
+    }
+  },
+  "pattern": [
+    "gdg",
+    "gxg",
+    "ggg"
+  ],
+  "result": {
+    "item": "romantictp:auto_player"
+  },
+  "show_notification": true
+}

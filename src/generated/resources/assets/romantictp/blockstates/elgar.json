@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/elgar",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/elgar"
+    },
+    "facing=south": {
+      "model": "romantictp:block/elgar",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/elgar",
+      "y": 270
+    }
+  }
+}

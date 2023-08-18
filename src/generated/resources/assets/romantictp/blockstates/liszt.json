@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/liszt",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/liszt"
+    },
+    "facing=south": {
+      "model": "romantictp:block/liszt",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/liszt",
+      "y": 270
+    }
+  }
+}

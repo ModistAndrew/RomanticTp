@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/tchaikovsky",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/tchaikovsky"
+    },
+    "facing=south": {
+      "model": "romantictp:block/tchaikovsky",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/tchaikovsky",
+      "y": 270
+    }
+  }
+}

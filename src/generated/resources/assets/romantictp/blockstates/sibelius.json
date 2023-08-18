@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/sibelius",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/sibelius"
+    },
+    "facing=south": {
+      "model": "romantictp:block/sibelius",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/sibelius",
+      "y": 270
+    }
+  }
+}

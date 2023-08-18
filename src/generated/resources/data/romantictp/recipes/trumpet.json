@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "tag": "minecraft:stone_buttons"
+    },
+    "g": {
+      "tag": "forge:storage_blocks/gold"
+    },
+    "n": {
+      "item": "minecraft:note_block"
+    }
+  },
+  "pattern": [
+    "bbb",
+    "ggg",
+    "nnn"
+  ],
+  "result": {
+    "item": "romantictp:trumpet"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/chopin",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/chopin"
+    },
+    "facing=south": {
+      "model": "romantictp:block/chopin",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/chopin",
+      "y": 270
+    }
+  }
+}

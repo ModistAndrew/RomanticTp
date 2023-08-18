@@ -27,8 +27,14 @@ public class BlockStateGenerator extends BlockStateProvider {
                 this.models().getExistingFile(modLoc("reverb_helmet")));
         simpleBlockItem(BlockLoader.REVERB_HELMET.get(),
                 this.models().getExistingFile(modLoc("reverb_helmet")));
-        BlockLoader.MUSICIAN_BUSTS.forEach((s, b) ->
-                horizontalBlock(b.get(), this.models().getExistingFile(modLoc(s))));
+        BlockLoader.MUSICIAN_BUSTS.forEach((s, b) -> {
+                    if(s.equals("beethoven")||s.equals("bach")||s.equals("haydn")||s.equals("mozart")){
+                        horizontalBlock(b.get(), this.models().getExistingFile(modLoc(s)));
+                    } else {
+                        horizontalBlock(b.get(),
+                                this.models().withExistingParent(s, modLoc("musician_bust")).texture("1", modLoc("block/"+s)));
+                    }
+                });
         BlockLoader.MUSICIAN_BUSTS.forEach((s, b) ->
                 simpleBlockItem(b.get(), this.models().getExistingFile(modLoc(s))));
         BlockLoader.INSTRUMENTS.forEach((s, b) -> {

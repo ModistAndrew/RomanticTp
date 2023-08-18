@@ -23,5 +23,6 @@ public class DataGenerators {
         generator.addProvider(event.includeClient(), new ItemModelGenerator(generator.getPackOutput(), event.getExistingFileHelper()));
         generator.addProvider(event.includeServer(), new LootTableProvider(generator.getPackOutput(), Collections.emptySet(),
                 List.of(new LootTableProvider.SubProviderEntry(LootTableGenerator::new, LootContextParamSets.BLOCK))));
+        generator.addProvider(event.includeServer(), new RecipeGenerator(generator.getPackOutput()));
     }
 }

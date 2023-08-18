@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "b": {
+      "tag": "forge:tools/bows"
+    },
+    "n": {
+      "item": "minecraft:note_block"
+    },
+    "s": {
+      "tag": "forge:string"
+    },
+    "w": {
+      "tag": "minecraft:dark_oak_logs"
+    }
+  },
+  "pattern": [
+    "ssb",
+    "www",
+    "nnn"
+  ],
+  "result": {
+    "item": "romantictp:violin"
+  },
+  "show_notification": true
+}

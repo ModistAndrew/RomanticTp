@@ -133,9 +133,16 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void addTrades(VillagerTradesEvent event) {
         if (event.getType() == VillageLoader.MUSICIAN.get()) {
-            event.getTrades().forEach((i, l) -> l.add(MusicianTrade::getInstrument));
-            event.getTrades().get(1).add(MusicianTrade::getScore);
-            event.getTrades().get(2).add(MusicianTrade::getBust);
+            event.getTrades().get(1).add(MusicianTrade::sellScore);
+            event.getTrades().get(1).add(MusicianTrade::buyPaper);
+            event.getTrades().get(2).add(MusicianTrade::sellInstrument);
+            event.getTrades().get(2).add(MusicianTrade::buyNoteBox);
+            event.getTrades().get(3).add(MusicianTrade::sellInstrument);
+            event.getTrades().get(3).add(MusicianTrade::sellBust);
+            event.getTrades().get(4).add(MusicianTrade::sellInstrument);
+            event.getTrades().get(4).add(MusicianTrade::buyDisc);
+            event.getTrades().get(5).add(MusicianTrade::sellBust);
+            event.getTrades().get(5).add(MusicianTrade::buyAmethyst);
         }
     }
 

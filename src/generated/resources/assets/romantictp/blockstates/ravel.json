@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/ravel",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/ravel"
+    },
+    "facing=south": {
+      "model": "romantictp:block/ravel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/ravel",
+      "y": 270
+    }
+  }
+}

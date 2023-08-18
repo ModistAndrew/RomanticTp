@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "i": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "n": {
+      "item": "minecraft:note_block"
+    },
+    "q": {
+      "tag": "forge:storage_blocks/quartz"
+    }
+  },
+  "pattern": [
+    "iqi",
+    "iqi",
+    "nnn"
+  ],
+  "result": {
+    "item": "romantictp:piano"
+  },
+  "show_notification": true
+}

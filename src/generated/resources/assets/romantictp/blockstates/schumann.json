@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/schumann",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/schumann"
+    },
+    "facing=south": {
+      "model": "romantictp:block/schumann",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/schumann",
+      "y": 270
+    }
+  }
+}

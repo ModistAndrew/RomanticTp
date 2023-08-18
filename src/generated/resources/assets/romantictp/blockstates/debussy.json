@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/debussy",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/debussy"
+    },
+    "facing=south": {
+      "model": "romantictp:block/debussy",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/debussy",
+      "y": 270
+    }
+  }
+}

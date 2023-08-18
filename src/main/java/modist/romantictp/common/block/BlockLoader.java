@@ -56,9 +56,25 @@ public class BlockLoader {
     static {
         registerMusicianBust("bach");
         registerMusicianBust("beethoven");
-        registerMusicianBust("mozart");
-        registerMusicianBust("mahler");
+        registerMusicianBust("brahms");
+        registerMusicianBust("chopin");
+        registerMusicianBust("debussy");
+        registerMusicianBust("dvorak");
+        registerMusicianBust("elgar");
+        registerMusicianBust("handel");
         registerMusicianBust("haydn");
+        registerMusicianBust("liszt");
+        registerMusicianBust("mahler");
+        registerMusicianBust("mozart");
+        registerMusicianBust("ravel");
+        registerMusicianBust("satie");
+        registerMusicianBust("schubert");
+        registerMusicianBust("schumann");
+        registerMusicianBust("shostakovich");
+        registerMusicianBust("sibelius");
+        registerMusicianBust("stravinsky");
+        registerMusicianBust("tchaikovsky");
+        registerMusicianBust("vivaldi");
     }
 
     public static final RegistryObject<BlockEntityType<InstrumentBlockEntity>> INSTRUMENT_BLOCK_ENTITY =

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/vivaldi",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/vivaldi"
+    },
+    "facing=south": {
+      "model": "romantictp:block/vivaldi",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/vivaldi",
+      "y": 270
+    }
+  }
+}
