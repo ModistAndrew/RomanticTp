@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class BlockLoader {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, RomanticTp.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RomanticTp.MODID);
 
-    public static final Map<String, RegistryObject<InstrumentBlock>> INSTRUMENTS = new HashMap<>();
+    public static final Map<String, RegistryObject<InstrumentBlock>> INSTRUMENTS = new LinkedHashMap<>();
     static {
         registerInstrument("timpani", Instrument.Builder.of(Instruments.TIMPANI).build());
         registerInstrument("music_box", Instrument.Builder.of(Instruments.MUSIC_BOX).build());
@@ -41,7 +42,7 @@ public class BlockLoader {
         registerInstrument("clarinet", Instrument.Builder.of(Instruments.CLARINET).build());
         registerInstrument("piccolo", Instrument.Builder.of(Instruments.PICCOLO).build());
         registerInstrument("flute", Instrument.Builder.of(Instruments.FLUTE).build());
-        registerInstrument("organ", Instrument.Builder.of(Instruments.ORGAN).reverb(ReverbType.LARGE_ROOM).build());
+        registerInstrument("organ", Instrument.Builder.of(Instruments.ORGAN).build());
         registerInstrument("harp", Instrument.Builder.of(Instruments.HARP).build());
         registerInstrument("harpsichord", Instrument.Builder.of(Instruments.HARPSICHORD).build());
         registerInstrument("piano", Instrument.Builder.of(Instruments.PIANO).build(),
@@ -52,7 +53,7 @@ public class BlockLoader {
     }
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
     public static final RegistryObject<Block> REVERB_HELMET = BLOCKS.register("reverb_helmet", ReverbHelmetBlock::new);
-    public static final Map<String, RegistryObject<MusicianBustBlock>> MUSICIAN_BUSTS = new HashMap<>();
+    public static final Map<String, RegistryObject<MusicianBustBlock>> MUSICIAN_BUSTS = new LinkedHashMap<>();
     static {
         registerMusicianBust("bach");
         registerMusicianBust("beethoven");
@@ -66,6 +67,7 @@ public class BlockLoader {
         registerMusicianBust("liszt");
         registerMusicianBust("mahler");
         registerMusicianBust("mozart");
+        registerMusicianBust("rachmaninoff");
         registerMusicianBust("ravel");
         registerMusicianBust("satie");
         registerMusicianBust("schubert");

@@ -37,14 +37,14 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
 
     @Override
     public void addText(List<Component> pTooltip, boolean showItems) {
-//        if(!this.isEmpty()) {
-//            TooltipProvider.addTooltip("initialPitch", initialPitch, pTooltip, ChatFormatting.AQUA);
-//            TooltipProvider.addTooltip("initialVolume", initialVolume, pTooltip, ChatFormatting.AQUA);
-//            TooltipProvider.addTooltip("singleTone", singleTone, pTooltip, ChatFormatting.AQUA);
-            TooltipProvider.addTooltip("reverb", reverb.name(), pTooltip, ChatFormatting.AQUA);
-//        } else {
-//            TooltipProvider.addTooltip("empty", pTooltip, ChatFormatting.RED);
-//        }
+        if(!isEmpty()) {
+            TooltipProvider.addTooltip("id", instrumentId, pTooltip, ChatFormatting.WHITE);
+            if (isSpecial()) {
+                TooltipProvider.addTooltip("reverb", reverb.name(), pTooltip, ChatFormatting.GOLD);
+            }
+        } else {
+            TooltipProvider.addTooltip("EMPTY", pTooltip, ChatFormatting.RED);
+        }
     }
 
     public boolean isSpecial() {

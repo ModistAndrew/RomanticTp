@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "romantictp:block/rachmaninoff",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "romantictp:block/rachmaninoff"
+    },
+    "facing=south": {
+      "model": "romantictp:block/rachmaninoff",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "romantictp:block/rachmaninoff",
+      "y": 270
+    }
+  }
+}

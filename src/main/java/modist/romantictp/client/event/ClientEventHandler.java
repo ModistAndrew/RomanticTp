@@ -27,14 +27,14 @@ public class ClientEventHandler {
     @SubscribeEvent
     public static void changeSound(PlaySoundSourceEvent event) {
         if(hasReverbHelmet()) {
-            EFXManager.getInstance().applyEFX(ReverbType.CONCERT_HALL, event.getChannel().source);
+            EFXManager.getInstance().applyEFX(ReverbType.SUPER, event.getChannel().source);
         }
     }
 
     @SubscribeEvent
     public static void changeSound(PlayStreamingSourceEvent event) {
         if(hasReverbHelmet() || event.getSound() instanceof NaturalTrumpetSoundInstance) { //natural trumpet should be SONARE
-            EFXManager.getInstance().applyEFX(ReverbType.CONCERT_HALL, event.getChannel().source);
+            EFXManager.getInstance().applyEFX(ReverbType.SUPER, event.getChannel().source);
         }
     }
 

@@ -32,8 +32,7 @@ public class ScoreItem extends Item implements ItemDisplayProvider {
         return getMidiInfo(stack).time();
     }
 
-    public MidiHelper.MidiInfo setMidiData(ItemStack stack) { //client only
-        String name = stack.getHoverName().getString();
+    public MidiHelper.MidiInfo setMidiData(ItemStack stack, String name) { //client only
         MidiHelper.MidiInfo info = MidiHelper.getInfo(name);
         fillMidiData(stack, info);
         return info;
@@ -49,8 +48,8 @@ public class ScoreItem extends Item implements ItemDisplayProvider {
         list.add(new ItemStack(this));
         MidiFileLoader.getInstance().resourceMap.keySet().forEach(s -> {
             if (!s.isEmpty()) {
-                ItemStack stack = new ItemStack(this).setHoverName(Component.literal(s));
-                setMidiData(stack);
+                ItemStack stack = new ItemStack(this);
+                setMidiData(stack, s);
                 list.add(stack);
             }
         });

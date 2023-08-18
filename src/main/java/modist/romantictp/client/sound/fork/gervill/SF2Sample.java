@@ -89,7 +89,7 @@ public final class SF2Sample extends SoundbankResource {
                 buf.get(arr);
                 this.data = new ModelByteBuffer(arr);
             } catch (IOException e) {
-                RomanticTp.LOGGER.warn("fail to load sample {}: {}", this.name, e);
+                RomanticTp.LOGGER.warn("Fail to load sample {}: {}", this.name, e);
             }
         } else {
             this.data = data;

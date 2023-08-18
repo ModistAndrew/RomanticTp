@@ -5,15 +5,11 @@ import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.midi.MidiFilter;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
-import modist.romantictp.client.sound.util.MathHelper;
-import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.client.instrument.InstrumentPlayer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
@@ -55,7 +51,6 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
             this.y = player.getPos().y;
             this.z = player.getPos().z;
             this.volume = player.getVolume();
-            //updateVolumeAndPan();
             generateParticle();
             updateInstrument();
             checkSequence();
@@ -63,14 +58,6 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
                 destroy();
             }
         }
-    }
-
-    private void updateVolumeAndPan() {
-        Player listener = Minecraft.getInstance().player;
-        midiFilter.send(MidiHelper.message(ShortMessage.CONTROL_CHANGE, 7,
-                MathHelper.getVolumeForRelativeNotePosition(listener.position(), player.getPos())), -1);
-        midiFilter.send(MidiHelper.message(ShortMessage.CONTROL_CHANGE, 10,
-                MathHelper.getLRPanForRelativeNotePosition(listener.position(), player.getPos(), listener.getYHeadRot())), -1);
     }
 
     private void generateParticle() {
@@ -99,7 +86,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.instrument = instrumentNow;
         this.hasReverbHelmet = hasReverbHelmetNow;
         this.midiFilter.setInstrument(this.instrument);
-        synthesizerWrapper.dataLine().setReverb(hasReverbHelmet ? ReverbType.CONCERT_HALL : this.instrument.reverb());
+        synthesizerWrapper.dataLine().setReverb(hasReverbHelmet ? ReverbType.SUPER : this.instrument.reverb());
         //reverb helmet can override instrument reverb
     }
 

@@ -43,12 +43,13 @@ public class CommonEventHandler {
         if (event.getOutput().getItem() instanceof ScoreItem scoreItem) {
             Player player = event.getEntity();
             if (player.level().isClientSide) {
-                MidiHelper.MidiInfo info = scoreItem.setMidiData(event.getOutput());
+                MidiHelper.MidiInfo info = scoreItem.setMidiData(event.getOutput(), event.getOutput().getHoverName().getString());
                 NetworkHandler.sendToServer(new ScoreSyncPacket(player.getId(), info));
             } else {
                 scoreToBeFilled.put(player.getId(), event.getOutput());
                 checkFill(player.getId());
             }
+            event.getOutput().removeTagKey("display"); //remove the ugly name and set them in midiInfo
         }
     }
 

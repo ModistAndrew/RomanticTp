@@ -18,6 +18,6 @@ public interface TooltipProvider {
     }
 
     static void addTooltip(String s, List<Component> pTooltip, ChatFormatting... pFormats) {
-        pTooltip.add(Component.translatable(PREFIX + s).withStyle(pFormats));
+        pTooltip.add(Component.literal(s).withStyle(pFormats));
     }
 }

@@ -25,7 +25,7 @@ public class MidiFilter implements Receiver {
         }
         this.instrument = instrument;
         updateInstrument();
-    }
+    } 
 
     public int getLastNote() {
         return lastNote;

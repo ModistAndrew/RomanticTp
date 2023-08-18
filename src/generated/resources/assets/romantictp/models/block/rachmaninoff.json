@@ -1,0 +1,6 @@
+{
+  "parent": "romantictp:block/musician_bust",
+  "textures": {
+    "1": "romantictp:block/rachmaninoff"
+  }
+}

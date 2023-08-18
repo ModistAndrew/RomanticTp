@@ -16,17 +16,14 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class ItemLoader {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RomanticTp.MODID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, RomanticTp.MODID);
-    public static final Map<String, RegistryObject<InstrumentItem>> INSTRUMENTS = new HashMap<>();
-    public static final Map<String, RegistryObject<Item>> MUSICIAN_BUSTS = new HashMap<>();
+    public static final Map<String, RegistryObject<InstrumentItem>> INSTRUMENTS = new LinkedHashMap<>();
+    public static final Map<String, RegistryObject<Item>> MUSICIAN_BUSTS = new LinkedHashMap<>();
     public static final LazyOptional<List<ItemStack>> INSTRUMENT_LIST = LazyOptional.of(ItemLoader::createInstrumentList);
     public static final RegistryObject<ScoreItem> SCORE = ITEMS.register("score", ScoreItem::new);
     public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));

@@ -1,17 +1,17 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.util.StringHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import org.apache.commons.compress.utils.FileNameUtils;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MidiFileLoader implements ResourceManagerReloadListener {
-    public HashMap<String, byte[]> resourceMap = new HashMap<>();
+    public Map<String, byte[]> resourceMap = new TreeMap<>();
 
     private static final MidiFileLoader instance = new MidiFileLoader();
 
@@ -30,7 +30,11 @@ public class MidiFileLoader implements ResourceManagerReloadListener {
             try {
                 String path = l.getPath();
                 String name = path.substring(5, path.length() - 4); //delete "midi/" and "mid"
-                resourceMap.put(name, r.open().readAllBytes());
+                if(StringHelper.validMidiName(name)) {
+                    resourceMap.put(name, r.open().readAllBytes());
+                } else {
+                    RomanticTp.LOGGER.warn("Midi file named {} should contain at most 2 - to split name, author and section. Skipping.", name);
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
