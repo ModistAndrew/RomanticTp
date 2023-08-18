@@ -24,10 +24,10 @@ public class AlChannel extends Channel {  //used for AlDataLine to pass data to 
     }
 
     public static AlChannel create() {
-        int[] aint = new int[1];
-        AL10.alGenSources(aint);
+        int[] aInt = new int[1];
+        AL10.alGenSources(aInt);
         AlHelper.checkALError();
-        return new AlChannel(aint[0]);
+        return new AlChannel(aInt[0]);
     }
 
     @Override

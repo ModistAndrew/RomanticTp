@@ -1,7 +1,6 @@
 package modist.romantictp.common.entity;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;

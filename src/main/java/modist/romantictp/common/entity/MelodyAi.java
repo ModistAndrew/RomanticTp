@@ -3,17 +3,9 @@ package modist.romantictp.common.entity;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,21 +16,11 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
-public class MelodyAi {
-    private static final float SPEED_MULTIPLIER_WHEN_IDLING = 1.0F;
-    private static final float SPEED_MULTIPLIER_WHEN_FOLLOWING_DEPOSIT_TARGET = 2.25F;
-    private static final float SPEED_MULTIPLIER_WHEN_RETRIEVING_ITEM = 1.75F;
-    private static final float SPEED_MULTIPLIER_WHEN_PANICKING = 2.5F;
-    private static final int CLOSE_ENOUGH_TO_TARGET = 4;
-    private static final int TOO_FAR_FROM_TARGET = 16;
-    private static final int MAX_LOOK_DISTANCE = 6;
-    private static final int MIN_WAIT_DURATION = 30;
-    private static final int MAX_WAIT_DURATION = 60;
-    private static final int TIME_TO_FORGET_NOTEBLOCK = 600;
-    private static final int DISTANCE_TO_WANTED_ITEM = 32;
-    private static final int GIVE_ITEM_TIMEOUT_DURATION = 20;
-    private static final UniformInt TIME_BETWEEN_LONG_JUMPS = UniformInt.of(600, 1200);
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Predicate;
 
+public class MelodyAi {
     protected static Brain<?> makeBrain(Brain<Melody> pBrain) {
         initCoreActivity(pBrain);
         initIdleActivity(pBrain);
@@ -58,6 +40,7 @@ public class MelodyAi {
                 new CountDownCooldownTicks(MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS)));
     }
 
+    @SuppressWarnings("deprecation")
     private static void initIdleActivity(Brain<Melody> pBrain) {
         pBrain.addActivityWithConditions(Activity.IDLE, ImmutableList.of(
                 Pair.of(0, GoToWantedItem.create((p_218428_) -> true, 1.75F, true, 32)),
@@ -75,25 +58,12 @@ public class MelodyAi {
         pMelody.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.IDLE));
     }
 
-    public static void hearNoteblock(LivingEntity pEntity, BlockPos pPos) {
-        Brain<?> brain = pEntity.getBrain();
-        GlobalPos globalpos = GlobalPos.of(pEntity.level().dimension(), pPos);
-        Optional<GlobalPos> optional = brain.getMemory(MemoryModuleType.LIKED_NOTEBLOCK_POSITION);
-        if (optional.isEmpty()) {
-            brain.setMemory(MemoryModuleType.LIKED_NOTEBLOCK_POSITION, globalpos);
-            brain.setMemory(MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS, 600);
-        } else if (optional.get().equals(globalpos)) {
-            brain.setMemory(MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS, 600);
-        }
-
-    }
-
     private static Optional<PositionTracker> getItemDepositPosition(LivingEntity p_218424_) {
         Brain<?> brain = p_218424_.getBrain();
         Optional<GlobalPos> optional = brain.getMemory(MemoryModuleType.LIKED_NOTEBLOCK_POSITION);
         if (optional.isPresent()) {
             GlobalPos globalpos = optional.get();
-            if (shouldDepositItemsAtLikedNoteblock(p_218424_, brain, globalpos)) {
+            if (shouldDepositItemsAtLikedNoteBlock(p_218424_, brain, globalpos)) {
                 return Optional.of(new BlockPosTracker(globalpos.pos().above()));
             }
 
@@ -108,16 +78,14 @@ public class MelodyAi {
         return brain.hasMemoryValue(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM);
     }
 
-    private static boolean shouldDepositItemsAtLikedNoteblock(LivingEntity pEntity, Brain<?> pBrain, GlobalPos pPos) {
+    private static boolean shouldDepositItemsAtLikedNoteBlock(LivingEntity pEntity, Brain<?> pBrain, GlobalPos pPos) {
         Optional<Integer> optional = pBrain.getMemory(MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS);
         Level level = pEntity.level();
         return level.dimension() == pPos.dimension() && level.getBlockState(pPos.pos()).is(Blocks.NOTE_BLOCK) && optional.isPresent();
     }
 
     private static Optional<PositionTracker> getLikedPlayerPositionTracker(LivingEntity pEntity) {
-        return getLikedPlayer(pEntity).map((p_218409_) -> {
-            return new EntityTracker(p_218409_, true);
-        });
+        return getLikedPlayer(pEntity).map((p_218409_) -> new EntityTracker(p_218409_, true));
     }
 
     public static Optional<ServerPlayer> getLikedPlayer(LivingEntity pEntity) {
@@ -126,8 +94,7 @@ public class MelodyAi {
             Optional<UUID> optional = pEntity.getBrain().getMemory(MemoryModuleType.LIKED_PLAYER);
             if (optional.isPresent()) {
                 Entity entity = serverlevel.getEntity(optional.get());
-                if (entity instanceof ServerPlayer) {
-                    ServerPlayer serverplayer = (ServerPlayer) entity;
+                if (entity instanceof ServerPlayer serverplayer) {
                     if ((serverplayer.gameMode.isSurvival() || serverplayer.gameMode.isCreative()) && serverplayer.closerThan(pEntity, 64.0D)) {
                         return Optional.of(serverplayer);
                     }

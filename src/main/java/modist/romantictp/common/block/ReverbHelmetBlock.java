@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ReverbHelmetBlock extends HorizontalDirectionalBlock implements Equipable {
@@ -25,6 +24,7 @@ public class ReverbHelmetBlock extends HorizontalDirectionalBlock implements Equ
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return pState.getValue(FACING).getAxis() == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
     }

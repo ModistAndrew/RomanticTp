@@ -7,7 +7,6 @@ import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.entity.EntityLoader;
 import modist.romantictp.common.item.ItemLoader;
 import modist.romantictp.common.village.VillageLoader;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

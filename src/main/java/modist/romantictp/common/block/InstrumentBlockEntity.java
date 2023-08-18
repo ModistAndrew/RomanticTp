@@ -1,6 +1,5 @@
 package modist.romantictp.common.block;
 
-import modist.romantictp.common.instrument.Instrument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -10,9 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 public class InstrumentBlockEntity extends BlockEntity {
     private ItemStack instrument = ItemStack.EMPTY;

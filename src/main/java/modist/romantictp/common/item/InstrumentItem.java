@@ -1,23 +1,16 @@
 package modist.romantictp.common.item;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import modist.romantictp.client.item.InstrumentAnim;
 import modist.romantictp.common.block.AutoPlayerBlock;
 import modist.romantictp.common.block.InstrumentBlock;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.util.ItemDisplayProvider;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;

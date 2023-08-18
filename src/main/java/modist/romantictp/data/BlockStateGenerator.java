@@ -2,12 +2,8 @@ package modist.romantictp.data;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.BlockLoader;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockStateGenerator extends BlockStateProvider {
@@ -37,8 +33,6 @@ public class BlockStateGenerator extends BlockStateProvider {
                 });
         BlockLoader.MUSICIAN_BUSTS.forEach((s, b) ->
                 simpleBlockItem(b.get(), this.models().getExistingFile(modLoc(s))));
-        BlockLoader.INSTRUMENTS.forEach((s, b) -> {
-            simpleBlock(b.get(), this.models().getExistingFile(modLoc("instrument")));
-        });
+        BlockLoader.INSTRUMENTS.forEach((s, b) -> simpleBlock(b.get(), this.models().getExistingFile(modLoc("instrument"))));
     }
 }

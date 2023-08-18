@@ -2,7 +2,6 @@ package modist.romantictp.data;
 
 import modist.romantictp.RomanticTp;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.data.event.GatherDataEvent;

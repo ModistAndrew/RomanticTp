@@ -1,6 +1,5 @@
 package modist.romantictp.client.sound.util;
 
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.util.TooltipProvider;
 import net.minecraft.ChatFormatting;
@@ -9,7 +8,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-import javax.sound.midi.*;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.ShortMessage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;

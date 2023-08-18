@@ -3,16 +3,11 @@ package modist.romantictp.client.block.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import modist.romantictp.RomanticTp;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Quaternionf;
 
@@ -32,8 +27,6 @@ public class AutoPlayerRenderer implements BlockEntityRenderer<AutoPlayerBlockEn
                 pPoseStack.translate(0.5D, 0.5D, 0.5D);
                 long time = System.currentTimeMillis();
                 float angle = InstrumentRenderer.getAngle(time, 5);
-                //float trans = InstrumentRenderer.diffFunction(time, 1000, 0.0002F);
-                //pPoseStack.translate(0, trans, 0);
                 pPoseStack.mulPose(new Quaternionf().rotationY(angle));
                 pPoseStack.translate(-0.5D, -0.5D, -0.5D);
             }

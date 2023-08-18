@@ -1,6 +1,5 @@
 package modist.romantictp.common.block;
 
-import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
@@ -33,6 +32,7 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (level.getBlockEntity(blockPos) instanceof AutoPlayerBlockEntity blockEntity) {
@@ -52,6 +52,7 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if(pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity) {
             blockEntity.updateStatus();
@@ -59,11 +60,13 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean hasAnalogOutputSignal(BlockState pState) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
         return pLevel.getBlockEntity(pPos) instanceof AutoPlayerBlockEntity blockEntity &&
                 blockEntity.isPlaying() ? 15 : 0;
@@ -80,6 +83,7 @@ public class AutoPlayerBlock extends Block implements EntityBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if(pLevel.getBlockState(pPos.above()).getBlock() instanceof InstrumentBlock) {
             pLevel.destroyBlock(pPos.above(), true);

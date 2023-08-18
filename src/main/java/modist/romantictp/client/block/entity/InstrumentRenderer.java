@@ -2,18 +2,12 @@ package modist.romantictp.client.block.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import modist.romantictp.common.block.InstrumentBlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 public class InstrumentRenderer implements BlockEntityRenderer<InstrumentBlockEntity> {
     private final ItemRenderer itemRenderer;

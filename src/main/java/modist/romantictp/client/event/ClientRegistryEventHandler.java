@@ -5,29 +5,22 @@ import modist.romantictp.client.block.entity.AutoPlayerRenderer;
 import modist.romantictp.client.block.entity.InstrumentRenderer;
 import modist.romantictp.client.entity.MelodyModel;
 import modist.romantictp.client.entity.MelodyRenderer;
+import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.client.sound.loader.MidiKeyboardLoader;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
-import modist.romantictp.client.keymap.InstrumentKeyMapping;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.entity.EntityLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.Music;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Arrays;
 
 @Mod.EventBusSubscriber(modid = RomanticTp.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientRegistryEventHandler {

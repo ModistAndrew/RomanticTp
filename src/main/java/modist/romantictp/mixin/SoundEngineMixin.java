@@ -1,13 +1,11 @@
 package modist.romantictp.mixin;
 
 import com.mojang.blaze3d.audio.Library;
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.config.RomanticTpConfig;
+import modist.romantictp.client.sound.AlChannel;
 import modist.romantictp.client.sound.InstrumentSoundInstance;
 import modist.romantictp.client.sound.InstrumentSoundManager;
-import modist.romantictp.client.sound.AlChannel;
 import modist.romantictp.client.sound.efx.EFXManager;
-import modist.romantictp.client.sound.util.AudioHelper;
 import modist.romantictp.mixininterface.IChannelAccessSpecial;
 import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -58,7 +56,7 @@ public class SoundEngineMixin {
     }
 
     @Redirect(method = "tickNonPaused", at = @At(value = "INVOKE", target = "Ljava/util/List;remove(Ljava/lang/Object;)Z"))
-    public boolean remove(List<SoundInstance> list, Object instance) { //TODO better mixin way?
+    public boolean remove(List<SoundInstance> list, Object instance) {
         if(instance instanceof SoundInstance && !(instance instanceof InstrumentSoundInstance)) {
             return list.remove(instance);
         }

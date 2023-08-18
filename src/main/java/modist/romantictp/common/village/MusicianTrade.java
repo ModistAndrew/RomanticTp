@@ -3,14 +3,12 @@ package modist.romantictp.common.village;
 import modist.romantictp.common.item.ItemLoader;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MusicianTrade {

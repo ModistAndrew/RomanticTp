@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 //used on server to manage when the sequence should stop
 @AutoRegisterCapability
 public interface ScoreTicker extends INBTSerializable<CompoundTag> {
-    Capability<ScoreTicker> SCORE_TICKER = CapabilityManager.get(new CapabilityToken<ScoreTicker>() {
+    Capability<ScoreTicker> SCORE_TICKER = CapabilityManager.get(new CapabilityToken<>() {
     });
 
     void start(long maxTick);
@@ -79,13 +79,10 @@ public interface ScoreTicker extends INBTSerializable<CompoundTag> {
     }
 
     class ScoreTickerProvider implements ICapabilitySerializable<CompoundTag> {
-        @Nullable
-        private final BlockEntity blockEntity;
         private final ScoreTicker backend;
         private final LazyOptional<ScoreTicker> optionalData;
 
         public ScoreTickerProvider(BlockEntity blockEntity) {
-            this.blockEntity = blockEntity;
             this.backend = new ScoreTicker.ScoreTickerImpl(blockEntity);
             this.optionalData = LazyOptional.of(() -> backend);
         }

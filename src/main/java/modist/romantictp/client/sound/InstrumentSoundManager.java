@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 //management of sound instance, creating, pausing, resuming, destroying
 //thus providing method sending midi message and starting sequence and broadcasting (close is managed by soundInstance tick automatically)
 public class InstrumentSoundManager {
-    private static InstrumentSoundManager instance = new InstrumentSoundManager();
+    private static final InstrumentSoundManager instance = new InstrumentSoundManager();
     private final Map<InstrumentPlayer, InstrumentSoundInstance> soundInstanceCache = new ConcurrentHashMap<>();
 
     public static InstrumentSoundManager getInstance() {

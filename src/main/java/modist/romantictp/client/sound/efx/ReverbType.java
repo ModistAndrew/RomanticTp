@@ -48,13 +48,6 @@ public record ReverbType(String name, float volume, float density, float diffusi
         EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_LFREFERENCE, lfReference);
         EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, 1F);
         EXTEfx.alEffecti(reverb, EXTEfx.AL_EAXREVERB_DECAY_HFLIMIT, decayHFLimit);
-
-//        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_GAIN, 1F);
-//        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_GAINHF, 1F);
-//        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_DECAY_TIME, 20F);
-//        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_REFLECTIONS_GAIN, 3.16F);
-//        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_LATE_REVERB_GAIN, 10.0F);
-//        EXTEfx.alEffectf(reverb, EXTEfx.AL_EAXREVERB_AIR_ABSORPTION_GAINHF, 1.0F);
     }
 
     private float m(float f, float max){

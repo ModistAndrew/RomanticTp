@@ -3,7 +3,6 @@ package modist.romantictp.common.entity;
 import com.google.common.collect.ImmutableList;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Dynamic;
-import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.InstrumentItem;
 import modist.romantictp.common.item.ScoreItem;
 import net.minecraft.core.BlockPos;
@@ -80,12 +79,13 @@ public class Melody extends PathfinderMob {
         return MelodyAi.makeBrain(this.brainProvider().makeBrain(pDynamic));
     }
 
+    @SuppressWarnings("unchecked")
     public Brain<Melody> getBrain() {
         return (Brain<Melody>) super.getBrain();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.FLYING_SPEED, (double) 0.1F).add(Attributes.MOVEMENT_SPEED, (double) 0.1F).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.FOLLOW_RANGE, 48.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.FLYING_SPEED, 0.1F).add(Attributes.MOVEMENT_SPEED, 0.1F).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.FOLLOW_RANGE, 48.0D);
     }
 
     protected PathNavigation createNavigation(Level pLevel) {
@@ -107,7 +107,7 @@ public class Melody extends PathfinderMob {
             if (this.isInWater()) {
                 this.moveRelative(0.02F, pTravelVector);
                 this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale((double) 0.8F));
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.8F));
             } else if (this.isInLava()) {
                 this.moveRelative(0.02F, pTravelVector);
                 this.move(MoverType.SELF, this.getDeltaMovement());
@@ -115,7 +115,7 @@ public class Melody extends PathfinderMob {
             } else {
                 this.moveRelative(this.getSpeed(), pTravelVector);
                 this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale((double) 0.91F));
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.91F));
             }
         }
 
@@ -154,10 +154,6 @@ public class Melody extends PathfinderMob {
     protected SoundEvent getDeathSound() {
         return SoundEvents.ALLAY_DEATH;
     }
-
-//    protected float getSoundVolume() {
-//        return 0.4F;
-//    }
 
     protected void customServerAiStep() {
         this.level().getProfiler().push("MelodyBrain");
@@ -359,9 +355,7 @@ public class Melody extends PathfinderMob {
 
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        VibrationSystem.Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData).resultOrPartial(LOGGER::error).ifPresent((p_218353_) -> {
-            pCompound.put("listener", p_218353_);
-        });
+        VibrationSystem.Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData).resultOrPartial(LOGGER::error).ifPresent((p_218353_) -> pCompound.put("listener", p_218353_));
         pCompound.putLong("DuplicationCooldown", this.duplicationCooldown);
         pCompound.putBoolean("CanDuplicate", this.canDuplicate());
     }
@@ -369,12 +363,10 @@ public class Melody extends PathfinderMob {
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         if (pCompound.contains("listener", 10)) {
-            VibrationSystem.Data.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, pCompound.getCompound("listener"))).resultOrPartial(LOGGER::error).ifPresent((p_281082_) -> {
-                this.vibrationData = p_281082_;
-            });
+            VibrationSystem.Data.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, pCompound.getCompound("listener"))).resultOrPartial(LOGGER::error).ifPresent((p_281082_) -> this.vibrationData = p_281082_);
         }
 
-        this.duplicationCooldown = (long) pCompound.getInt("DuplicationCooldown");
+        this.duplicationCooldown = pCompound.getInt("DuplicationCooldown");
         this.entityData.set(DATA_CAN_DUPLICATE, pCompound.getBoolean("CanDuplicate"));
     }
 

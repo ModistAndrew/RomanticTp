@@ -15,22 +15,17 @@ public class AlHelper {
     }
 
     private static String alErrorToString(int pErrorCode) {
-        switch (pErrorCode) {
-            case 40961:
-                return "Invalid name parameter.";
-            case 40962:
-                return "Invalid enumerated parameter value.";
-            case 40963:
-                return "Invalid parameter parameter value.";
-            case 40964:
-                return "Invalid operation.";
-            case 40965:
-                return "Unable to allocate memory.";
-            default:
-                return "An unrecognized error occurred.";
-        }
+        return switch (pErrorCode) {
+            case 40961 -> "Invalid name parameter.";
+            case 40962 -> "Invalid enumerated parameter value.";
+            case 40963 -> "Invalid parameter parameter value.";
+            case 40964 -> "Invalid operation.";
+            case 40965 -> "Unable to allocate memory.";
+            default -> "An unrecognized error occurred.";
+        };
     }
 
+    @SuppressWarnings("unused")
     public static void printSource(int source) {
         RomanticTp.LOGGER.info("Status of {}: {}", source, AL10.alGetSourcei(source, AL10.AL_SOURCE_STATE));
         RomanticTp.LOGGER.info("Queued buffers of {}: {}", source, AL10.alGetSourcei(source, AL10.AL_BUFFERS_QUEUED));

@@ -14,9 +14,6 @@ import java.util.Set;
 public class CountingChannelPoolMixin implements ICountingChannelPoolSpecial {
     @Shadow
     @Final
-    private int limit; //ignore limit?
-    @Shadow
-    @Final
     private Set<Channel> activeChannels;
 
 

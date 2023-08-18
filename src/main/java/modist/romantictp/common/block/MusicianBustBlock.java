@@ -24,6 +24,7 @@ public class MusicianBustBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return pState.getValue(FACING).getAxis() == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
     }

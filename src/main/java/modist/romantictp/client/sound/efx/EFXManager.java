@@ -6,14 +6,11 @@ import org.lwjgl.openal.AL11;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.EXTEfx;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 public class EFXManager {
     private final HashMap<ReverbType, Integer> auxFXSlots = new HashMap<>();
     private static EFXManager instance;
-    private static final Random RANDOM = new Random();
 
     public static void init() {
         instance = new EFXManager();

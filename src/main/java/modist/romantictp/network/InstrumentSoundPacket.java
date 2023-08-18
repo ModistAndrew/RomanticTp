@@ -1,14 +1,8 @@
 package modist.romantictp.network;
 
-import modist.romantictp.client.instrument.InstrumentPlayer;
-import modist.romantictp.client.instrument.InstrumentPlayerManager;
-import modist.romantictp.client.sound.InstrumentSoundManager;
 import modist.romantictp.client.sound.util.MidiHelper;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
 import javax.sound.midi.ShortMessage;

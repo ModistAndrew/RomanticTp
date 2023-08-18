@@ -19,7 +19,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public class InstrumentBlock extends Block implements EntityBlock {
     public final Instrument defaultInstrument;
@@ -46,21 +45,25 @@ public class InstrumentBlock extends Block implements EntityBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Shapes.block();
     }
 
     @Deprecated
+    @SuppressWarnings("deprecation")
     public VoxelShape getCollisionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Shapes.empty();
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             if (pLevel.getBlockEntity(pPos) instanceof InstrumentBlockEntity blockEntity) {
