@@ -65,6 +65,6 @@ public class NetworkHandler {
     public static <MSG> void broadcast(@Nullable ServerPlayer pExcept, LivingEntity entity, MSG packet) {
         INSTANCE.send(PacketDistributor.NEAR.with
                 (() -> new PacketDistributor.TargetPoint
-                        (pExcept, entity.getX(), entity.getY(), entity.getZ(), AudioHelper.MAX_DISTANCE, entity.level().dimension())), packet);
+                        (pExcept, entity.getX(), entity.getY(), entity.getZ(), 64, entity.level().dimension())), packet);
     }
 }

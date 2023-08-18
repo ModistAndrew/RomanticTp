@@ -7,7 +7,6 @@ import java.nio.ShortBuffer;
 
 public class AudioHelper {
     public static final AudioFormat AUDIO_FORMAT = new AudioFormat(44100, 16, 1, true, false);
-    public static final int MAX_DISTANCE = 16; //correspond with sounds.json
 
     public static ByteBuffer convertAudioBytes(byte[] audio_bytes, boolean two_bytes_data, ByteOrder order) {
         ByteBuffer dest = ByteBuffer.allocateDirect(audio_bytes.length);

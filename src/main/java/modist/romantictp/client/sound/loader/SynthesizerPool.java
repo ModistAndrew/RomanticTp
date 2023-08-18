@@ -1,6 +1,7 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
+import modist.romantictp.client.config.RomanticTpConfig;
 import modist.romantictp.client.sound.AlDataLine;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
 import modist.romantictp.client.sound.util.AudioHelper;
@@ -70,7 +71,7 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
                 SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
                 AlDataLine alDataLine = new AlDataLine(sourceDataLine);
                 Map<String, Object> params = new HashMap<>();
-                params.put("jitter correction", true); //delay may be higher
+                params.put("jitter correction", RomanticTpConfig.JITTER_CORRECTION.get());
                 synthesizer.open(alDataLine, params);
                 if (SoundbankLoader.getInstance().soundbank != null) {
                     synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);

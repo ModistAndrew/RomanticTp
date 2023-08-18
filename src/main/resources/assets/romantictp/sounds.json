@@ -3,7 +3,6 @@
     "sounds": [
       {
         "name":"romantictp:blank",
-        "attenuation_distance": 16,
         "stream": true
       }
     ],
@@ -13,7 +12,7 @@
     "sounds": [
       {
         "name":"romantictp:natural_trumpet",
-        "attenuation_distance": 16,
+        "attenuation_distance": 64,
         "stream": true
       }
     ],

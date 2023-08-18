@@ -1,5 +1,6 @@
 package modist.romantictp.network;
 
+import modist.romantictp.client.config.RomanticTpConfig;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,7 @@ public class InstrumentSoundBroadcastPacket {
 
     public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
         Entity entity = Minecraft.getInstance().level.getEntity(playerId);
-        if(entity instanceof LivingEntity player) {
+        if(entity instanceof LivingEntity player && player.distanceTo(Minecraft.getInstance().player) <= RomanticTpConfig.MAX_DISTANCE.get()) {
             switch (packet.op) {
                 case 0 -> InstrumentSoundManager.getInstance().sendMessage(InstrumentPlayerManager.getOrCreate(player), packet.midiMessage, packet.timeStamp, false);
                 case 1 -> InstrumentSoundManager.getInstance().attachSequence(InstrumentPlayerManager.getOrCreate(player), packet.midiData, false);
