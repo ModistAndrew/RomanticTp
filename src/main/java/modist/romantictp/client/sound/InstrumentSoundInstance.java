@@ -138,7 +138,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         if(sequencer != null) {
             sequencer.stop();
         }
-        midiFilter.updateInstrument(); //stop all sounds
+        midiFilter.stopAll(); //stop all sounds
     }
 
     public void unpause() {
