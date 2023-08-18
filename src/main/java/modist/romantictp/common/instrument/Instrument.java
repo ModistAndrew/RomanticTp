@@ -1,6 +1,7 @@
 package modist.romantictp.common.instrument;
 
 import modist.romantictp.client.sound.efx.ReverbType;
+import modist.romantictp.client.sound.util.StringHelper;
 import modist.romantictp.util.TooltipProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -38,9 +39,9 @@ public record Instrument(int initialPitch, float initialVolume, int instrumentId
     @Override
     public void addText(List<Component> pTooltip, boolean showItems) {
         if(!isEmpty()) {
-            TooltipProvider.addTooltip("id", instrumentId, pTooltip, ChatFormatting.WHITE);
+            TooltipProvider.addTooltip(StringHelper.ID, instrumentId, pTooltip, ChatFormatting.AQUA);
             if (isSpecial()) {
-                TooltipProvider.addTooltip("reverb", reverb.name(), pTooltip, ChatFormatting.GOLD);
+                TooltipProvider.addTooltip(StringHelper.REVERB, StringHelper.title(reverb.name()), pTooltip, ChatFormatting.GOLD);
             }
         } else {
             TooltipProvider.addTooltip("EMPTY", pTooltip, ChatFormatting.RED);

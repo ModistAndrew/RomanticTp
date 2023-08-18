@@ -2,10 +2,23 @@ package modist.romantictp.client.sound.util;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StringHelper {
     private static final List<String> ARTICLES = List.of("a", "an", "the", "to", "in", "on", "from", "and", "with");
+    public static final List<String> TOOLTIPS = new ArrayList<>();
+    public static final String GROUP = registerTooltip("group");
+    public static final String TIME = registerTooltip("time");
+    public static final String AUTHOR = registerTooltip("author");
+    public static final String SECTION = registerTooltip("section");
+    public static final String ID = registerTooltip("id");
+    public static final String REVERB = registerTooltip("reverb");
+
+    public static String registerTooltip(String s) {
+        TOOLTIPS.add(s);
+        return s;
+    }
 
     public static boolean validMidiName(String path) {
         return path.split("-").length <= 3;

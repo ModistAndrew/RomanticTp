@@ -71,9 +71,8 @@ public class MidiHelper {
             }
             long time = MidiSystem.getSequence(new ByteArrayInputStream(data)).getMicrosecondLength() / 1000000 + 1;
             String[] strings = StringHelper.splitMidiName(path);
-            String name = StringHelper.title(strings[0]);
-            String group = StringHelper.getGroup(name);
-            String displayName = StringHelper.getDisplayName(name);
+            String group = StringHelper.getGroup(strings[0]);
+            String displayName = StringHelper.title(StringHelper.getDisplayName(strings[0]));
             String author = "";
             String section = "";
             if(strings.length > 1) {
@@ -119,16 +118,16 @@ public class MidiHelper {
         @Override
         public void addText(List<Component> pTooltip, boolean advanced) {
             if(!this.isEmpty()) {
-                if(!group.isEmpty()) {
-                    TooltipProvider.addTooltip("group", group, pTooltip, ChatFormatting.GOLD);
-                }
                 TooltipProvider.addTooltip(name, pTooltip, ChatFormatting.WHITE);
-                TooltipProvider.addTooltip("time", getTimeString(), pTooltip, ChatFormatting.AQUA);
+                TooltipProvider.addTooltip(StringHelper.TIME, getTimeString(), pTooltip, ChatFormatting.AQUA);
+                if(!group.isEmpty()) {
+                    TooltipProvider.addTooltip(StringHelper.GROUP, group, pTooltip, ChatFormatting.YELLOW);
+                }
                 if(!author.isEmpty()) {
-                    TooltipProvider.addTooltip("author", author, pTooltip, ChatFormatting.GREEN);
+                    TooltipProvider.addTooltip(StringHelper.AUTHOR, author, pTooltip, ChatFormatting.GREEN);
                 }
                 if(!section.isEmpty()) {
-                    TooltipProvider.addTooltip("section", section, pTooltip, ChatFormatting.GREEN);
+                    TooltipProvider.addTooltip(StringHelper.SECTION, section, pTooltip, ChatFormatting.BLUE);
                 }
             } else {
                 TooltipProvider.addTooltip("EMPTY", pTooltip, ChatFormatting.RED);

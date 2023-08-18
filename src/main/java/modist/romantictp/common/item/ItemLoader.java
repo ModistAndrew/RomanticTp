@@ -29,7 +29,7 @@ public class ItemLoader {
     public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));
     public static final RegistryObject<Item> REVERB_HELMET = ITEMS.register("reverb_helmet", () -> new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties()));
     public static final RegistryObject<Item> NATURAL_TRUMPET = ITEMS.register("natural_trumpet", NaturalTrumpetItem::new);
-    public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody_spawn_egg", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFFFF, new Item.Properties()));
 
     static {
         BlockLoader.INSTRUMENTS.forEach((s, b) -> INSTRUMENTS.put
