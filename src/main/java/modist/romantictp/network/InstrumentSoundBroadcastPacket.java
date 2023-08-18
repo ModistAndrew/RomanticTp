@@ -7,6 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -29,7 +32,13 @@ public class InstrumentSoundBroadcastPacket {
         buf.writeInt(this.playerId);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> contextSupplier) {
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::doHandle));
+        ctx.get().setPacketHandled(true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void doHandle() {
         Entity entity = Minecraft.getInstance().level.getEntity(playerId);
         if(entity instanceof LivingEntity player && player.distanceTo(Minecraft.getInstance().player) <= RomanticTpConfig.MAX_DISTANCE.get()) {
             switch (packet.op) {
