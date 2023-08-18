@@ -34,6 +34,7 @@ public class AutoPlayerRenderer implements BlockEntityRenderer<AutoPlayerBlockEn
                     null, blockRenderer.getBlockModelShaper().getModelManager().getModel(DISC_LOCATION), 1F, 1F, 1F,
                     pPackedLight, pPackedOverlay, ModelData.EMPTY, null);
             pPoseStack.popPose();
+            //TODO: show progress
         }
     }
 }

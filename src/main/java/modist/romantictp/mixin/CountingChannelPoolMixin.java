@@ -18,7 +18,7 @@ public class CountingChannelPoolMixin implements ICountingChannelPoolSpecial {
 
 
     @Override
-    public Channel romanticTp$acquireSpecial() {
+    public Channel romanticTp$acquireSpecial() { //TODO: limit for stream should be higher?
         Channel channel = AlChannel.create();
         if (channel != null) {
             this.activeChannels.add(channel);

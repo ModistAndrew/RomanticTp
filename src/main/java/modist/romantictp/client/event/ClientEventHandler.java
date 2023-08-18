@@ -26,21 +26,21 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void changeSound(PlaySoundSourceEvent event) {
-        if(hasReverbHelmet()) {
+        if (hasReverbHelmet() || event.getSound() instanceof NaturalTrumpetSoundInstance) { //natural trumpet should be SONARE
             EFXManager.getInstance().applyEFX(ReverbType.SUPER, event.getChannel().source);
         }
     }
 
     @SubscribeEvent
     public static void changeSound(PlayStreamingSourceEvent event) {
-        if(hasReverbHelmet() || event.getSound() instanceof NaturalTrumpetSoundInstance) { //natural trumpet should be SONARE
+        if (hasReverbHelmet()) {
             EFXManager.getInstance().applyEFX(ReverbType.SUPER, event.getChannel().source);
         }
     }
 
-    public static boolean hasReverbHelmet(){
+    public static boolean hasReverbHelmet() {
         LocalPlayer player = Minecraft.getInstance().player;
-        return player!=null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get());
+        return player != null && player.getItemBySlot(EquipmentSlot.HEAD).is(ItemLoader.REVERB_HELMET.get());
     }
 
     @SubscribeEvent
@@ -48,7 +48,7 @@ public class ClientEventHandler {
         for (int i = 0; i < 7; i++) {
             Lazy<KeyMapping> k = InstrumentKeyMapping.PITCHES.get(i);
             if (event.getKey() != -1 && event.getKey() == k.get().getKey().getValue()) {
-                if (event.getAction() == InputConstants.PRESS && Minecraft.getInstance().screen==null) { //may be not available, e.g. chatting
+                if (event.getAction() == InputConstants.PRESS && Minecraft.getInstance().screen == null) { //may be not available, e.g. chatting
                     LocalReceiver.getInstance().send
                             (MidiHelper.startMessage(InstrumentKeyMapping.getPitch(i), 80), -1);
                 } else if (event.getAction() == InputConstants.RELEASE) {

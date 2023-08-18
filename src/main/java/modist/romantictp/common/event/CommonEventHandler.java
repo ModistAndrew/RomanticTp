@@ -39,7 +39,7 @@ public class CommonEventHandler {
     private static final Map<Integer, MidiHelper.MidiInfo> cachedData = new HashMap<>(); //cache on server
 
     @SubscribeEvent
-    public static void fillMidiData(AnvilRepairEvent event) {
+    public static void fillMidiData(AnvilRepairEvent event) { //TODO: use our own machine instead of anvil?
         if (event.getOutput().getItem() instanceof ScoreItem scoreItem) {
             Player player = event.getEntity();
             if (player.level().isClientSide) {

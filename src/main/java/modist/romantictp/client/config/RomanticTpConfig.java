@@ -6,8 +6,8 @@ public class RomanticTpConfig {
     public static ForgeConfigSpec CONFIG_SPEC;
     public static ForgeConfigSpec.ConfigValue<String> SOUNDBANK_LOCATION;
     public static ForgeConfigSpec.ConfigValue<String> MIDI_KEYBOARD;
-    public static ForgeConfigSpec.ConfigValue<Boolean> JITTER_CORRECTION;
-    public static ForgeConfigSpec.ConfigValue<Integer> MAX_DISTANCE;
+    public static ForgeConfigSpec.ConfigValue<Boolean> JITTER_CORRECTION; //TODO: optimize and fix delay when preloading auto player. initial count?
+    public static ForgeConfigSpec.ConfigValue<Integer> MAX_DISTANCE; //TODO: stored in auto player?
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
