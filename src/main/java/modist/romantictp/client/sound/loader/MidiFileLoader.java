@@ -1,7 +1,7 @@
 package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.util.StringHelper;
+import modist.romantictp.util.StringHelper;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
@@ -32,7 +32,7 @@ public class MidiFileLoader implements ResourceManagerReloadListener {
                 if(StringHelper.validMidiName(name)) {
                     resourceMap.put(name, r.open().readAllBytes());
                 } else {
-                    RomanticTp.LOGGER.warn("Midi file named {} should contain at most 2 - to split name, author and section. Skipping.", name);
+                    RomanticTp.LOGGER.warn("Midi file named {} should contain at most 2 -- to split name, author and section. Skipping.", name);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

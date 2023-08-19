@@ -57,7 +57,7 @@ public class NetworkHandler {
         INSTANCE.sendToServer(packet);
     }
 
-    public static <MSG> void broadcast(@Nullable ServerPlayer pExcept, LivingEntity entity, MSG packet) {
+    public static <MSG> void broadcast(@Nullable ServerPlayer pExcept, LivingEntity entity, MSG packet) { //check distance on client
         INSTANCE.send(PacketDistributor.NEAR.with
                 (() -> new PacketDistributor.TargetPoint
                         (pExcept, entity.getX(), entity.getY(), entity.getZ(), 64, entity.level().dimension())), packet);

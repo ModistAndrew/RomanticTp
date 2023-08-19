@@ -2,7 +2,7 @@ package modist.romantictp.data;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.keymap.InstrumentKeyMapping;
-import modist.romantictp.client.sound.util.StringHelper;
+import modist.romantictp.util.StringHelper;
 import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.block.MusicianBustBlock;
 import modist.romantictp.common.entity.EntityLoader;

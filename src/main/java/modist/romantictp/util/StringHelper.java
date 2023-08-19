@@ -1,12 +1,15 @@
-package modist.romantictp.client.sound.util;
+package modist.romantictp.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StringHelper {
     private static final List<String> ARTICLES = List.of("a", "an", "the", "to", "in", "on", "from", "and", "with");
+    private static final List<String> ROMAN_NUMERALS =
+            List.of("i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii");
     public static final List<String> TOOLTIPS = new ArrayList<>();
     public static final String GROUP = registerTooltip("group");
     public static final String TIME = registerTooltip("time");
@@ -21,11 +24,11 @@ public class StringHelper {
     }
 
     public static boolean validMidiName(String path) {
-        return path.split("-").length <= 3;
+        return path.split("--").length <= 3;
     }
 
     public static String[] splitMidiName(String path) {
-        return path.split("-");
+        return path.split("--");
     }
 
     public static String getGroup(String name) {
@@ -49,18 +52,11 @@ public class StringHelper {
         return strings[strings.length - 1];
     }
 
-    public static String upperCase(String str) {
-        return StringUtils.capitalize(str);
-    }
-
     public static String title(String str) {
         String[] strings = str.split("_");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < strings.length; i++) {
-            String word = strings[i];
-            if (i == 0 || shouldCapitalize(word)) {
-                word = upperCase(word);
-            }
+            String word = upperCase(i, strings[i]);
             sb.append(word);
             if (i < strings.length - 1) {
                 sb.append(" ");
@@ -69,7 +65,22 @@ public class StringHelper {
         return sb.toString();
     }
 
+    @SuppressWarnings("deprecation")
+    private static String upperCase(int index, String str) {
+        if(shouldCapitalizeAll(str)){
+            return StringUtils.upperCase(str);
+        }
+        if (index==0 || shouldCapitalize(str)) {
+            return WordUtils.capitalize(str.replace('.', ' ')).replace(' ', '.');
+        }
+        return str;
+    }
+
     private static boolean shouldCapitalize(String word) {
         return !ARTICLES.contains(word);
+    }
+
+    private static boolean shouldCapitalizeAll(String word) {
+        return ROMAN_NUMERALS.contains(word);
     }
 }

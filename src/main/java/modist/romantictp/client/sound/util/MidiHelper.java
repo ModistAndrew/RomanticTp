@@ -1,6 +1,7 @@
 package modist.romantictp.client.sound.util;
 
 import modist.romantictp.client.sound.loader.MidiFileLoader;
+import modist.romantictp.util.StringHelper;
 import modist.romantictp.util.TooltipProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -122,14 +123,14 @@ public class MidiHelper {
             if(!this.isEmpty()) {
                 TooltipProvider.addTooltip(name, pTooltip, ChatFormatting.WHITE);
                 TooltipProvider.addTooltip(StringHelper.TIME, getTimeString(), pTooltip, ChatFormatting.AQUA);
-                if(!group.isEmpty()) {
-                    TooltipProvider.addTooltip(StringHelper.GROUP, group, pTooltip, ChatFormatting.YELLOW);
-                }
                 if(!author.isEmpty()) {
                     TooltipProvider.addTooltip(StringHelper.AUTHOR, author, pTooltip, ChatFormatting.GREEN);
                 }
+                if(!group.isEmpty()) {
+                    TooltipProvider.addTooltip(StringHelper.GROUP, group, pTooltip, ChatFormatting.YELLOW);
+                }
                 if(!section.isEmpty()) {
-                    TooltipProvider.addTooltip(StringHelper.SECTION, section, pTooltip, ChatFormatting.BLUE);
+                    TooltipProvider.addTooltip(StringHelper.SECTION, section, pTooltip, ChatFormatting.GOLD);
                 }
             } else {
                 TooltipProvider.addTooltip("EMPTY", pTooltip, ChatFormatting.RED);

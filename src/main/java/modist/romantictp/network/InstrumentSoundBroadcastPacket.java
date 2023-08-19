@@ -38,7 +38,7 @@ public class InstrumentSoundBroadcastPacket {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void doHandle() {
+    public void doHandle() { //check distance on client
         Entity entity = Minecraft.getInstance().level.getEntity(playerId);
         if(entity instanceof LivingEntity player && player.distanceTo(Minecraft.getInstance().player) <= RomanticTpConfig.MAX_DISTANCE.get()) {
             switch (packet.op) {

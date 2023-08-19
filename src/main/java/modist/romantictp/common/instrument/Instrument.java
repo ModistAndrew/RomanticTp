@@ -1,7 +1,7 @@
 package modist.romantictp.common.instrument;
 
 import modist.romantictp.client.sound.efx.ReverbType;
-import modist.romantictp.client.sound.util.StringHelper;
+import modist.romantictp.util.StringHelper;
 import modist.romantictp.util.TooltipProvider;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

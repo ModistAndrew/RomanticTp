@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class AutoPlayerBlockEntity extends BlockEntity {
+public class AutoPlayerBlockEntity extends BlockEntity { //TODO: better broadcast
     private ItemStack score = ItemStack.EMPTY; //count should always be 1
     public Instrument instrument = Instrument.EMPTY; //updated from server
     public boolean powered; //whether is powered
