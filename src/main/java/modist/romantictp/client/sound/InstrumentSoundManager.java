@@ -1,5 +1,8 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.RomanticTp;
+import modist.romantictp.client.sound.loader.SynthesizerPool;
+import modist.romantictp.client.sound.loader.SynthesizerWrapper;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.client.instrument.InstrumentPlayer;
 import modist.romantictp.network.InstrumentSoundPacket;
@@ -31,7 +34,12 @@ public class InstrumentSoundManager {
 
     @Nullable
     private InstrumentSoundInstance tryCreate(InstrumentPlayer player) { //try to create and put. if failed, do nothing and return null
-        InstrumentSoundInstance soundInstance = new InstrumentSoundInstance(player);
+        SynthesizerWrapper synthesizerWrapper = SynthesizerPool.getInstance().request();
+        if(synthesizerWrapper == null) {
+            RomanticTp.LOGGER.warn("Synthesizer out of limit.");
+            return null;
+        }
+        InstrumentSoundInstance soundInstance = new InstrumentSoundInstance(player, synthesizerWrapper);
         Minecraft.getInstance().getSoundManager().play(soundInstance);
         if (checkContains(soundInstance)) {
             soundInstanceCache.put(player, soundInstance);

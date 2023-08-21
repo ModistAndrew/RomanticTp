@@ -1,20 +1,25 @@
 package modist.romantictp.client.sound;
 
 import modist.romantictp.client.sound.efx.ReverbType;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sound.sampled.*;
 import java.util.concurrent.CompletableFuture;
 
 public class AlDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
-    private final CompletableFuture<AlChannel> channel = new CompletableFuture<>();
+    private CompletableFuture<AlChannel> channel = new CompletableFuture<>();
 
     public AlDataLine(SourceDataLine line) {
         this.dataLine = line;
     }
 
-    public void bindChannel(AlChannel channel) {
-        this.channel.complete(channel);
+    public void bindChannel(@Nullable AlChannel channel) {
+        if(channel==null) {
+            this.channel = new CompletableFuture<>();
+        } else {
+            this.channel.complete(channel);
+        }
     }
 
     public void setReverb(ReverbType reverb) { //may have not been completed

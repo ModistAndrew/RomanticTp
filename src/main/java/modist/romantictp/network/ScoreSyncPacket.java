@@ -1,6 +1,6 @@
 package modist.romantictp.network;
 
-import modist.romantictp.client.sound.util.MidiHelper;
+import modist.romantictp.client.sound.util.MidiInfo;
 import modist.romantictp.common.event.CommonEventHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
@@ -9,16 +9,16 @@ import java.util.function.Supplier;
 
 public class ScoreSyncPacket {
     protected final int id;
-    protected final MidiHelper.MidiInfo info;
+    protected final MidiInfo info;
 
-    public ScoreSyncPacket(int id, MidiHelper.MidiInfo info) {
+    public ScoreSyncPacket(int id, MidiInfo info) {
         this.id = id;
         this.info = info;
     }
 
     public ScoreSyncPacket(FriendlyByteBuf byteBuf) {
         this.id = byteBuf.readInt();
-        this.info = new MidiHelper.MidiInfo(byteBuf.readNbt());
+        this.info = new MidiInfo(byteBuf.readNbt());
     }
 
     public void toBytes(FriendlyByteBuf buf) {

@@ -3,6 +3,7 @@ package modist.romantictp.client.sound;
 import modist.romantictp.client.event.ClientEventHandler;
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.efx.ReverbType;
+import modist.romantictp.client.sound.loader.SynthesizerWrapper;
 import modist.romantictp.client.sound.midi.MidiFilter;
 import modist.romantictp.client.sound.loader.SynthesizerPool;
 import modist.romantictp.common.instrument.Instrument;
@@ -18,7 +19,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     //interact with channel and receiver and manage stop
     private final InstrumentPlayer player;
     private final MidiFilter midiFilter;
-    private final SynthesizerPool.SynthesizerWrapper synthesizerWrapper;
+    private final SynthesizerWrapper synthesizerWrapper;
     @Nullable
     private Sequencer sequencer;
     @Nullable
@@ -28,10 +29,10 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
 
     private int lastNote = -1;
 
-    public InstrumentSoundInstance(InstrumentPlayer player) {
+    public InstrumentSoundInstance(InstrumentPlayer player, SynthesizerWrapper synthesizerWrapper) {
         super(SoundEventLoader.BLANK.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
-        this.synthesizerWrapper = SynthesizerPool.getInstance().request();
+        this.synthesizerWrapper = synthesizerWrapper;
         this.midiFilter = new MidiFilter(synthesizerWrapper.receiver());
         this.tick(); //init tick to update instrument, etc
     }
@@ -73,7 +74,7 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         InstrumentSoundManager.getInstance().remove(player);
         InstrumentPlayerManager.remove(player);
         closeSequencer();
-        SynthesizerPool.getInstance().delete(this.synthesizerWrapper);
+        SynthesizerPool.getInstance().free(this.synthesizerWrapper);
         this.stop();
     }
 

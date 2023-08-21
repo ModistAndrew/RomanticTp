@@ -8,7 +8,7 @@ public class RomanticTpConfig {
     public static ForgeConfigSpec.ConfigValue<String> MIDI_KEYBOARD;
     public static ForgeConfigSpec.ConfigValue<Boolean> JITTER_CORRECTION; //TODO: optimize and fix delay when preloading auto player. initial count?
     public static ForgeConfigSpec.ConfigValue<Integer> MAX_DISTANCE; //TODO: stored in auto player?
-    public static ForgeConfigSpec.ConfigValue<Integer> INITIAL_SYNTHESIZER_COUNT;
+    public static ForgeConfigSpec.ConfigValue<Integer> SYNTHESIZER_POOL_SIZE;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -21,8 +21,8 @@ public class RomanticTpConfig {
                 .define("jitter_correction", true);
         MAX_DISTANCE = builder.comment("The radius of the area instrument sounds spread over")
                 .define("max_distance", 32);
-        INITIAL_SYNTHESIZER_COUNT = builder.comment("The initial synthesizer count created as a buffer")
-                .define("initial_synthesizer_count", 32);
+        SYNTHESIZER_POOL_SIZE = builder.comment("The most instruments to be loaded at a time")
+                .define("initial_synthesizer_count", 64);
         CONFIG_SPEC = builder.build();
     }
 }

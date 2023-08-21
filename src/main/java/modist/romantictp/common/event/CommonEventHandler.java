@@ -1,7 +1,7 @@
 package modist.romantictp.common.event;
 
 import modist.romantictp.RomanticTp;
-import modist.romantictp.client.sound.util.MidiHelper;
+import modist.romantictp.client.sound.util.MidiInfo;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.InstrumentItem;
@@ -36,14 +36,14 @@ import java.util.Map;
 @Mod.EventBusSubscriber(modid = RomanticTp.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonEventHandler {
     private static final Map<Integer, ItemStack> scoreToBeFilled = new HashMap<>(); //cache on server
-    private static final Map<Integer, MidiHelper.MidiInfo> cachedData = new HashMap<>(); //cache on server
+    private static final Map<Integer, MidiInfo> cachedData = new HashMap<>(); //cache on server
 
     @SubscribeEvent
     public static void fillMidiData(AnvilRepairEvent event) { //TODO: use our own machine instead of anvil?
         if (event.getOutput().getItem() instanceof ScoreItem scoreItem) {
             Player player = event.getEntity();
             if (player.level().isClientSide) {
-                MidiHelper.MidiInfo info = scoreItem.setMidiData(event.getOutput(), event.getOutput().getHoverName().getString());
+                MidiInfo info = scoreItem.setMidiData(event.getOutput(), event.getOutput().getHoverName().getString());
                 NetworkHandler.sendToServer(new ScoreSyncPacket(player.getId(), info));
             } else {
                 scoreToBeFilled.put(player.getId(), event.getOutput());
@@ -53,7 +53,7 @@ public class CommonEventHandler {
         }
     }
 
-    public static void setData(int id, MidiHelper.MidiInfo info) { //called from server
+    public static void setData(int id, MidiInfo info) { //called from server
         cachedData.put(id, info);
         checkFill(id);
     }
