@@ -22,8 +22,6 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     private final SynthesizerWrapper synthesizerWrapper;
     @Nullable
     private Sequencer sequencer;
-    @Nullable
-    private Sequencer sequencerCache;
     private Instrument instrument = Instrument.EMPTY;
     private boolean hasReverbHelmet;
 
@@ -62,9 +60,9 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
     }
 
     private void generateParticle() {
-        if(this.lastNote != midiFilter.getLastNote()){
+        if (this.lastNote != midiFilter.getLastNote()) {
             this.lastNote = midiFilter.getLastNote();
-            if(lastNote >= 0) {
+            if (lastNote >= 0) {
                 player.addParticle(lastNote);
             }
         }
@@ -106,44 +104,28 @@ public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
         this.sequencer = null;
     }
 
-    public void attachSequencer(Sequence sequence, boolean shouldStart) { //if false, only preparing
+    public void attachSequencer(Sequence sequence) {
         try {
-            this.sequencerCache = MidiSystem.getSequencer(false);
-            sequencerCache.open();
-            sequencerCache.setSequence(sequence);
-            if(shouldStart) {
-                closeSequencer();
-                this.sequencer = sequencerCache;
-                sequencer.getTransmitter().setReceiver(midiFilter);
-                sequencer.start();
-            }
+            closeSequencer();
+            this.sequencer = MidiSystem.getSequencer(false);
+            sequencer.open();
+            sequencer.setSequence(sequence);
+            sequencer.getTransmitter().setReceiver(midiFilter);
+            sequencer.start();
         } catch (MidiUnavailableException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void startSequencer() {
-        if(sequencerCache != null) {
-            try {
-                closeSequencer();
-                this.sequencer = sequencerCache;
-                sequencer.getTransmitter().setReceiver(midiFilter);
-                sequencer.start();
-            } catch (MidiUnavailableException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     public void pause() {
-        if(sequencer != null) {
+        if (sequencer != null) {
             sequencer.stop();
         }
         midiFilter.stopAll(); //stop all sounds
     }
 
     public void unpause() {
-        if(sequencer != null) {
+        if (sequencer != null) {
             sequencer.start();
         }
     }

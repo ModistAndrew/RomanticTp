@@ -2,7 +2,6 @@ package modist.romantictp.common.block;
 
 import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
-import modist.romantictp.client.sound.util.ClientHelper;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.instrument.ScoreTicker;
 import modist.romantictp.common.item.InstrumentItem;
@@ -96,13 +95,9 @@ public class AutoPlayerBlockEntity extends BlockEntity { //TODO: better broadcas
     }
 
     private void startSequence() { //client
-        InstrumentSoundManager.getInstance().startSequence(InstrumentPlayerManager.getOrCreate(this));
-    }
-
-    private void preLoad() { //client
-        if (score.getItem() instanceof ScoreItem scoreItem) {
-            InstrumentSoundManager.getInstance().preLoad(InstrumentPlayerManager.getOrCreate(this),
-                    scoreItem.getMidiData(score));
+        if(this.score.getItem() instanceof ScoreItem scoreItem) {
+            InstrumentSoundManager.getInstance().attachSequence(InstrumentPlayerManager.getOrCreate(this),
+                    scoreItem.getMidiData(score), false);
         }
     }
 
@@ -148,9 +143,6 @@ public class AutoPlayerBlockEntity extends BlockEntity { //TODO: better broadcas
     @Override
     public void handleUpdateTag(CompoundTag tag) {
         this.load(tag);
-        if(containsScore() && containsInstrument() && ClientHelper.nearToLocalPlayer(this.getBlockPos().getCenter())) {
-            preLoad();
-        }
     }
 
     public void tick() {

@@ -6,7 +6,7 @@ public class RomanticTpConfig {
     public static ForgeConfigSpec CONFIG_SPEC;
     public static ForgeConfigSpec.ConfigValue<String> SOUNDBANK_LOCATION;
     public static ForgeConfigSpec.ConfigValue<String> MIDI_KEYBOARD;
-    public static ForgeConfigSpec.ConfigValue<Boolean> JITTER_CORRECTION; //TODO: optimize and fix delay when preloading auto player. initial count?
+    public static ForgeConfigSpec.ConfigValue<Boolean> JITTER_CORRECTION;
     public static ForgeConfigSpec.ConfigValue<Integer> MAX_DISTANCE; //TODO: stored in auto player?
     public static ForgeConfigSpec.ConfigValue<Integer> SYNTHESIZER_POOL_SIZE;
 
@@ -16,7 +16,7 @@ public class RomanticTpConfig {
                 .define("soundbank_location", "");
         MIDI_KEYBOARD = builder.comment("Optional name of the midi keyboard for midi input")
                 .define("midi_keyboard", "");
-        JITTER_CORRECTION = builder.comment("Jitter correction results in more stable tempo but longer delay")
+        JITTER_CORRECTION = builder.comment("Jitter correction results in more stable tempo but longer delay in input")
                 .comment("When enabled, any block in render thread can cause delay")
                 .define("jitter_correction", true);
         MAX_DISTANCE = builder.comment("The radius of the area instrument sounds spread over")

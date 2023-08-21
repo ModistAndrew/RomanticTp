@@ -2,6 +2,7 @@ package modist.romantictp.client.sound;
 
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.SoundBuffer;
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.util.AlHelper;
@@ -45,6 +46,9 @@ public class AlChannel extends Channel {  //used for AlDataLine to pass data to 
     @Override
     public void destroy() {
         if (this.alive.compareAndSet(true, false)) { //avoid duplication
+            synchronized (pumpCount) {
+                pumpCount.notify(); //unlock AudioPusher Thread
+            }
             this.removeProcessedBuffers(); //stream is null, super will skip
             super.destroy();
         }

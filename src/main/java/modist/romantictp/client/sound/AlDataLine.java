@@ -8,14 +8,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class AlDataLine implements SourceDataLine {
     private final SourceDataLine dataLine;
-    private CompletableFuture<AlChannel> channel = new CompletableFuture<>();
+    private volatile CompletableFuture<AlChannel> channel = new CompletableFuture<>();
 
     public AlDataLine(SourceDataLine line) {
         this.dataLine = line;
     }
 
-    public void bindChannel(@Nullable AlChannel channel) {
+    public void bindChannel(@Nullable AlChannel channel) { //set to null to clear
         if(channel==null) {
+            if(this.channel.isDone()) {
+                this.channel.join().destroy();
+            }
             this.channel = new CompletableFuture<>();
         } else {
             this.channel.complete(channel);
@@ -124,9 +127,6 @@ public class AlDataLine implements SourceDataLine {
     @Override
     public void close() {
         dataLine.close();
-        if(this.channel.isDone()) {
-            this.channel.join().destroy(); //also from here
-        }
     }
 
     @Override

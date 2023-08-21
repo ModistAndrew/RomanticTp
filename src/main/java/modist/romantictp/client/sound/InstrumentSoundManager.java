@@ -71,7 +71,7 @@ public class InstrumentSoundManager {
         if (soundInstance != null) {
             Sequence sequence = MidiHelper.loadSequence(midiData);
             if (sequence != null) {
-                soundInstance.attachSequencer(sequence, true);
+                soundInstance.attachSequencer(sequence);
             }
         }
         if (broadcast) {
@@ -83,23 +83,6 @@ public class InstrumentSoundManager {
         Minecraft.getInstance().getSoundManager().play(new NaturalTrumpetSoundInstance(player));
         if (broadcast) {
             NetworkHandler.sendToServer(new InstrumentSoundPacket());
-        }
-    }
-
-    public void preLoad(@NotNull InstrumentPlayer player, byte[] midiData) { //for autoPlayer
-        InstrumentSoundInstance soundInstance = getSound(player);
-        if (soundInstance != null) {
-            Sequence sequence = MidiHelper.loadSequence(midiData);
-            if (sequence != null) {
-                soundInstance.attachSequencer(sequence, false);
-            }
-        }
-    }
-
-    public void startSequence(@NotNull InstrumentPlayer player) { //for autoPlayer
-        InstrumentSoundInstance soundInstance = getSound(player);
-        if (soundInstance != null) {
-            soundInstance.startSequencer();
         }
     }
 
