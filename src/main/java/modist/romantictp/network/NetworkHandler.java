@@ -37,7 +37,7 @@ public class NetworkHandler {
         INSTANCE.messageBuilder(InstrumentSoundBroadcastPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(InstrumentSoundBroadcastPacket::new)
                 .encoder(InstrumentSoundBroadcastPacket::toBytes)
-                .consumerNetworkThread(InstrumentSoundBroadcastPacket::handle)
+                .consumerMainThread(InstrumentSoundBroadcastPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(ScoreSyncPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)

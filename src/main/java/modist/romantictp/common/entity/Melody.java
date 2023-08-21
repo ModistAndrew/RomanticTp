@@ -48,7 +48,7 @@ import org.slf4j.Logger;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Melody extends PathfinderMob {
+public class Melody extends PathfinderMob { //TODO: bug
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Vec3i ITEM_PICKUP_REACH = new Vec3i(1, 1, 1);
     private static final Ingredient DUPLICATION_ITEM = Ingredient.of(Items.AMETHYST_SHARD);
@@ -141,10 +141,6 @@ public class Melody extends PathfinderMob {
     }
 
     protected void checkFallDamage(double pY, boolean pOnGround, BlockState pState, BlockPos pPos) {
-    }
-
-    protected SoundEvent getAmbientSound() {
-        return this.hasItemInSlot(EquipmentSlot.MAINHAND) ? SoundEvents.ALLAY_AMBIENT_WITH_ITEM : SoundEvents.ALLAY_AMBIENT_WITHOUT_ITEM;
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {

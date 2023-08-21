@@ -47,7 +47,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public float getVolume() {
-            return (90F - entity.getXRot()) / 180F;
+            return entity instanceof net.minecraft.world.entity.player.Player ? (90F-entity.getXRot()) / 180F : 1F;
         }
 
         @Override

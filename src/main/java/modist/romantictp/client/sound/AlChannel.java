@@ -14,7 +14,9 @@ import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AlChannel extends Channel {  //used for AlDataLine to pass data to openAL. ticked by vanilla soundEngine, but simplified.
+public class AlChannel extends Channel {  //used for AlDataLine to pass data to openAL
+    // started and ticked by vanilla soundEngine
+    // destroyed by soundEngine or by AlDataLine
     private final AtomicInteger pumpCount = new AtomicInteger();
     private final int BUFFER_COUNT = 8;
     private final AtomicBoolean alive = new AtomicBoolean(true);
@@ -37,11 +39,11 @@ public class AlChannel extends Channel {  //used for AlDataLine to pass data to 
 
     @Override
     public boolean stopped() {
-        return !this.alive.get(); //only can be stopped by destroy
+        return !this.alive.get(); //only can be stopped by doDestroy
     }
 
     @Override
-    public void destroy() { //called in stopAll
+    public void destroy() {
         if (this.alive.compareAndSet(true, false)) { //avoid duplication
             this.removeProcessedBuffers(); //stream is null, super will skip
             super.destroy();

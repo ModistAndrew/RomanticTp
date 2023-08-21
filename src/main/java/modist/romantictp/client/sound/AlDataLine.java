@@ -119,6 +119,9 @@ public class AlDataLine implements SourceDataLine {
     @Override
     public void close() {
         dataLine.close();
+        if(this.channel.isDone()) {
+            this.channel.join().destroy(); //also from here
+        }
     }
 
     @Override

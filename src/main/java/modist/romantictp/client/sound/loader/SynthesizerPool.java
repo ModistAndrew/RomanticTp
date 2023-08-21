@@ -18,11 +18,9 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     public final List<SynthesizerWrapper> availableSynthesizers = Collections.synchronizedList(new ArrayList<>());
     private static final SynthesizerPool instance = new SynthesizerPool();
 
-    private static final int INITIAL_COUNT = 4;
-
     public void init() {
         availableSynthesizers.clear();
-        for (int i = 0; i < INITIAL_COUNT; i++) {
+        for (int i = 0; i < RomanticTpConfig.INITIAL_SYNTHESIZER_COUNT.get(); i++) {
             create();
         }
     }

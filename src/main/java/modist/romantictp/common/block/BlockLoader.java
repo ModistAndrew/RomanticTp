@@ -30,7 +30,8 @@ public class BlockLoader {
         registerInstrument("cello", Instrument.Builder.of(Instruments.CELLO).build());
         registerInstrument("contrabass", Instrument.Builder.of(Instruments.CONTRABASS).build());
         registerInstrument("strings", Instrument.Builder.of(Instruments.STRINGS).build());
-        registerInstrument("trumpet", Instrument.Builder.of(Instruments.TRUMPET).build());
+        registerInstrument("trumpet", Instrument.Builder.of(Instruments.TRUMPET).build(),
+                                    Instrument.Builder.of(Instruments.TRUMPET).reverb(ReverbType.CONCERT_HALL).build());
         registerInstrument("trombone", Instrument.Builder.of(Instruments.TROMBONE).build());
         registerInstrument("tuba", Instrument.Builder.of(Instruments.TUBA).build());
         registerInstrument("french_horn", Instrument.Builder.of(Instruments.FRENCH_HORN).build());
