@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoreItem extends Item implements ItemDisplayProvider { //TODO: show score with color
+public class ScoreItem extends Item implements ItemDisplayProvider { //TODO: show score better
     public ScoreItem() {
         super(new Item.Properties().stacksTo(16));
     }

@@ -2,7 +2,6 @@ package modist.romantictp.client.sound;
 
 import com.mojang.blaze3d.audio.Channel;
 import com.mojang.blaze3d.audio.SoundBuffer;
-import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.efx.EFXManager;
 import modist.romantictp.client.sound.efx.ReverbType;
 import modist.romantictp.client.sound.util.AlHelper;

@@ -48,7 +48,7 @@ import org.slf4j.Logger;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Melody extends PathfinderMob { //TODO: bug
+public class Melody extends PathfinderMob {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Vec3i ITEM_PICKUP_REACH = new Vec3i(1, 1, 1);
     private static final Ingredient DUPLICATION_ITEM = Ingredient.of(Items.AMETHYST_SHARD);

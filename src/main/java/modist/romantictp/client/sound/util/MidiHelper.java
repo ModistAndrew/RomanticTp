@@ -1,7 +1,5 @@
 package modist.romantictp.client.sound.util;
 
-import modist.romantictp.client.sound.loader.MidiFileLoader;
-import modist.romantictp.util.StringHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Nullable;
 
