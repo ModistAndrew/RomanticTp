@@ -1,5 +1,6 @@
 package modist.romantictp.client.instrument;
 
+import modist.romantictp.client.sound.util.ClientHelper;
 import modist.romantictp.common.block.AutoPlayerBlockEntity;
 import modist.romantictp.common.instrument.Instrument;
 import modist.romantictp.common.item.InstrumentItem;
@@ -39,6 +40,9 @@ public class InstrumentPlayerManager {
     }
 
     private record Player(LivingEntity entity) implements InstrumentPlayer {
+        private boolean isPlayer() {
+            return entity instanceof net.minecraft.world.entity.player.Player;
+        }
         @Override
         public Vec3 getPos() {
             return entity.getEyePosition().add(entity.getForward().scale(0.5D))
@@ -47,7 +51,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public float getVolume() {
-            return entity instanceof net.minecraft.world.entity.player.Player ? (90F-entity.getXRot()) / 180F : 1F;
+            return isPlayer() ? (90F-entity.getXRot()) / 180F : 1F;
         }
 
         @Override
@@ -64,7 +68,8 @@ public class InstrumentPlayerManager {
 
         @Override
         public boolean isRemoved() {
-            return entity.isRemoved();
+            return (!isPlayer()) &&
+                    (entity.isRemoved() || !isPlaying() || !ClientHelper.nearToLocalPlayer(getPos()));
         }
 
         @Override
@@ -98,7 +103,7 @@ public class InstrumentPlayerManager {
 
         @Override
         public boolean isRemoved() {
-            return blockEntity.isRemoved();
+            return blockEntity.isRemoved() || !isPlaying() || !ClientHelper.nearToLocalPlayer(getPos());
         }
 
         @Override

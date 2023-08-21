@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.efx.ReverbType;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,10 +15,18 @@ public class AlDataLine implements SourceDataLine {
         this.dataLine = line;
     }
 
+    public void muteInnerDataLine() { //called after inner data line is opened
+        if(dataLine.isControlSupported(BooleanControl.Type.MUTE)) {
+            ((BooleanControl)dataLine.getControl(BooleanControl.Type.MUTE)).setValue(true);
+        } else {
+            RomanticTp.LOGGER.warn("Unable to mute inner data line");
+        }
+    }
+
     public void bindChannel(@Nullable AlChannel channel) { //set to null to clear
         if(channel==null) {
             if(this.channel.isDone()) {
-                this.channel.join().destroy();
+                this.channel.join().destroy(); //channel may still be alive when instance is destroyed (but not vice versa!)
             }
             this.channel = new CompletableFuture<>();
         } else {
@@ -42,7 +51,7 @@ public class AlDataLine implements SourceDataLine {
     @Override
     public int write(byte[] b, int off, int len) {
         if (!channel.isDone() || channel.join().stopped()) {
-            return dataLine.write(b, off, len); //simply pass data to inner dataLine as there should be no sound
+            return dataLine.write(b, off, len); //simply pass data to inner data line as it's muted
         }
         AlChannel alChannel = channel.join();
         alChannel.write(b, off, len);

@@ -8,6 +8,7 @@ public class RomanticTpConfig {
     public static ForgeConfigSpec.ConfigValue<String> MIDI_KEYBOARD;
     public static ForgeConfigSpec.ConfigValue<Boolean> JITTER_CORRECTION;
     public static ForgeConfigSpec.ConfigValue<Integer> MAX_DISTANCE; //TODO: stored in auto player?
+    public static ForgeConfigSpec.ConfigValue<Integer> MAX_LOAD_DISTANCE;
     public static ForgeConfigSpec.ConfigValue<Integer> SYNTHESIZER_POOL_SIZE;
 
     static {
@@ -21,6 +22,8 @@ public class RomanticTpConfig {
                 .define("jitter_correction", true);
         MAX_DISTANCE = builder.comment("The radius of the area instrument sounds spread over")
                 .define("max_distance", 32);
+        MAX_LOAD_DISTANCE = builder.comment("The max distance from which instrument sounds can be loaded and unloaded")
+                .define("max_load_distance", 48);
         SYNTHESIZER_POOL_SIZE = builder.comment("The most instruments to be loaded at a time")
                 .define("initial_synthesizer_count", 64);
         CONFIG_SPEC = builder.build();

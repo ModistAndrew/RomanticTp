@@ -29,7 +29,7 @@ public class InstrumentSoundManager {
     @Nullable
     private InstrumentSoundInstance getSound(@NotNull InstrumentPlayer player) { //lazy
         InstrumentSoundInstance soundInstance = soundInstanceCache.get(player);
-        return soundInstance != null ? soundInstance : tryCreate(player);
+        return (soundInstance != null && checkContains(soundInstance)) ? soundInstance : tryCreate(player);
     }
 
     @Nullable
@@ -41,7 +41,7 @@ public class InstrumentSoundManager {
         }
         InstrumentSoundInstance soundInstance = new InstrumentSoundInstance(player, synthesizerWrapper);
         Minecraft.getInstance().getSoundManager().play(soundInstance);
-        if (checkContains(soundInstance)) {
+        if (checkContains(soundInstance)) { //may fail
             soundInstanceCache.put(player, soundInstance);
             return soundInstance;
         }

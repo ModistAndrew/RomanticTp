@@ -42,14 +42,14 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
     }
 
     public void free(SynthesizerWrapper wrapper) {
-        RomanticTp.LOGGER.info("Start deleting synthesizer, current: {}", availableSynthesizers.size());
+        RomanticTp.LOGGER.info("Start freeing synthesizer, current: {}", availableSynthesizers.size());
         wrapper.free();
         availableSynthesizers.add(wrapper);
-        RomanticTp.LOGGER.info("Finish deleting synthesizer, current: {}", availableSynthesizers.size());
+        RomanticTp.LOGGER.info("Finish freeing synthesizer, current: {}", availableSynthesizers.size());
     }
 
     @Override
-    public void onResourceManagerReload(ResourceManager pResourceManager) {
+    public void onResourceManagerReload(ResourceManager pResourceManager) { //TODO: reload this and midiKeyBoard
         if(!initialized) {
             SoundbankLoader.getInstance().onResourceManagerReload(pResourceManager); //first load soundbank
             init();
