@@ -2,13 +2,12 @@ package modist.romantictp.client.sound.loader;
 
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.config.RomanticTpConfig;
-import modist.romantictp.client.instrument.InstrumentPlayerManager;
 import modist.romantictp.client.sound.InstrumentSoundManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Stack;
 
 public class SynthesizerPool implements ResourceManagerReloadListener {
     public final Stack<SynthesizerWrapper> availableSynthesizers;
