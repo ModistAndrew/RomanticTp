@@ -3,6 +3,8 @@ package modist.romantictp.client.sound.loader;
 import modist.romantictp.RomanticTp;
 import modist.romantictp.client.config.RomanticTpConfig;
 import modist.romantictp.client.sound.midi.LocalReceiver;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.MidiDevice;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MidiKeyboardLoader {
+public class MidiKeyboardLoader implements ResourceManagerReloadListener {
     private static final MidiKeyboardLoader instance = new MidiKeyboardLoader();
     @Nullable
     private MidiDevice midiKeyboard;
@@ -21,12 +23,13 @@ public class MidiKeyboardLoader {
         return instance;
     }
 
-    public void init() {
+    @Override
+    public void onResourceManagerReload(ResourceManager pResourceManager) {
         getAvailableDevices().forEach(midiDevice ->
                 RomanticTp.LOGGER.info("Available midi input device founded: {}", midiDevice.getDeviceInfo().getName()));
         List<MidiDevice> device = getAvailableDevices().stream()
                 .filter(midiDevice -> midiDevice.getDeviceInfo().getName().equals(RomanticTpConfig.MIDI_KEYBOARD.get())).toList();
-        if(!device.isEmpty()){
+        if (!device.isEmpty()) {
             midiKeyboard = device.get(0);
             try {
                 midiKeyboard.getTransmitter().setReceiver(LocalReceiver.getInstance());
@@ -35,7 +38,7 @@ public class MidiKeyboardLoader {
             } catch (MidiUnavailableException e) {
                 RomanticTp.LOGGER.warn("Midi keyboard error: ", e);
             }
-        } else if(!RomanticTpConfig.MIDI_KEYBOARD.get().isEmpty()) {
+        } else if (!RomanticTpConfig.MIDI_KEYBOARD.get().isEmpty()) {
             RomanticTp.LOGGER.warn("Midi keyboard not found: {}", RomanticTpConfig.MIDI_KEYBOARD.get());
         }
     }

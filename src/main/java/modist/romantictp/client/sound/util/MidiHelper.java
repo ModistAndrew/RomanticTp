@@ -25,8 +25,12 @@ public class MidiHelper {
         return message(ShortMessage.NOTE_ON, clip(note), clip(velocity));
     }
 
+    public static ShortMessage stopMessage(int note, int velocity){
+        return message(ShortMessage.NOTE_OFF, clip(note), clip(velocity));
+    }
+
     public static ShortMessage stopMessage(int note){
-        return message(ShortMessage.NOTE_OFF, clip(note), 0);
+        return stopMessage(note, 0);
     }
 
     public static ShortMessage instrumentMessage(int instrument){

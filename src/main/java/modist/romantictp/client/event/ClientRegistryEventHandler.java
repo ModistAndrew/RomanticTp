@@ -20,6 +20,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = RomanticTp.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -29,9 +30,8 @@ public class ClientRegistryEventHandler {
         InstrumentKeyMapping.PITCHES.forEach(l -> event.register(l.get()));
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST) //avoid MIDI Keyboard conflict?
+    @SubscribeEvent
     public static void init(FMLClientSetupEvent event) {
-        MidiKeyboardLoader.getInstance().init();
         BlockEntityRenderers.register(BlockLoader.INSTRUMENT_BLOCK_ENTITY.get(), c -> new InstrumentRenderer(c.getItemRenderer()));
         BlockEntityRenderers.register(BlockLoader.AUTO_PLAYER_BLOCK_ENTITY.get(), c -> new AutoPlayerRenderer(c.getBlockRenderDispatcher()));
     }
@@ -40,6 +40,7 @@ public class ClientRegistryEventHandler {
     public static void loadResource(RegisterClientReloadListenersEvent event) {
         event.registerReloadListener(MidiFileLoader.getInstance());
         event.registerReloadListener(SynthesizerPool.getInstance());
+        event.registerReloadListener(MidiKeyboardLoader.getInstance());
     }
 
     @SubscribeEvent

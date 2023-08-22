@@ -32,7 +32,7 @@ public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver,
         }
     }
 
-    public void close() {
+    public void delete() {
         this.synthesizer.close();
     }
 

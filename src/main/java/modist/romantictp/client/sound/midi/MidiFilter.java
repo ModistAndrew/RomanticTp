@@ -58,6 +58,10 @@ public class MidiFilter implements Receiver {
                     lastNote = shortMessage.getData1(); //record note
                     innerReceiver.send(MidiHelper.startMessage(shortMessage.getData1(), shortMessage.getData2()), -1);
                 }
+                case ShortMessage.NOTE_OFF -> {
+                    lastNote = -1; //record note
+                    innerReceiver.send(MidiHelper.stopMessage(shortMessage.getData1(), shortMessage.getData2()), -1);
+                }
                 case ShortMessage.PROGRAM_CHANGE -> {
                     //skip instrument change
                 }

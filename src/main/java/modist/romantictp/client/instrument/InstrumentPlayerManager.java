@@ -36,7 +36,7 @@ public class InstrumentPlayerManager {
     }
 
     private static double getVelocity(int note) {
-        return note < 32 ? 0D : note > 96 ? 1D : (note-32) / 64D;
+        return note < 20 ? 0D : note > 84 ? 1D : (note-20) / 64D;
     }
 
     private record Player(LivingEntity entity) implements InstrumentPlayer {

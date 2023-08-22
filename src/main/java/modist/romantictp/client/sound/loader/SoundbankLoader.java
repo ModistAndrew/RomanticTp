@@ -10,7 +10,9 @@ import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 public class SoundbankLoader implements ResourceManagerReloadListener {
@@ -24,21 +26,25 @@ public class SoundbankLoader implements ResourceManagerReloadListener {
 
     @Override
     public void onResourceManagerReload(ResourceManager pResourceManager) {
+        String loc = RomanticTpConfig.SOUNDBANK.get();
         try {
-            soundbank = RomanticTpConfig.SOUNDBANK_LOCATION.get().isEmpty() ?
-                    getDefaultSoundbank(pResourceManager) :
-                    new SF2Soundbank(new File(RomanticTpConfig.SOUNDBANK_LOCATION.get()));
-            RomanticTp.LOGGER.info("Soundbank loaded: {}", soundbank.getName());
+            soundbank = getSoundbank(pResourceManager, loc);
+            if (soundbank == null) {
+                soundbank = new SF2Soundbank(new File(loc)); //shouldn't be null
+            }
+            RomanticTp.LOGGER.info("Soundbank {} loaded, name: {}", loc, soundbank.getName());
         } catch (Exception e) {
-            RomanticTp.LOGGER.warn("Failed to load soundbank. Error: ", e);
+            if (e instanceof FileNotFoundException) {
+                RomanticTp.LOGGER.warn("Cannot find soundbank {}. Use fallback soundbank.", loc);
+            } else {
+                RomanticTp.LOGGER.warn("Failed to load soundbank {}. Use fallback soundbank. Error: ", loc, e);
+            }
         }
     }
 
-    private SF2Soundbank getDefaultSoundbank(ResourceManager pResourceManager) throws IOException {
-        Optional<Resource> resource = pResourceManager.getResource(new ResourceLocation(RomanticTp.MODID, "soundbank/romantictp.sf3"));
-        if(resource.isPresent()) {
-            return new SF2Soundbank(resource.get().open());
-        }
-        return null;
+    private SF2Soundbank getSoundbank(ResourceManager pResourceManager, String name) throws IOException {
+        Map<ResourceLocation, Resource> resourceMap =
+                pResourceManager.listResources("soundbank", l -> l.getPath().endsWith(name));
+        return resourceMap.isEmpty() ? null : new SF2Soundbank(resourceMap.values().iterator().next().open());
     }
 }
