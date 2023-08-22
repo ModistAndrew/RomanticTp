@@ -1,9 +1,11 @@
 package modist.romantictp.client.sound.loader;
 
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.config.RomanticTpConfig;
 import modist.romantictp.client.sound.AlDataLine;
 import modist.romantictp.client.sound.fork.gervill.SoftSynthesizer;
 import modist.romantictp.client.sound.util.AudioHelper;
+import org.jetbrains.annotations.Nullable;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Receiver;
@@ -12,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver, AlDataLine dataLine) {
+    @Nullable
     public static SynthesizerWrapper create() {
         try {
             SoftSynthesizer synthesizer = new SoftSynthesizer();
@@ -28,7 +31,8 @@ public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver,
             }
             return new SynthesizerWrapper(synthesizer, synthesizer.getReceiver(), alDataLine);
         } catch (MidiUnavailableException | LineUnavailableException e) {
-            throw new RuntimeException(e);
+            RomanticTp.LOGGER.warn("Fail to init synthesizer", e);
+            return null;
         }
     }
 

@@ -31,7 +31,10 @@ public class SynthesizerPool implements ResourceManagerReloadListener {
         }
         for (int i = 0; i < RomanticTpConfig.SYNTHESIZER_POOL_SIZE.get(); i++) {
             RomanticTp.LOGGER.info("Start creating synthesizer, current: {}", availableSynthesizers.size());
-            availableSynthesizers.push(SynthesizerWrapper.create());
+            SynthesizerWrapper synthesizerWrapper = SynthesizerWrapper.create();
+            if(synthesizerWrapper != null) {
+                availableSynthesizers.push(synthesizerWrapper);
+            }
             RomanticTp.LOGGER.info("Finish creating synthesizer, current: {}", availableSynthesizers.size());
         }
     }
