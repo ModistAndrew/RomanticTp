@@ -31,7 +31,7 @@ public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver,
             }
             return new SynthesizerWrapper(synthesizer, synthesizer.getReceiver(), alDataLine);
         } catch (MidiUnavailableException | LineUnavailableException e) {
-            RomanticTp.LOGGER.warn("Fail to init synthesizer", e);
+            RomanticTp.LOGGER.error("Fail to init synthesizer", e);
             return null;
         }
     }

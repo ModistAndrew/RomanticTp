@@ -36,7 +36,7 @@ public class SoundbankLoader implements ResourceManagerReloadListener {
             if (e instanceof FileNotFoundException) {
                 RomanticTp.LOGGER.warn("Cannot find soundbank {}. Use fallback soundbank.", loc);
             } else {
-                RomanticTp.LOGGER.warn("Failed to load soundbank {}. Use fallback soundbank. Error: ", loc, e);
+                RomanticTp.LOGGER.error("Failed to load soundbank {}. Use fallback soundbank. Error: ", loc, e);
             }
         }
     }

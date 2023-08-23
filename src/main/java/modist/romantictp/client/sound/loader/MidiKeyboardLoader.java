@@ -36,7 +36,7 @@ public class MidiKeyboardLoader implements ResourceManagerReloadListener {
                 midiKeyboard.open();
                 RomanticTp.LOGGER.info("Midi keyboard loaded: {}", midiKeyboard.getDeviceInfo().getName());
             } catch (MidiUnavailableException e) {
-                RomanticTp.LOGGER.warn("Midi keyboard error: ", e);
+                RomanticTp.LOGGER.error("Midi keyboard error: ", e);
             }
         } else if (!RomanticTpConfig.MIDI_KEYBOARD.get().isEmpty()) {
             RomanticTp.LOGGER.warn("Midi keyboard not found: {}", RomanticTpConfig.MIDI_KEYBOARD.get());
@@ -51,7 +51,7 @@ public class MidiKeyboardLoader implements ResourceManagerReloadListener {
             try {
                 devices.add(MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[i]));
             } catch (MidiUnavailableException e) {
-                RomanticTp.LOGGER.warn("Midi device error. Device will be skipped. Error: ", e);
+                RomanticTp.LOGGER.error("Midi device error. Device will be skipped.", e);
             }
         }
 

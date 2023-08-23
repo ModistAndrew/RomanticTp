@@ -33,7 +33,7 @@ public class ScoreItem extends Item implements ItemDisplayProvider { //TODO: sho
     }
 
     public MidiInfo setMidiData(ItemStack stack, String name) { //client only
-        MidiInfo info = MidiInfo.create(name);
+        MidiInfo info = MidiFileLoader.getInstance().getMidiInfo(name);
         fillMidiData(stack, info);
         return info;
     }

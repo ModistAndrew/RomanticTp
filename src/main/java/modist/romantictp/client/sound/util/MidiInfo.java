@@ -11,14 +11,15 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
-public record MidiInfo(byte[] data, long time, String group, String name, String author, String section) implements TooltipProvider {
+public record MidiInfo(byte[] data, long time, String group, String name, String author, String section)
+        implements TooltipProvider, Comparable<MidiInfo> {
     public static final MidiInfo EMPTY = new MidiInfo(new byte[0], 0, "", "", "", "");
 
-    public static MidiInfo create(String path) {
+    public static MidiInfo create(String path, byte[] data) {
         try {
-            byte[] data = MidiFileLoader.getInstance().getMidiData(path);
             if(data.length== 0){
                 return MidiInfo.EMPTY;
             }
@@ -69,7 +70,7 @@ public record MidiInfo(byte[] data, long time, String group, String name, String
     @Override
     public void addText(List<Component> pTooltip, boolean advanced) {
         if (!this.isEmpty()) {
-            TooltipProvider.addTooltip(name, pTooltip, ChatFormatting.WHITE);
+            TooltipProvider.addTooltip(name, pTooltip, ChatFormatting.WHITE, ChatFormatting.ITALIC);
             TooltipProvider.addTooltip(StringHelper.TIME, getTimeString(), pTooltip, ChatFormatting.AQUA);
             if (!author.isEmpty()) {
                 TooltipProvider.addTooltip(StringHelper.AUTHOR, author, pTooltip, ChatFormatting.GREEN);
@@ -83,5 +84,14 @@ public record MidiInfo(byte[] data, long time, String group, String name, String
         } else {
             TooltipProvider.addTooltip("EMPTY", pTooltip, ChatFormatting.RED);
         }
+    }
+
+    @Override
+    public int compareTo(MidiInfo other) {
+        return Comparator.comparing((MidiInfo i) -> i.group)
+                .thenComparing(MidiInfo::author)
+                .thenComparing(MidiInfo::name)
+                .thenComparing(MidiInfo::section)
+                .compare(this, other);
     }
 }

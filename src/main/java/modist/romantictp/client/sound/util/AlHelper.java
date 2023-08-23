@@ -7,7 +7,7 @@ public class AlHelper {
     public static boolean checkALError() {
         int i = AL10.alGetError();
         if (i != 0) {
-            RomanticTp.LOGGER.warn("OpenAL error: {}", alErrorToString(i));
+            RomanticTp.LOGGER.error("OpenAL error: {}", alErrorToString(i));
             return true;
         } else {
             return false;
