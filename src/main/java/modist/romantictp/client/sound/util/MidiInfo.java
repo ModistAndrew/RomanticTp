@@ -1,6 +1,5 @@
 package modist.romantictp.client.sound.util;
 
-import modist.romantictp.client.sound.loader.MidiFileLoader;
 import modist.romantictp.util.StringHelper;
 import modist.romantictp.util.TooltipProvider;
 import net.minecraft.ChatFormatting;
