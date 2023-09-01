@@ -33,7 +33,7 @@ public class MidiFileLoader implements ResourceManagerReloadListener {
                 if (StringHelper.validMidiName(path)) {
                     MidiInfo info = MidiInfo.create(path, r.open().readAllBytes());
                     if (resourceMap.put(name, info) == null) {
-                        RomanticTp.LOGGER.debug("Midi file named {} loaded", name);
+                        RomanticTp.LOGGER.info("Midi file named {} loaded", name);
                     } else {
                         RomanticTp.LOGGER.warn("Midi file named {} is duplicate", name);
                     }
