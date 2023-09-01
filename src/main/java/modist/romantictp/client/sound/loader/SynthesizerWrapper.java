@@ -25,7 +25,6 @@ public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver,
             Map<String, Object> params = new HashMap<>();
             params.put("jitter correction", RomanticTpConfig.JITTER_CORRECTION.get());
             synthesizer.open(alDataLine, params);
-            alDataLine.muteInnerDataLine();
             if (SoundbankLoader.getInstance().soundbank != null) {
                 synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
             }
