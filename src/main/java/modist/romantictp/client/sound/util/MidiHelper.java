@@ -11,14 +11,18 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class MidiHelper {
-    public static ShortMessage message(int command, int note, int velocity) {
+    public static ShortMessage message(int ch, int command, int note, int velocity) {
         ShortMessage message;
         try {
-            message = new ShortMessage(command, 1, note, velocity);
+            message = new ShortMessage(command, ch, note, velocity);
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         }
         return message;
+    }
+
+    public static ShortMessage message(int command, int note, int velocity) {
+        return message(1, command, note, velocity);
     }
 
     public static ShortMessage startMessage(int note, int velocity){

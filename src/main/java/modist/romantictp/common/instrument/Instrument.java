@@ -12,6 +12,7 @@ import java.util.List;
 public record Instrument(int instrumentId, ReverbType reverb)
         implements TooltipProvider {
     public static final Instrument EMPTY = new Instrument(-1, ReverbType.GENERIC);
+    public static final Instrument ALL = new Instrument(-2, ReverbType.GENERIC);
 
     public Instrument(CompoundTag tag) {
         this(tag.getInt("instrumentId"), ReverbType.fromString(tag.getString("reverb")));
@@ -25,7 +26,11 @@ public record Instrument(int instrumentId, ReverbType reverb)
     }
 
     public boolean isEmpty() {
-        return instrumentId < 0;
+        return instrumentId == -1;
+    }
+
+    public boolean isAll() {
+        return instrumentId == -2;
     }
 
     @Override

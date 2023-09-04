@@ -29,18 +29,20 @@ public class MidiFilter implements Receiver {
 
     private void updateInstrument() {
         stopAll(); //stop first
-        if (!this.instrument.isEmpty()) {
+        if (!this.instrument.isEmpty() && !this.instrument.isAll()) {
             innerReceiver.send(MidiHelper.instrumentMessage(this.instrument.instrumentId()), -1); //change instrument
         }
     }
 
     public void stopAll() {
-        for (int i = 0; i < 128; i++) {
-            innerReceiver.send(MidiHelper.stopMessage(i), -1);
+        for (int ch=0; ch<16; ch++) {
+            for (int i = 0; i < 128; i++) {
+                innerReceiver.send(MidiHelper.message(ch, ShortMessage.NOTE_OFF, i, 0), -1);
+            }
+            lastNote = -1;
+            innerReceiver.send(MidiHelper.message(ch, ShortMessage.CONTROL_CHANGE, 123, 0), -1);
+            innerReceiver.send(MidiHelper.message(ch, ShortMessage.CONTROL_CHANGE, 64, 0), -1);
         }
-        lastNote = -1;
-        innerReceiver.send(MidiHelper.message(ShortMessage.CONTROL_CHANGE, 123, 0), -1);
-        innerReceiver.send(MidiHelper.message(ShortMessage.CONTROL_CHANGE, 64, 0), -1);
     }
 
     public int getLastNote() {
@@ -49,19 +51,16 @@ public class MidiFilter implements Receiver {
 
     @Override
     public void send(MidiMessage message, long timeStamp) {
+        if (this.instrument.isEmpty()) {
+            return;
+        }
+        recordLastNote(message);
+        if(this.instrument.isAll()) {
+            innerReceiver.send(message, timeStamp);
+            return;
+        }
         if (message instanceof ShortMessage shortMessage) {
-            if (this.instrument.isEmpty()) {
-                return;
-            }
             switch (shortMessage.getCommand()) {
-                case ShortMessage.NOTE_ON -> {
-                    lastNote = shortMessage.getData1(); //record note
-                    innerReceiver.send(MidiHelper.startMessage(shortMessage.getData1(), shortMessage.getData2()), -1);
-                }
-                case ShortMessage.NOTE_OFF -> {
-                    lastNote = -1; //record note
-                    innerReceiver.send(MidiHelper.stopMessage(shortMessage.getData1(), shortMessage.getData2()), -1);
-                }
                 case ShortMessage.PROGRAM_CHANGE -> {
                     //skip instrument change
                 }
@@ -76,6 +75,15 @@ public class MidiFilter implements Receiver {
             }
         } else {
             innerReceiver.send(message, timeStamp);
+        }
+    }
+
+    private void recordLastNote(MidiMessage message) {
+        if (message instanceof ShortMessage shortMessage) {
+            switch (shortMessage.getCommand()) {
+                case ShortMessage.NOTE_ON -> lastNote = shortMessage.getData1(); //record note
+                case ShortMessage.NOTE_OFF -> lastNote = -1; //record note
+            }
         }
     }
 

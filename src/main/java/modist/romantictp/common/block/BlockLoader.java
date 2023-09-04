@@ -21,6 +21,7 @@ public class BlockLoader {
 
     public static final Map<String, RegistryObject<InstrumentBlock>> INSTRUMENTS = new LinkedHashMap<>();
     static {
+        registerInstrument("all", Instrument.ALL);
         registerInstrument("timpani", Instrument.Builder.of(Instruments.TIMPANI).build());
         registerInstrument("music_box", Instrument.Builder.of(Instruments.MUSIC_BOX).build());
         registerInstrument("marimba", Instrument.Builder.of(Instruments.MARIMBA).build());
