@@ -19,7 +19,10 @@ public class BlockLoader {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, RomanticTp.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RomanticTp.MODID);
 
+    private static final boolean[] USED_INSTRUMENTS = new boolean[128];
+
     public static final Map<String, RegistryObject<InstrumentBlock>> INSTRUMENTS = new LinkedHashMap<>();
+
     static {
         registerInstrument("all", Instrument.ALL);
         registerInstrument("timpani", Instrument.Builder.of(Instruments.TIMPANI).build());
@@ -31,8 +34,7 @@ public class BlockLoader {
         registerInstrument("cello", Instrument.Builder.of(Instruments.CELLO).build());
         registerInstrument("contrabass", Instrument.Builder.of(Instruments.CONTRABASS).build());
         registerInstrument("strings", Instrument.Builder.of(Instruments.STRINGS).build());
-        registerInstrument("trumpet", Instrument.Builder.of(Instruments.TRUMPET).build(),
-                                    Instrument.Builder.of(Instruments.TRUMPET).reverb(ReverbType.CONCERT_HALL).build());
+        registerInstrument("trumpet", Instrument.Builder.of(Instruments.TRUMPET).build());
         registerInstrument("trombone", Instrument.Builder.of(Instruments.TROMBONE).build());
         registerInstrument("tuba", Instrument.Builder.of(Instruments.TUBA).build());
         registerInstrument("french_horn", Instrument.Builder.of(Instruments.FRENCH_HORN).build());
@@ -47,14 +49,21 @@ public class BlockLoader {
         registerInstrument("harp", Instrument.Builder.of(Instruments.HARP).build());
         registerInstrument("harpsichord", Instrument.Builder.of(Instruments.HARPSICHORD).build());
         registerInstrument("piano", Instrument.Builder.of(Instruments.PIANO).build(),
-                                    Instrument.Builder.of(Instruments.PIANO).reverb(ReverbType.CONCERT_HALL).build());
+                Instrument.Builder.of(Instruments.PIANO).reverb(ReverbType.CONCERT_HALL).build());
         registerInstrument("guitar", Instrument.Builder.of(Instruments.GUITAR).build());
         registerInstrument("bass", Instrument.Builder.of(Instruments.BASS).build());
         registerInstrument("drum_kit", Instrument.Builder.of(Instruments.DRUM_KIT).build());
+        for (int i = 0; i < 128; i++) {
+            if(!USED_INSTRUMENTS[i]){
+                registerInstrument("default_instrument_"+i, Instrument.Builder.of(i).build());
+            }
+        }
     }
+
     public static final RegistryObject<Block> AUTO_PLAYER = BLOCKS.register("auto_player", AutoPlayerBlock::new);
     public static final RegistryObject<Block> REVERB_HELMET = BLOCKS.register("reverb_helmet", ReverbHelmetBlock::new);
     public static final Map<String, RegistryObject<MusicianBustBlock>> MUSICIAN_BUSTS = new LinkedHashMap<>();
+
     static {
         registerMusicianBust("bach");
         registerMusicianBust("beethoven");
@@ -81,17 +90,21 @@ public class BlockLoader {
     }
 
     public static final RegistryObject<BlockEntityType<InstrumentBlockEntity>> INSTRUMENT_BLOCK_ENTITY =
-            BLOCK_ENTITIES.register("instrument_block_entity", ()-> BlockEntityType.Builder.of
+            BLOCK_ENTITIES.register("instrument_block_entity", () -> BlockEntityType.Builder.of
                     (InstrumentBlockEntity::new, INSTRUMENTS.values().stream().map(RegistryObject::get).toArray(Block[]::new)).build(DSL.remainderType()));
     public static final RegistryObject<BlockEntityType<AutoPlayerBlockEntity>> AUTO_PLAYER_BLOCK_ENTITY =
-            BLOCK_ENTITIES.register("auto_player_block_entity", ()-> BlockEntityType.Builder.of
+            BLOCK_ENTITIES.register("auto_player_block_entity", () -> BlockEntityType.Builder.of
                     (AutoPlayerBlockEntity::new, AUTO_PLAYER.get()).build(DSL.remainderType()));
 
-    private static void registerInstrument(String name, Instrument... instrument){
+    private static void registerInstrument(String name, Instrument... instrument) {
+        int id = instrument[0].instrumentId();
+        if (id >= 0 && id < 128) {
+            USED_INSTRUMENTS[id] = true;
+        }
         INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument[0], List.of(instrument))));
     }
 
-    private static void registerMusicianBust(String name){
+    private static void registerMusicianBust(String name) {
         MUSICIAN_BUSTS.put(name, BLOCKS.register(name, MusicianBustBlock::new));
     }
 }

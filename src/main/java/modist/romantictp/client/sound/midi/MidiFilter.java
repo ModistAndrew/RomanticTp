@@ -1,5 +1,6 @@
 package modist.romantictp.client.sound.midi;
 
+import it.unimi.dsi.fastutil.ints.IntList;
 import modist.romantictp.client.sound.util.MidiHelper;
 import modist.romantictp.common.instrument.Instrument;
 
@@ -14,6 +15,7 @@ public class MidiFilter implements Receiver {
     private volatile Instrument instrument = Instrument.EMPTY;
     private int lastNote = -1;
     private final Receiver innerReceiver; //synthesizer receiver
+    private static final IntList CONTROL_BLACKLIST = IntList.of(98, 99);
 
     public MidiFilter(Receiver innerReceiver) {
         this.innerReceiver = innerReceiver;
@@ -56,8 +58,12 @@ public class MidiFilter implements Receiver {
         }
         recordLastNote(message);
         if (this.instrument.isAll()) {
-//            sorry but I have to skip this to avoid strange controls
-            if (!(message instanceof ShortMessage shortMessage && shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE)) {
+//            sorry but I have to use black list to ban strange controls
+            if (!(message instanceof ShortMessage shortMessage && shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE
+            && CONTROL_BLACKLIST.contains(shortMessage.getData1()))) {
+//                if(message instanceof ShortMessage shortMessage && shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE) {
+//                    RomanticTp.LOGGER.debug("Control:{}", shortMessage.getData1());
+//                }
                 innerReceiver.send(message, timeStamp);
             }
             return;

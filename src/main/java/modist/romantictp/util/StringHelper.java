@@ -53,6 +53,7 @@ public class StringHelper {
     }
 
     public static String title(String str) {
+        str = str.replace("...", "\"").replace("..", "'");
         String[] strings = str.split("_");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < strings.length; i++) {
