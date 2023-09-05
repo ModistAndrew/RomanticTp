@@ -21,24 +21,20 @@ public class MidiHelper {
         return message;
     }
 
-    public static ShortMessage message(int command, int note, int velocity) {
-        return message(1, command, note, velocity);
+    public static ShortMessage startMessage(int ch, int note, int velocity){
+        return message(ch, ShortMessage.NOTE_ON, clip(note), clip(velocity));
     }
 
-    public static ShortMessage startMessage(int note, int velocity){
-        return message(ShortMessage.NOTE_ON, clip(note), clip(velocity));
+    public static ShortMessage stopMessage(int ch, int note, int velocity){
+        return message(ch, ShortMessage.NOTE_OFF, clip(note), clip(velocity));
     }
 
-    public static ShortMessage stopMessage(int note, int velocity){
-        return message(ShortMessage.NOTE_OFF, clip(note), clip(velocity));
+    public static ShortMessage stopMessage(int ch, int note){
+        return stopMessage(ch, note, 0);
     }
 
-    public static ShortMessage stopMessage(int note){
-        return stopMessage(note, 0);
-    }
-
-    public static ShortMessage instrumentMessage(int instrument){
-        return message(ShortMessage.PROGRAM_CHANGE, instrument, 0);
+    public static ShortMessage instrumentMessage(int ch, int instrument){
+        return message(ch, ShortMessage.PROGRAM_CHANGE, instrument, 0);
     }
 
     private static int clip(int value) {
@@ -46,16 +42,18 @@ public class MidiHelper {
     }
 
     public static void save(FriendlyByteBuf buf, ShortMessage message){
+        buf.writeInt(message.getChannel());
         buf.writeInt(message.getCommand());
         buf.writeInt(message.getData1());
         buf.writeInt(message.getData2());
     }
 
     public static ShortMessage load(FriendlyByteBuf buf){
+        int ch = buf.readInt();
         int command = buf.readInt();
         int data1 = buf.readInt();
         int data2 = buf.readInt();
-        return message(command, data1, data2);
+        return message(ch, command, data1, data2);
     }
 
     @Nullable

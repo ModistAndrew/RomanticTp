@@ -41,7 +41,7 @@ public class StringHelper {
             String word = strings[i];
             sb.append(word);
             if (i < strings.length - 2) {
-                sb.append("-");
+                sb.append("/");
             }
         }
         return sb.toString();

@@ -50,10 +50,10 @@ public class ClientEventHandler {
             if (event.getKey() != -1 && event.getKey() == k.get().getKey().getValue()) {
                 if (event.getAction() == InputConstants.PRESS && Minecraft.getInstance().screen == null) { //may be not available, e.g. chatting
                     LocalReceiver.getInstance().send
-                            (MidiHelper.startMessage(InstrumentKeyMapping.getPitch(i), 80), -1);
+                            (MidiHelper.startMessage(0, InstrumentKeyMapping.getPitch(i), 80), -1);
                 } else if (event.getAction() == InputConstants.RELEASE) {
                     LocalReceiver.getInstance().send
-                            (MidiHelper.stopMessage(InstrumentKeyMapping.getPitch(i)), -1);
+                            (MidiHelper.stopMessage(0, InstrumentKeyMapping.getPitch(i)), -1);
                 }
             }
         }
