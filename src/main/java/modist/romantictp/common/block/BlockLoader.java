@@ -38,6 +38,7 @@ public class BlockLoader {
         registerInstrument("trombone", Instrument.Builder.of(Instruments.TROMBONE).build());
         registerInstrument("tuba", Instrument.Builder.of(Instruments.TUBA).build());
         registerInstrument("french_horn", Instrument.Builder.of(Instruments.FRENCH_HORN).build());
+        registerInstrument("brass_section", Instrument.Builder.of(Instruments.BRASS_SECTION).build());
         registerInstrument("soprano_sax", Instrument.Builder.of(Instruments.SOPRANO_SAX).build());
         registerInstrument("oboe", Instrument.Builder.of(Instruments.OBOE).build());
         registerInstrument("english_horn", Instrument.Builder.of(Instruments.ENGLISH_HORN).build());
@@ -56,6 +57,7 @@ public class BlockLoader {
         for (int i = 0; i < 128; i++) {
             if(!USED_INSTRUMENTS[i]){
                 registerInstrument("default_instrument_"+i, Instrument.Builder.of(i).build());
+                USED_INSTRUMENTS[i] = false; //reset
             }
         }
     }
@@ -102,6 +104,13 @@ public class BlockLoader {
             USED_INSTRUMENTS[id] = true;
         }
         INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument[0], List.of(instrument))));
+    }
+
+    public static boolean hasInstrument(int id) {
+        if (id >= 0 && id < 128) {
+            return USED_INSTRUMENTS[id];
+        }
+        return false;
     }
 
     private static void registerMusicianBust(String name) {

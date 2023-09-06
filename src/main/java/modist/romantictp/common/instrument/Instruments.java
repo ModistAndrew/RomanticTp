@@ -14,6 +14,7 @@ public class Instruments {
     public static final int TROMBONE = 57;
     public static final int TUBA = 58;
     public static final int FRENCH_HORN = 60;
+    public static final int BRASS_SECTION = 61;
     public static final int SOPRANO_SAX = 64;
     public static final int OBOE = 68;
     public static final int ENGLISH_HORN = 69;

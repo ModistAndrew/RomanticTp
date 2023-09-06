@@ -7,9 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StringHelper {
-    private static final List<String> ARTICLES = List.of("a", "an", "the", "to", "in", "on", "from", "and", "with");
+    private static final List<String> ARTICLES = List.of
+            ("a", "an", "the", "to", "in", "on", "from", "and", "with", "of");
     private static final List<String> ROMAN_NUMERALS =
             List.of("i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii");
+    private static final char[] ESCAPE_CHARACTERS =
+            new char[] {'~', '\'', '"'};
+    private static final char[] DELIMITERS =
+            new char[] {' ', '.', '"'};
     public static final List<String> TOOLTIPS = new ArrayList<>();
     public static final String GROUP = registerTooltip("group");
     public static final String TIME = registerTooltip("time");
@@ -53,7 +58,7 @@ public class StringHelper {
     }
 
     public static String title(String str) {
-        str = str.replace("...", "\"").replace("..", "'");
+        str = escape(str);
         String[] strings = str.split("_");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < strings.length; i++) {
@@ -66,13 +71,21 @@ public class StringHelper {
         return sb.toString();
     }
 
+    public static String escape(String str) {
+        String ret = str;
+        for(int i=0; i<ESCAPE_CHARACTERS.length; i++) {
+            ret = ret.replace("__"+i+"__", String.valueOf(ESCAPE_CHARACTERS[i]));
+        }
+        return ret;
+    }
+
     @SuppressWarnings("deprecation")
     private static String upperCase(int index, String str) {
         if(shouldCapitalizeAll(str)){
             return StringUtils.upperCase(str);
         }
         if (index==0 || shouldCapitalize(str)) {
-            return WordUtils.capitalize(str.replace('.', ' ')).replace(' ', '.');
+            return WordUtils.capitalize(str, DELIMITERS);
         }
         return str;
     }

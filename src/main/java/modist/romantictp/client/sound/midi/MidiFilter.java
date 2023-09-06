@@ -1,7 +1,9 @@
 package modist.romantictp.client.sound.midi;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import modist.romantictp.RomanticTp;
 import modist.romantictp.client.sound.util.MidiHelper;
+import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.instrument.Instrument;
 
 import javax.sound.midi.MidiMessage;
@@ -32,7 +34,9 @@ public class MidiFilter implements Receiver {
     private void updateInstrument() {
         stopAll(); //stop first
         if (!this.instrument.isEmpty() && !this.instrument.isAll()) {
-            innerReceiver.send(MidiHelper.instrumentMessage(0, this.instrument.instrumentId()), -1); //change instrument
+            ShortMessage instrumentMessage = MidiHelper.instrumentMessage(0, this.instrument.instrumentId());
+            checkInstrument(instrumentMessage);
+            innerReceiver.send(instrumentMessage, -1); //change instrument
         }
     }
 
@@ -57,10 +61,11 @@ public class MidiFilter implements Receiver {
             return;
         }
         recordLastNote(message);
+        checkInstrument(message);
         if (this.instrument.isAll()) {
 //            sorry but I have to use black list to ban strange controls
             if (!(message instanceof ShortMessage shortMessage && shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE
-            && CONTROL_BLACKLIST.contains(shortMessage.getData1()))) {
+                    && CONTROL_BLACKLIST.contains(shortMessage.getData1()))) {
 //                if(message instanceof ShortMessage shortMessage && shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE) {
 //                    RomanticTp.LOGGER.debug("Control:{}", shortMessage.getData1());
 //                }
@@ -84,6 +89,18 @@ public class MidiFilter implements Receiver {
             }
         } else {
             innerReceiver.send(message, timeStamp);
+        }
+    }
+
+    private void checkInstrument(MidiMessage message) {
+        if (message instanceof ShortMessage shortMessage && shortMessage.getCommand() == ShortMessage.PROGRAM_CHANGE) {
+            if (BlockLoader.hasInstrument(shortMessage.getData1())) {
+                RomanticTp.LOGGER.info("Instrument with id {} on channel {} attached.",
+                        shortMessage.getData1(), shortMessage.getChannel());
+            } else {
+                RomanticTp.LOGGER.warn("Instrument with id {} on channel {} is not available in our soundbank. Using default.",
+                        shortMessage.getData1(), shortMessage.getChannel());
+            }
         }
     }
 
