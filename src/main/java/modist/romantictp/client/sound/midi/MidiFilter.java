@@ -17,7 +17,7 @@ public class MidiFilter implements Receiver {
     private volatile Instrument instrument = Instrument.EMPTY;
     private int lastNote = -1;
     private final Receiver innerReceiver; //synthesizer receiver
-    private static final IntList CONTROL_BLACKLIST = IntList.of(98, 99);
+    private static final IntList CONTROL_BLACKLIST = IntList.of(93, 98, 99);
 
     public MidiFilter(Receiver innerReceiver) {
         this.innerReceiver = innerReceiver;
