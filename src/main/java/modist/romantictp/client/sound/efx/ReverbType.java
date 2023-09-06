@@ -13,7 +13,7 @@ public record ReverbType(String name, float volume, float density, float diffusi
     public static final HashMap<String, ReverbType> REVERB_TYPES = new HashMap<>();
     public static final ReverbType GENERIC = register(new ReverbType("generic", 1f, 1.0000f, 1.0000f, 0.3162f, 0.8913f, 1.0000f, 1.4900f, 0.8300f, 1.0000f, 0.0500f, 0.0070f, new float[]{0.0000f, 0.0000f, 0.0000f}, 1.2589f, 0.0110f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
     public static final ReverbType SUPER = register(new ReverbType("super", 10f, 1.0000f, 1.0000f, 0.3162f, 0.5623f, 1.0000f, 3.9200f, 0.7000f, 1.0000f, 0.2427f, 0.0200f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.9977f, 0.0290f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
-    public static final ReverbType CONCERT_HALL = register(new ReverbType("concert_hall", 2f, 1.0000f, 1.0000f, 0.3162f, 0.5623f, 1.0000f, 3.9200f, 0.7000f, 1.0000f, 0.2427f, 0.0200f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.9977f, 0.0290f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
+    public static final ReverbType CONCERT_HALL = register(new ReverbType("concert_hall", 1f, 1.0000f, 1.0000f, 0.3162f, 0.5623f, 1.0000f, 3.9200f, 0.7000f, 1.0000f, 0.2427f, 0.0200f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.9977f, 0.0290f, new float[]{0.0000f, 0.0000f, 0.0000f}, 0.2500f, 0.0000f, 0.2500f, 0.0000f, 0.9943f, 5000.0000f, 250.0000f, 0.0000f, 0x1));
 
     public static ReverbType fromString(String name) {
         return REVERB_TYPES.getOrDefault(name, GENERIC);
