@@ -56,8 +56,7 @@ public class BlockLoader {
         registerInstrument("drum_kit", Instrument.Builder.of(Instruments.DRUM_KIT).build());
         for (int i = 0; i < 128; i++) {
             if(!USED_INSTRUMENTS[i]){
-                registerInstrument("default_instrument_"+i, Instrument.Builder.of(i).build());
-                USED_INSTRUMENTS[i] = false; //reset
+                registerInstrument(true, "default_instrument_"+i, Instrument.Builder.of(i).build());
             }
         }
     }
@@ -98,12 +97,17 @@ public class BlockLoader {
             BLOCK_ENTITIES.register("auto_player_block_entity", () -> BlockEntityType.Builder.of
                     (AutoPlayerBlockEntity::new, AUTO_PLAYER.get()).build(DSL.remainderType()));
 
-    private static void registerInstrument(String name, Instrument... instrument) {
+    private static void registerInstrument(boolean isDefault, String name, Instrument... instrument) {
         int id = instrument[0].instrumentId();
-        if (id >= 0 && id < 128) {
+        if (id >= 0 && id < 128 && !isDefault) {
             USED_INSTRUMENTS[id] = true;
         }
-        INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument[0], List.of(instrument))));
+        INSTRUMENTS.put(name, BLOCKS.register(name, () -> new InstrumentBlock(instrument[0],
+                isDefault ? List.of() : List.of(instrument))));
+    }
+
+    private static void registerInstrument(String name, Instrument... instrument) {
+        registerInstrument(false, name, instrument);
     }
 
     public static boolean hasInstrument(int id) {

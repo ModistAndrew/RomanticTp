@@ -12,10 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -31,7 +28,7 @@ public class InstrumentItem extends BlockItem implements ItemDisplayProvider {
     public final List<Instrument> display;
 
     public InstrumentItem(InstrumentBlock block) {
-        super(block, new Item.Properties().stacksTo(1));
+        super(block, new Item.Properties().stacksTo(1).rarity(block.defaultInstrument.isAll() ? Rarity.UNCOMMON : Rarity.COMMON));
         this.defaultInstrument = block.defaultInstrument;
         this.display = block.display;
     }

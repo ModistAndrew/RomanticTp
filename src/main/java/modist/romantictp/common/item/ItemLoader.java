@@ -5,10 +5,7 @@ import modist.romantictp.common.block.BlockLoader;
 import modist.romantictp.common.entity.EntityLoader;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,7 +25,8 @@ public class ItemLoader {
     public static final LazyOptional<List<ItemStack>> INSTRUMENT_LIST = LazyOptional.of(ItemLoader::createInstrumentList);
     public static final RegistryObject<ScoreItem> SCORE = ITEMS.register("score", ScoreItem::new);
     public static final RegistryObject<Item> AUTO_PLAYER = ITEMS.register("auto_player", () -> new BlockItem(BlockLoader.AUTO_PLAYER.get(), new Item.Properties()));
-    public static final RegistryObject<Item> REVERB_HELMET = ITEMS.register("reverb_helmet", () -> new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties()));
+    public static final RegistryObject<Item> REVERB_HELMET = ITEMS.register("reverb_helmet", () ->
+            new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> NATURAL_TRUMPET = ITEMS.register("natural_trumpet", NaturalTrumpetItem::new);
     public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody_spawn_egg", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFFFF, new Item.Properties()));
 
@@ -42,7 +40,7 @@ public class ItemLoader {
         BlockLoader.INSTRUMENTS.forEach((s, b) -> INSTRUMENTS.put
                 (s, ITEMS.register(s, () -> new InstrumentItem(b.get()))));
         BlockLoader.MUSICIAN_BUSTS.forEach((s, b) -> MUSICIAN_BUSTS.put
-                (s, ITEMS.register(s, () -> new BlockItem(b.get(), new Item.Properties()))));
+                (s, ITEMS.register(s, () -> new BlockItem(b.get(), new Item.Properties().rarity(Rarity.RARE)))));
         TABS.register("romantictp_tab", () -> CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.romantictp_tab"))
                 .displayItems((parameters, output) -> {
