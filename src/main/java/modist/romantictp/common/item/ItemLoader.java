@@ -29,6 +29,7 @@ public class ItemLoader {
             new BlockItem(BlockLoader.REVERB_HELMET.get(), new Item.Properties().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> NATURAL_TRUMPET = ITEMS.register("natural_trumpet", NaturalTrumpetItem::new);
     public static final RegistryObject<Item> MELODY_EGG = ITEMS.register("melody_spawn_egg", () -> new ForgeSpawnEggItem(EntityLoader.MELODY, 0xFFFF00, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<Item> SOUTH_SECTION_ONE = ITEMS.register("south_section_one", () -> new Item(new Item.Properties()));
 
     private static List<ItemStack> createInstrumentList() {
         List<ItemStack> list = new ArrayList<>();
