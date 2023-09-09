@@ -26,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 public class SoundEngineMixin {
     @Shadow
     private boolean loaded;
-    //protect instrument sound instance. only when stopAll or player dead can destroy
     @Redirect(
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/sounds/ChannelAccess;createHandle(Lcom/mojang/blaze3d/audio/Library$Pool;)Ljava/util/concurrent/CompletableFuture;"
@@ -55,6 +54,7 @@ public class SoundEngineMixin {
         return instance.getAttenuationDistance();
     }
 
+    //protect instrument sound instance. only when stopAll or player dead can destroy
     @Redirect(method = "tickNonPaused", at = @At(value = "INVOKE", target = "Ljava/util/List;remove(Ljava/lang/Object;)Z"))
     public boolean remove(List<SoundInstance> list, Object instance) {
         if(instance instanceof SoundInstance && !(instance instanceof InstrumentSoundInstance)) {

@@ -21,19 +21,19 @@ public class MidiHelper {
         return message;
     }
 
-    public static ShortMessage startMessage(int ch, int note, int velocity){
+    public static ShortMessage startMessage(int ch, int note, int velocity) {
         return message(ch, ShortMessage.NOTE_ON, clip(note), clip(velocity));
     }
 
-    public static ShortMessage stopMessage(int ch, int note, int velocity){
+    public static ShortMessage stopMessage(int ch, int note, int velocity) {
         return message(ch, ShortMessage.NOTE_OFF, clip(note), clip(velocity));
     }
 
-    public static ShortMessage stopMessage(int ch, int note){
+    public static ShortMessage stopMessage(int ch, int note) {
         return stopMessage(ch, note, 0);
     }
 
-    public static ShortMessage instrumentMessage(int ch, int instrument){
+    public static ShortMessage instrumentMessage(int ch, int instrument) {
         return message(ch, ShortMessage.PROGRAM_CHANGE, instrument, 0);
     }
 
@@ -41,14 +41,14 @@ public class MidiHelper {
         return Math.max(0, Math.min(127, value));
     }
 
-    public static void save(FriendlyByteBuf buf, ShortMessage message){
+    public static void save(FriendlyByteBuf buf, ShortMessage message) {
         buf.writeInt(message.getChannel());
         buf.writeInt(message.getCommand());
         buf.writeInt(message.getData1());
         buf.writeInt(message.getData2());
     }
 
-    public static ShortMessage load(FriendlyByteBuf buf){
+    public static ShortMessage load(FriendlyByteBuf buf) {
         int ch = buf.readInt();
         int command = buf.readInt();
         int data1 = buf.readInt();
@@ -57,9 +57,9 @@ public class MidiHelper {
     }
 
     @Nullable
-    public static Sequence loadSequence(byte[] data){
+    public static Sequence loadSequence(byte[] data) {
         try {
-            return data.length>0 ? MidiSystem.getSequence(new ByteArrayInputStream(data)) : null;
+            return data.length > 0 ? MidiSystem.getSequence(new ByteArrayInputStream(data)) : null;
         } catch (InvalidMidiDataException | IOException e) {
             throw new RuntimeException(e);
         }
