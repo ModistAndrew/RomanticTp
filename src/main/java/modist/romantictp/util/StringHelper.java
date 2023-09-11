@@ -11,8 +11,6 @@ public class StringHelper {
             ("a", "an", "the", "to", "in", "on", "from", "and", "with", "of");
     private static final List<String> ROMAN_NUMERALS =
             List.of("i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x", "xi", "xii");
-    private static final char[] ESCAPE_CHARACTERS =
-            new char[] {'~', '\'', '"'};
     private static final char[] DELIMITERS =
             new char[] {' ', '.', '"'};
     public static final List<String> TOOLTIPS = new ArrayList<>();
@@ -72,11 +70,7 @@ public class StringHelper {
     }
 
     public static String escape(String str) {
-        String ret = str;
-        for(int i=0; i<ESCAPE_CHARACTERS.length; i++) {
-            ret = ret.replace("__"+i+"__", String.valueOf(ESCAPE_CHARACTERS[i]));
-        }
-        return ret;
+        return str.replaceAll("-([0-9]{3})-", "\\\\$1").translateEscapes();
     }
 
     @SuppressWarnings("deprecation")
