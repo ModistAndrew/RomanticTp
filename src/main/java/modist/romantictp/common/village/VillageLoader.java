@@ -20,5 +20,5 @@ public class VillageLoader {
     public static final RegistryObject<VillagerProfession> MUSICIAN = VILLAGER_PROFESSIONS.register("musician", () ->
             new VillagerProfession("musician", poiTypeHolder -> poiTypeHolder.get() == MUSICIAN_POI.get(),
                     poiTypeHolder -> poiTypeHolder.get() == MUSICIAN_POI.get(),
-                    ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_FISHERMAN));
+                    ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_FISHERMAN)); //TODO: add our own sound
 }
