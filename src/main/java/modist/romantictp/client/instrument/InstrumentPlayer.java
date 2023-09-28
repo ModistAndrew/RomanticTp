@@ -9,5 +9,5 @@ public interface InstrumentPlayer {
     Instrument getInstrument(); //get current instrument holding. set to EMPTY to stop all sounds.
     boolean isPlaying(); //for sequence check. should be synchronized from server. sequencer stopping should be managed by tick.
     boolean isRemoved(); //remove
-    void addParticle(int note); //TODO: distribute
+    void addParticle(int note); //TODO: don't gather in the center
 }

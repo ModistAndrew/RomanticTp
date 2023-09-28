@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MidiFileLoader implements ResourceManagerReloadListener {
+public class MidiFileLoader implements ResourceManagerReloadListener { //TODO sync mid files to server instead of storing them in the item NBT?
     public LinkedHashMap<String, MidiInfo> resourceMap = new LinkedHashMap<>();
     private static final MidiFileLoader instance = new MidiFileLoader();
 

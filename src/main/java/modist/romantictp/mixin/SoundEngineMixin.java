@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(SoundEngine.class)
-public class SoundEngineMixin {
+public class SoundEngineMixin { //TODO: use less redirect?
     @Shadow
     private boolean loaded;
     @Redirect(

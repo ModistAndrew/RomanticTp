@@ -15,7 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import javax.annotation.Nullable;
 import javax.sound.midi.*;
 
-public class InstrumentSoundInstance extends AbstractTickableSoundInstance {
+public class InstrumentSoundInstance extends AbstractTickableSoundInstance { //TODO: debug sound
     //interact with channel and receiver and manage stop
     private final InstrumentPlayer player;
     private final MidiFilter midiFilter;
