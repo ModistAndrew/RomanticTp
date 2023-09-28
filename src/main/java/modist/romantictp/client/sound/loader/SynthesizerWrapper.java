@@ -19,9 +19,9 @@ public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver,
         try {
             SoftSynthesizer synthesizer = new SoftSynthesizer();
             AudioFormat audioFormat = AudioHelper.AUDIO_FORMAT;
-            DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-            SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
-            AlDataLine alDataLine = new AlDataLine(sourceDataLine);
+            //DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+            //SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(info);
+            AlDataLine alDataLine = new AlDataLine(audioFormat);
             Map<String, Object> params = new HashMap<>();
             params.put("jitter correction", RomanticTpConfig.JITTER_CORRECTION.get());
             synthesizer.open(alDataLine, params);
@@ -29,7 +29,7 @@ public record SynthesizerWrapper(SoftSynthesizer synthesizer, Receiver receiver,
                 synthesizer.loadAllInstruments(SoundbankLoader.getInstance().soundbank);
             }
             return new SynthesizerWrapper(synthesizer, synthesizer.getReceiver(), alDataLine);
-        } catch (MidiUnavailableException | LineUnavailableException e) {
+        } catch (MidiUnavailableException e) {
             RomanticTp.LOGGER.error("Fail to init synthesizer", e);
             return null;
         }
