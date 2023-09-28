@@ -7,11 +7,14 @@ import javax.sound.sampled.*;
 import java.util.concurrent.CompletableFuture;
 
 public class AlDataLine implements SourceDataLine {
-    private final SourceDataLine dataLine;
+    //private final SourceDataLine dataLine;
+    private final AudioFormat format;
+    private final DataLine.Info info;
     private volatile CompletableFuture<AlChannel> channel = new CompletableFuture<>();
 
-    public AlDataLine(SourceDataLine line) {
-        this.dataLine = line;
+    public AlDataLine(AudioFormat format) {
+        info = new DataLine.Info(SourceDataLine.class, format);
+        this.format = format;
     }
 
     public void bindChannel(@Nullable AlChannel channel) { //set to null to clear
@@ -31,12 +34,12 @@ public class AlDataLine implements SourceDataLine {
 
     @Override
     public void open(AudioFormat format, int bufferSize) throws LineUnavailableException {
-        dataLine.open(format, bufferSize);
+        //dataLine.open(format, bufferSize);
     }
 
     @Override
     public void open(AudioFormat format) throws LineUnavailableException {
-        dataLine.open(format);
+        //dataLine.open(format);
     }
 
     @Override
@@ -56,111 +59,130 @@ public class AlDataLine implements SourceDataLine {
 
     @Override
     public void drain() {
-        dataLine.drain();
+        //dataLine.drain();
     }
 
     @Override
     public void flush() {
-        dataLine.flush();
+        //dataLine.flush();
     }
 
     @Override
     public void start() {
-        dataLine.start();
+        //dataLine.start();
     }
 
     @Override
     public void stop() {
-        dataLine.stop();
+        //dataLine.stop();
     }
 
     @Override
     public boolean isRunning() {
-        return dataLine.isRunning();
+        return false;
+        //return dataLine.isRunning();
     }
 
     @Override
     public boolean isActive() {
-        return dataLine.isActive();
+        return true;
+        //return dataLine.isActive();
     }
 
     @Override
     public AudioFormat getFormat() {
-        return dataLine.getFormat();
+        return format;
+        //return dataLine.getFormat();
     }
 
     @Override
     public int getBufferSize() {
-        return dataLine.getBufferSize();
+        return format.getFrameSize();
+        //return dataLine.getBufferSize();
     }
 
     @Override
     public int available() {
-        return dataLine.available();
+        return 0;
+        //return dataLine.available();
     }
 
     @Override
     public int getFramePosition() {
-        return dataLine.getFramePosition();
+        return 0;
+        //return dataLine.getFramePosition();
     }
 
     @Override
     public long getLongFramePosition() {
-        return dataLine.getFramePosition();
+        return 0;
+        //return dataLine.getFramePosition();
     }
 
     @Override
     public long getMicrosecondPosition() {
-        return dataLine.getMicrosecondPosition();
+        return 0;
+        //return dataLine.getMicrosecondPosition();
     }
 
     @Override
     public float getLevel() {
-        return dataLine.getLevel();
+        return 1;
+        //return dataLine.getLevel();
     }
 
     @Override
     public Line.Info getLineInfo() {
-        return dataLine.getLineInfo();
+        return info;
+        //return dataLine.getLineInfo();
     }
 
     @Override
     public void open() throws LineUnavailableException {
-        dataLine.open();
+        //dataLine.open();
     }
 
     @Override
     public void close() {
-        dataLine.close();
+        //dataLine.close();
     }
 
     @Override
     public boolean isOpen() {
-        return dataLine.isOpen();
+        return true;
+        //return dataLine.isOpen();
     }
 
     @Override
     public Control[] getControls() {
-        return dataLine.getControls();
+        return new Control[]{};
+        //return dataLine.getControls();
     }
 
     @Override
     public boolean isControlSupported(Control.Type control) {
-        return dataLine.isControlSupported(control);
+        return false;
+        // return dataLine.isControlSupported(control);
     }
 
     @Override
     public Control getControl(Control.Type control) {
-        return dataLine.getControl(control);
+        return new Control(control) {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        };
+        //return dataLine.getControl(control);
     }
 
     @Override
     public void addLineListener(LineListener listener) {
-        dataLine.addLineListener(listener);
+        //dataLine.addLineListener(listener);
     }
 
     @Override
     public void removeLineListener(LineListener listener) {
-        dataLine.addLineListener(listener);
+        //dataLine.addLineListener(listener);
     }
 }
